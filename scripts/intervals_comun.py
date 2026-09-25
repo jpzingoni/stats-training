@@ -20,6 +20,14 @@ from pathlib import Path
 
 import requests
 
+try:
+    # Usa los certificados del sistema operativo en lugar de los de Python.
+    # Necesario en Windows con antivirus que inspeccionan HTTPS (p. ej., Avast).
+    import truststore
+    truststore.inject_into_ssl()
+except ImportError:
+    pass
+
 # En Windows, si la salida se redirige a un archivo, Python usa cp1252 y fallan los emojis
 sys.stdout.reconfigure(encoding="utf-8")
 
