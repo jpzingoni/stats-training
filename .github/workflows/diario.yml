@@ -1,0 +1,67 @@
+name: Actualización diaria de datos
+
+on:
+  schedule:
+    - cron: "0 12 * * *"        # 12:00 UTC = 09:00 Argentina
+  workflow_dispatch:            # permite correrlo a mano desde la pestaña Actions
+    inputs:
+      dias:
+        description: "Días hacia atrás a revisar (terminando ayer)"
+        required: false
+        default: "7"
+
+permissions:
+  contents: write               # necesario para hacer commit de los CSV
+
+concurrency:
+  group: actualizacion-datos
+  cancel-in-progress: false
+
+jobs:
+  actualizar:
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    env:
+      TZ: America/Argentina/Buenos_Aires     # para que "ayer" sea el ayer de Argentina
+      PYTHONIOENCODING: utf-8
+      INTERVALS_ATHLETE_ID: ${{ secrets.INTERVALS_ATHLETE_ID }}
+      INTERVALS_API_KEY: ${{ secrets.INTERVALS_API_KEY }}
+
+    steps:
+      - name: Descargar el repositorio
+        uses: actions/checkout@v5
+
+      - name: Preparar Python
+        uses: actions/setup-python@v6
+        with:
+          python-version: "3.12"
+          cache: pip
+
+      - name: Instalar dependencias
+        run: pip install -r requirements.txt
+
+      - name: Bajar datos de Intervals.icu
+        run: python scripts/diario.py "${{ github.event.inputs.dias || '7' }}"
+
+      # Fase 2: cuando exista el generador de datos del tablero, se ejecuta automáticamente
+      - name: Generar datos del tablero (si existe el script)
+        run: |
+          if [ -f scripts/generar_datos_app.py ]; then
+            python scripts/generar_datos_app.py
+          else
+            echo "Todavía no hay generador del tablero; se omite."
+          fi
+
+      - name: Guardar cambios en el repositorio
+        run: |
+          git config user.name "github-actions[bot]"
+          git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
+          git add datos/
+          [ -d app/data ] && git add app/data/
+          if git diff --cached --quiet; then
+            echo "Sin cambios en los datos."
+          else
+            git commit -m "datos: actualización $(date +%F)"
+            git pull --rebase   # por si subiste algo mientras corría el workflow
+            git push
+          fi

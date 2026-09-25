@@ -1,0 +1,16 @@
+# Credenciales: NUNCA al repositorio
+config.json
+.env
+.dev.vars
+
+# Python
+__pycache__/
+*.pyc
+.venv/
+
+# Varios
+*.tmp
+datos/consola.log
+.DS_Store
+Thumbs.db
+node_modules/
