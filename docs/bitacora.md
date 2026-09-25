@@ -5,6 +5,37 @@ Una entrada por etapa, de la más reciente a la más antigua.
 
 ---
 
+## Etapa 1: repositorio y actualización automática (24/09/2026)
+
+### Qué hice
+- Creé el repositorio público `stats-training` en GitHub y subí la estructura del proyecto.
+- Cargué el Athlete ID y la API key como secretos del repositorio.
+- Extendí la carga histórica para que arranque el 10/07.
+- Probé a mano el workflow diario y terminó bien. Desde ahí corre solo todos los días
+  a las 09:00 (hora de Argentina) y guarda los cambios con un commit `datos:`.
+
+### Problemas
+- **El antivirus rompía la conexión con la API.** Avast inspecciona las conexiones HTTPS y
+  las firma con su propio certificado. Windows confía en él, pero Python usa su propia lista
+  de certificados y rechazaba la conexión. Lo resolví con la librería `truststore`, que hace
+  que Python use los certificados del sistema. Descarté desactivar la verificación porque
+  deja la conexión expuesta.
+- **Finales de línea distintos en Windows y en Linux.** Los CSV se escriben en mi compu
+  (Windows, CRLF) y en GitHub Actions (Linux). Agregué un `.gitattributes` que guarda todo
+  con LF para que cada commit muestre solo los cambios reales y no el archivo entero.
+- **Del 10 al 17/07 no hay actividades en Intervals.** La más antigua es del 18/07. Si
+  aparecen entrenamientos de esos días, hay que exportarlos de Zepp y subirlos a mano.
+
+### Decisiones
+- **Los valores sin decimales se guardan como enteros** (`37` y no `37.0`): los CSV se leen
+  mejor y ocupan menos.
+- **Si una actividad no tiene detalle de vueltas, se saltea** en lugar de cortar toda la
+  descarga.
+- **El workflow hace `git pull --rebase` antes de subir los datos**, por si subí algo
+  mientras corría.
+
+---
+
 ## Etapa 0: exploración de los datos (22–24/09/2026)
 
 ### Qué hice
