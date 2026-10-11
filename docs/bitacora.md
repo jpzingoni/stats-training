@@ -5,17 +5,24 @@ Una entrada por etapa, de la más reciente a la más antigua.
 
 ---
 
-## Etapa 2: tablero web (28/09/2026)
+## Etapa 2: tablero web (28/09 – 11/10/2026)
 
 ### Qué hice
 - Escribí `scripts/generar_datos_app.py`, que convierte los CSV en `app/data/datos.js` para
   el tablero (`meta`, `actividades`, `semanas`, `bienestar` y `crudos`). Usa solo la
   biblioteca estándar de Python, así el workflow no suma dependencias.
-- Armé el tablero en `app/` con cinco pestañas: **Resumen** (visión general), **Carrera**,
-  **Pádel**, **Recuperación** y **Datos**. Tiene un filtro de período (4 semanas / 12 semanas
-  / todo), modo claro/oscuro y diseño para celular.
-- La pestaña **Datos** muestra los tres CSV tal cual y marca qué columnas usa algún gráfico
+- Armé el tablero en `app/`. La primera versión tenía pestañas arriba. La versión actual
+  sigue el estilo de Intervals.icu: una **barra lateral** con la navegación y los filtros, y
+  el **Calendario** mensual como vista principal. Las demás vistas son **Resumen**,
+  **Carrera**, **Pádel**, **Ciclismo**, **Otras actividades**, **Recuperación** y **Datos**.
+  Tiene filtro de período (4 semanas / 12 semanas / todo), modo claro/oscuro y diseño para
+  celular.
+- La vista **Datos** muestra los tres CSV tal cual y marca qué columnas usa algún gráfico
   y cuáles no, para saber qué queda por aprovechar.
+- El 11/10 subí el tablero y el generador a GitHub. Desde ahí, el workflow diario también
+  regenera `datos.js`: para ver los datos nuevos alcanza con `git pull`.
+- Recuperé el bienestar del 29/09 al 01/10 volviendo a correr `diario.py` con 14 días
+  hacia atrás (ver Problemas).
 
 ### Decisiones
 - **Chart.js** en lugar de ECharts: pesa ~70 KB contra ~330 KB. El calendario de carga
@@ -59,6 +66,20 @@ Una entrada por etapa, de la más reciente a la más antigua.
   Recuperación.
 - El servidor de desarrollo de Python (`http.server`) a veces cortaba la conexión en
   Windows al pedir un JSON. Dejó de importar cuando el tablero pasó a abrirse sin servidor.
+- **Zepp sincroniza tarde y el workflow solo revisa 7 días.** Al 11/10 faltaban sueño, FC
+  en reposo y pasos del 29/09 al 01/10, aunque los datos existían en Intervals: habían
+  llegado cuando esos días ya estaban fuera de la ventana. Volví a correr `diario.py 14` y
+  aparecieron. Para la próxima: desde GitHub, Actions → "Actualización diaria de datos" →
+  Run workflow, con más días hacia atrás.
+- **Huecos que no son errores**: el 02/10 Intervals no tiene sueño ni FC en reposo, y del
+  05 al 10/10 faltan datos porque el reloj se quedó sin batería.
+- **Una caminata larga quedó partida en 5 actividades** (3–4/10, unas 13 h en total): el
+  reloj cortó la grabación. Por ahora quedan separadas para no tocar los scripts.
+- **Pendiente: en mi Chrome los gráficos de Chart.js a veces quedan en blanco** (por
+  ejemplo, Resumen con "Todo"). No se pudo reproducir: en Chrome y Edge sin interfaz se
+  dibujan bien, incluso con la escala de pantalla al 125 % y al 150 %. Sospecha: una
+  extensión o el antivirus bloqueando el canvas. Agregué un aviso en rojo que muestra el
+  error si algo falla al dibujar, para poder diagnosticarlo.
 
 ---
 
