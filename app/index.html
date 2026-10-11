@@ -21,6 +21,7 @@
         <p class="actualizado" id="actualizado">Cargando datos…</p>
       </div>
       <nav class="nav-lateral" aria-label="Secciones">
+        <button type="button" data-pestana="inicio"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg><span>Este mes</span></button>
         <button type="button" data-pestana="calendario"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg><span>Calendario</span></button>
         <button type="button" data-pestana="resumen"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg><span>Resumen</span></button>
         <span class="nav-grupo">Entrenamientos</span>
@@ -63,6 +64,28 @@
 
   <main>
     <p class="aviso aviso-error" id="error-render" role="alert" hidden></p>
+    <!-- ── Este mes (portada) ──────────────────────────────────── -->
+    <section id="panel-inicio" class="seccion" hidden>
+      <div class="cal-cabecera">
+        <button type="button" id="inicio-anterior" aria-label="Mes anterior">‹</button>
+        <h2 id="inicio-mes" aria-live="polite"></h2>
+        <button type="button" id="inicio-siguiente" aria-label="Mes siguiente">›</button>
+        <span class="texto-sec" id="inicio-rango"></span>
+      </div>
+      <div class="kpis" id="inicio-kpis"></div>
+      <div class="grilla">
+        <section class="tarjeta">
+          <h2>Actividades del mes</h2>
+          <div id="inicio-actividades"></div>
+        </section>
+        <section class="tarjeta">
+          <h2>Días con actividad</h2>
+          <p class="texto-sec">Los días marcados tienen al menos una actividad registrada por el reloj. Los puntos indican el tipo.</p>
+          <div class="mini-cal" id="inicio-mini-cal"></div>
+        </section>
+      </div>
+    </section>
+
     <!-- ── Calendario ──────────────────────────────────────────── -->
     <section id="panel-calendario" class="seccion" hidden>
       <div class="cal-cabecera">
@@ -282,6 +305,7 @@
   <script src="js/componentes.js"></script>
   <script src="js/tema.js"></script>
   <script src="js/sesiones.js"></script>
+  <script src="js/secciones/inicio.js"></script>
   <script src="js/secciones/calendario.js"></script>
   <script src="js/secciones/resumen.js"></script>
   <script src="js/secciones/carrera.js"></script>

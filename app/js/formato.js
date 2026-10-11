@@ -52,5 +52,27 @@
     return v.length ? v.reduce((a, b) => a + b, 0) / v.length : null;
   }
 
-  Tablero.formato = { numero, ritmo, duracion, ts, iso, sumarDias, lunesDe, fechaCorta, fechaLarga, mesCorto, km, suma, promedio };
+  // ─── Meses ("YYYY-MM") ───────────────────────────────────────────────────
+  const MESES_LARGOS = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto",
+    "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+  /** Fecha de hoy en la zona horaria del navegador, como "YYYY-MM-DD". */
+  const hoyLocal = () => {
+    const d = new Date();
+    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
+  };
+  const sumarMes = (mes, n) => {
+    const [a, m] = mes.split("-").map(Number);
+    return iso(Date.UTC(a, m - 1 + n, 1)).slice(0, 7);
+  };
+  const ultimoDiaMes = (mes) => {
+    const [a, m] = mes.split("-").map(Number);
+    return iso(Date.UTC(a, m, 0));
+  };
+  /** "2026-10" → "Octubre 2026" */
+  const nombreMes = (mes) => `${MESES_LARGOS[Number(mes.slice(5, 7)) - 1]} ${mes.slice(0, 4)}`;
+
+  Tablero.formato = {
+    numero, ritmo, duracion, ts, iso, sumarDias, lunesDe, fechaCorta, fechaLarga, mesCorto, km, suma, promedio,
+    MESES_LARGOS, hoyLocal, sumarMes, ultimoDiaMes, nombreMes,
+  };
 })();

@@ -10,19 +10,19 @@
   const S = Tablero.secciones;
 
   const SECCIONES = {
-    calendario: S.calendario, resumen: S.resumen, carrera: S.carrera, padel: S.padel,
+    inicio: S.inicio, calendario: S.calendario, resumen: S.resumen, carrera: S.carrera, padel: S.padel,
     ciclismo: S.ciclismo, otras: S.otras, recuperacion: S.recuperacion, datos: S.datos,
   };
   const TITULOS = {
-    calendario: "Calendario", resumen: "Resumen", carrera: "Carrera", padel: "Pádel",
+    inicio: "Este mes", calendario: "Calendario", resumen: "Resumen", carrera: "Carrera", padel: "Pádel",
     ciclismo: "Ciclismo", otras: "Otras actividades", recuperacion: "Recuperación", datos: "Datos",
   };
-  const CON_FILTROS = ["calendario", "resumen"];       // vistas a las que aplican los filtros laterales
-  const SIN_PERIODO = ["calendario", "datos"];          // el calendario navega por mes; los datos crudos no se filtran
+  const CON_FILTROS = ["inicio", "calendario", "resumen"];   // vistas a las que aplican los filtros laterales
+  const SIN_PERIODO = ["inicio", "calendario", "datos"];     // esas vistas navegan por mes; los datos crudos no se filtran
   const PERIODOS = { 4: "4 semanas", 12: "12 semanas", todo: "todo el historial" };
 
   const estado = {
-    pestana: "calendario",
+    pestana: "inicio",
     periodo: "12",
     datos: null,
     filtros: { grupos: new Set(GRUPOS), bienestar: new Set(S.calendario.DIARIOS.map((d) => d.clave)) },
@@ -116,7 +116,7 @@
   }
 
   function mostrarPestana(nombre) {
-    if (!SECCIONES[nombre]) nombre = "calendario";
+    if (!SECCIONES[nombre]) nombre = "inicio";
     estado.pestana = nombre;
     for (const b of document.querySelectorAll("[data-pestana]")) {
       if (b.dataset.pestana === nombre) b.setAttribute("aria-current", "page");

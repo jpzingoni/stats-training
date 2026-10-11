@@ -53,7 +53,12 @@ Una entrada por etapa, de la más reciente a la más antigua.
   nombre; al tocarlos se abre el detalle completo. A la izquierda de cada semana hay un
   resumen (sesiones, tiempo, distancia, carga, fitness, fatiga). En celular la barra lateral
   es un menú desplegable y el calendario pasa a ser una agenda, un día por fila.
-- Los filtros laterales se aplican al Calendario y al Resumen. En las vistas de cada deporte
+- **Portada "Este mes"** (lo primero que se abre): tarjetas con pasos del mes, pasos por
+  día, sueño y FC en reposo promedio, las actividades del mes por tipo y un calendario
+  chico con los días de actividad marcados. Los promedios se calculan solo con los días
+  que tienen dato, y cada tarjeta dice cuántos son: así un día sin reloj no baja el
+  promedio. El mes en curso corta en el último día descargado (ayer), no en hoy.
+- Los filtros laterales se aplican a Este mes, al Calendario y al Resumen. En las vistas de cada deporte
   no, porque ahí ya se ve un único deporte. Se recuerdan en el navegador.
 - La lista de columnas "en uso" vive en el generador (`USO_COLUMNAS`). Cuando un gráfico
   empiece a usar una columna nueva, hay que agregarla ahí.

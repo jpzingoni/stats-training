@@ -5,10 +5,8 @@
 
   const { escapar } = Tablero.componentes;
   const { VAR_GRUPO } = Tablero.graficos;
-  const { numero, duracion, ts, iso, sumarDias, lunesDe, suma } = Tablero.formato;
+  const { numero, duracion, ts, sumarDias, lunesDe, suma, MESES_LARGOS: MESES, hoyLocal, sumarMes, ultimoDiaMes: ultimoDia } = Tablero.formato;
 
-  const MESES = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto",
-    "Septiembre", "Octubre", "Noviembre", "Diciembre"];
   const DIAS = ["Lun", "Mar", "Mié", "Jue", "Vie", "Sáb", "Dom"];
 
   const svg = (d) => `<svg class="icono" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"
@@ -26,19 +24,6 @@
 
   const estado = { mes: null, ctx: null, enlazado: false };
 
-  const hoyLocal = () => {
-    const d = new Date();
-    return `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, "0")}-${String(d.getDate()).padStart(2, "0")}`;
-  };
-  const sumarMes = (mes, n) => {
-    const [a, m] = mes.split("-").map(Number);
-    const d = new Date(Date.UTC(a, m - 1 + n, 1));
-    return iso(d.getTime()).slice(0, 7);
-  };
-  const ultimoDia = (mes) => {
-    const [a, m] = mes.split("-").map(Number);
-    return iso(Date.UTC(a, m, 0));
-  };
   /** Número de semana ISO (lunes a domingo), como en Intervals. */
   function semanaIso(f) {
     const d = new Date(ts(f));
