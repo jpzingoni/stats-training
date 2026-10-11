@@ -5,6 +5,63 @@ Una entrada por etapa, de la más reciente a la más antigua.
 
 ---
 
+## Etapa 2: tablero web (28/09/2026)
+
+### Qué hice
+- Escribí `scripts/generar_datos_app.py`, que convierte los CSV en `app/data/datos.js` para
+  el tablero (`meta`, `actividades`, `semanas`, `bienestar` y `crudos`). Usa solo la
+  biblioteca estándar de Python, así el workflow no suma dependencias.
+- Armé el tablero en `app/` con cinco pestañas: **Resumen** (visión general), **Carrera**,
+  **Pádel**, **Recuperación** y **Datos**. Tiene un filtro de período (4 semanas / 12 semanas
+  / todo), modo claro/oscuro y diseño para celular.
+- La pestaña **Datos** muestra los tres CSV tal cual y marca qué columnas usa algún gráfico
+  y cuáles no, para saber qué queda por aprovechar.
+
+### Decisiones
+- **Chart.js** en lugar de ECharts: pesa ~70 KB contra ~330 KB. El calendario de carga
+  (que Chart.js no trae) lo hice con una grilla CSS. Si más adelante hace falta algo que
+  Chart.js no resuelva, se evalúa el cambio.
+- **Los cálculos se hacen en Python, no en el navegador**: ritmo en segundos, eficiencia
+  (metros por latido), agregados semanales y medias móviles de 7 días. El JavaScript solo
+  filtra y dibuja.
+- **Salida determinística**: la fecha de "actualizado" sale de los CSV y no de la hora
+  actual. Si los datos no cambian, el archivo tampoco, y no hay commits vacíos.
+- **El tablero se abre sin servidor** (doble clic en `app/index.html`). Al principio usaba
+  JSON con `fetch()` y módulos ES, pero los navegadores bloquean las dos cosas en `file://`
+  y había que levantar un servidor cada vez. Lo cambié por un único `datos.js` cargado con
+  `<script>` y scripts clásicos con un espacio de nombres (`window.Tablero`). En Cloudflare
+  funciona igual.
+- **Nunca dos ejes Y en un gráfico**: el ritmo y la FC del bloque principal van en
+  gráficos separados. Con dos escalas en el mismo gráfico, parece que hay una correlación
+  que en realidad no existe.
+- **Los días sin dato quedan como huecos** (no se rellenan con 0 ni se interpolan).
+- **Ciclismo tiene pestaña propia** (van a sumarse varias salidas). "Otras actividades"
+  queda para caminata y cualquier deporte nuevo sin pestaña.
+- **Detalle por sesión en todas las pestañas**: al tocar una fila se ven todas las
+  métricas, el tiempo en cada zona y las vueltas/bloques. Es un único componente
+  (`js/sesiones.js`) hecho con HTML y CSS, sin Chart.js, para que abrir muchas filas no pese.
+- **Estructura al estilo Intervals.icu**: barra lateral con la navegación y los filtros
+  (qué entrenamientos y qué datos diarios mostrar), y un **calendario mensual** como vista
+  principal. Cada día muestra sueño, FC en reposo y pasos, y los entrenamientos solo con su
+  nombre; al tocarlos se abre el detalle completo. A la izquierda de cada semana hay un
+  resumen (sesiones, tiempo, distancia, carga, fitness, fatiga). En celular la barra lateral
+  es un menú desplegable y el calendario pasa a ser una agenda, un día por fila.
+- Los filtros laterales se aplican al Calendario y al Resumen. En las vistas de cada deporte
+  no, porque ahí ya se ve un único deporte. Se recuerdan en el navegador.
+- La lista de columnas "en uso" vive en el generador (`USO_COLUMNAS`). Cuando un gráfico
+  empiece a usar una columna nueva, hay que agregarla ahí.
+
+### Problemas
+- **No hay FC en reposo, sueño ni pasos antes del 26/08.** Coincide con el límite de la
+  sincronización Zepp → Intervals (~4 semanas hacia atrás). Las corridas viejas que subí
+  a mano como FIT traen todo lo de la actividad (FC, zonas, dinámica), pero los datos
+  diarios de bienestar no vienen en esos archivos. El tablero lo avisa en la pestaña
+  Recuperación.
+- El servidor de desarrollo de Python (`http.server`) a veces cortaba la conexión en
+  Windows al pedir un JSON. Dejó de importar cuando el tablero pasó a abrirse sin servidor.
+
+---
+
 ## Etapa 1: repositorio y actualización automática (24/09/2026)
 
 ### Qué hice
