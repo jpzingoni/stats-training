@@ -84,11 +84,14 @@ Una entrada por etapa, de la más reciente a la más antigua.
   05 al 10/10 faltan datos porque el reloj se quedó sin batería.
 - **Una caminata larga quedó partida en 5 actividades** (3–4/10, unas 13 h en total): el
   reloj cortó la grabación. Por ahora quedan separadas para no tocar los scripts.
-- **Pendiente: en mi Chrome los gráficos de Chart.js a veces quedan en blanco** (por
-  ejemplo, Resumen con "Todo"). No se pudo reproducir: en Chrome y Edge sin interfaz se
-  dibujan bien, incluso con la escala de pantalla al 125 % y al 150 %. Sospecha: una
-  extensión o el antivirus bloqueando el canvas. Agregué un aviso en rojo que muestra el
-  error si algo falla al dibujar, para poder diagnosticarlo.
+- **En mi Chrome los gráficos de Chart.js a veces quedaban en blanco** (por ejemplo,
+  Resumen con "Todo"). No se podía reproducir: en Chrome y Edge sin interfaz se dibujaban
+  bien. El aviso en rojo que agregué para diagnosticar mostró "Script error.", que es como
+  Chrome oculta los errores de scripts de otro origen: el problema venía de Chart.js
+  cargado desde el CDN (probablemente por las extensiones o el antivirus). **Solución**,
+  copiada de un prototipo que andaba bien: guardar Chart.js dentro de la carpeta
+  (`app/vendor/chart.umd.min.js`, misma versión 4.4.7) y desactivar las animaciones, para
+  que cada gráfico se dibuje de una vez. De paso, el tablero ahora funciona sin internet.
 
 ---
 

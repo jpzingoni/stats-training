@@ -303,7 +303,9 @@
   <div class="tooltip" id="tooltip" role="tooltip" hidden></div>
 
   <!-- Scripts clásicos (no módulos) y datos en .js: así funciona también abriendo el archivo sin servidor -->
-  <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+  <!-- Chart.js guardado en la carpeta (no desde el CDN): funciona sin internet y sin que
+       extensiones o el antivirus interfieran con un script externo -->
+  <script src="vendor/chart.umd.min.js"></script>
   <script src="data/datos.js"></script>
   <script src="js/formato.js"></script>
   <script src="js/graficos.js"></script>

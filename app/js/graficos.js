@@ -29,7 +29,9 @@
     Chart.defaults.color = c.muted;
     Chart.defaults.borderColor = c.grilla;
     Chart.defaults.maintainAspectRatio = false;
-    Chart.defaults.animation = { duration: 250 };
+    // Sin animación: cada gráfico se dibuja de una vez (con animación, el dibujo seguía en
+    // cuadros posteriores y ahí fallaba en algunos navegadores)
+    Chart.defaults.animation = false;
     Chart.defaults.plugins.legend.labels.boxWidth = 10;
     Chart.defaults.plugins.legend.labels.boxHeight = 10;
     Chart.defaults.plugins.legend.labels.color = c.textoSec;
