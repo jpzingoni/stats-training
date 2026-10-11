@@ -145,9 +145,14 @@
     aviso.hidden = false;
   }
 
-  // Chart.js dibuja después (en el próximo cuadro de animación): esos errores no pasan
-  // por el try/catch de dibujar(), así que se capturan acá también
-  addEventListener("error", (e) => mostrarError(e.message));
+  // Errores fuera del try/catch de dibujar(). Solo se avisan los de los archivos del
+  // tablero: las extensiones del navegador inyectan sus propios scripts y sus errores
+  // llegan como "Script error." sin archivo; esos van a la consola y no al aviso.
+  const BASE = location.href.replace(/[#?].*$/, "").replace(/[^/]*$/, "");
+  addEventListener("error", (e) => {
+    if (e.filename && e.filename.startsWith(BASE)) mostrarError(e.message);
+    else console.warn("Error ajeno al tablero (extensión del navegador?):", e.message, e.filename || "(sin archivo)");
+  });
 
   // ─── Menú lateral en celular ───────────────────────────────────────────────
 

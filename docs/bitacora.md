@@ -92,6 +92,10 @@ Una entrada por etapa, de la más reciente a la más antigua.
   copiada de un prototipo que andaba bien: guardar Chart.js dentro de la carpeta
   (`app/vendor/chart.umd.min.js`, misma versión 4.4.7) y desactivar las animaciones, para
   que cada gráfico se dibuje de una vez. De paso, el tablero ahora funciona sin internet.
+  Con eso los gráficos se dibujaron, pero el aviso seguía diciendo "Script error.": era un
+  error de alguna **extensión del navegador**, que inyecta sus scripts en la página, y el
+  aviso escuchaba todos los errores. Ahora solo muestra los de los archivos del tablero;
+  los ajenos van a la consola.
 
 ---
 
