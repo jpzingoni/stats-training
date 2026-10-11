@@ -4,7 +4,7 @@
   const Tablero = (window.Tablero ??= { secciones: {} });
 
   const { kpis, escapar } = Tablero.componentes;
-  const { GRUPOS, VAR_GRUPO, grupoDe } = Tablero.graficos;
+  const { GRUPOS, VAR_GRUPO, grupoDe, grafico, sinDatos, colores, ejeY, estiloBarra } = Tablero.graficos;
   const { numero, duracion, suma, promedio, sumarDias, lunesDe, fechaLarga,
     MESES_LARGOS, hoyLocal, sumarMes, ultimoDiaMes, nombreMes } = Tablero.formato;
 
@@ -86,6 +86,7 @@
 
     renderActividades(m, p, nombreAnt);
     renderMiniCalendario(m);
+    renderPasos(ctx, m);
   }
 
   /** 7.47 → "7 h 28 min" */
@@ -137,7 +138,50 @@
       celdas.push(`<span class="${clases}" title="${escapar(titulo)}" aria-label="${escapar(titulo)}">
         <b>${Number(f.slice(8, 10))}</b>${puntos ? `<span class="mini-puntos">${puntos}</span>` : ""}</span>`);
     }
-    document.getElementById("inicio-mini-cal").innerHTML = celdas.join("");
+    const cal = document.getElementById("inicio-mini-cal");
+    cal.innerHTML = celdas.join("");
+    // La fila de nombres + una fila por semana, repartiéndose el alto de la tarjeta
+    const semanas = Math.ceil((celdas.length - DIAS.length) / 7);
+    cal.style.gridTemplateRows = `auto repeat(${semanas}, minmax(0, 1fr))`;
+  }
+
+  /** Barras verticales: un día por barra, con los pasos. Los días sin dato quedan vacíos. */
+  function renderPasos(ctx, m) {
+    const pasos = new Map(ctx.todo.bienestar.map((d) => [d.fecha, d.pasos]));
+    const dias = [];
+    for (let f = m.desde; f <= m.fin; f = sumarDias(f, 1)) dias.push(f);
+    const valores = dias.map((f) => (f <= m.hasta ? pasos.get(f) ?? null : null));
+    if (!valores.some((v) => v != null)) return sinDatos("g-inicio-pasos", "Sin datos de pasos este mes");
+    const c = colores();
+    grafico("g-inicio-pasos", {
+      type: "bar",
+      data: {
+        labels: dias.map((f) => Number(f.slice(8, 10))),
+        datasets: [
+          { type: "bar", label: "Pasos", data: valores, ...estiloBarra(c.serie[0]), order: 1 },
+          // Promedio de los días con dato, como referencia
+          { type: "line", label: "Promedio", data: dias.map((f) => (f <= m.hasta ? m.pasosProm : null)),
+            borderColor: c.textoSec, borderWidth: 1.5, borderDash: [5, 4], pointRadius: 0, order: 0 },
+        ],
+      },
+      options: {
+        interaction: { mode: "index", intersect: false },
+        scales: {
+          x: { grid: { display: false }, ticks: { maxRotation: 0, autoSkip: true, autoSkipPadding: 6 } },
+          y: ejeY({ beginAtZero: true, ticks: { maxTicksLimit: 4, callback: (v) => (v >= 1000 ? `${numero(v / 1000)} mil` : v) } }),
+        },
+        plugins: {
+          legend: { position: "top" },
+          tooltip: {
+            filter: (i) => i.parsed.y != null,
+            callbacks: {
+              title: (i) => fechaLarga(dias[i[0].dataIndex]),
+              label: (i) => ` ${i.dataset.label}: ${numero(i.parsed.y)} pasos`,
+            },
+          },
+        },
+      },
+    });
   }
 
   Tablero.secciones.inicio = { render };

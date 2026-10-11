@@ -58,6 +58,10 @@ Una entrada por etapa, de la más reciente a la más antigua.
   chico con los días de actividad marcados. Los promedios se calculan solo con los días
   que tienen dato, y cada tarjeta dice cuántos son: así un día sin reloj no baja el
   promedio. El mes en curso corta en el último día descargado (ayer), no en hoy.
+  La portada entra entera en la pantalla, sin scroll. Arriba van las actividades y el
+  calendario chico; abajo, un gráfico de barras de pasos por día (con el promedio como
+  referencia) y las cuatro tarjetas en 2 × 2. En celular o en ventanas muy bajas se apila
+  y se scrollea.
 - Los filtros laterales se aplican a Este mes, al Calendario y al Resumen. En las vistas de cada deporte
   no, porque ahí ya se ve un único deporte. Se recuerdan en el navegador.
 - La lista de columnas "en uso" vive en el generador (`USO_COLUMNAS`). Cuando un gráfico

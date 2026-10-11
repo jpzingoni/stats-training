@@ -72,17 +72,22 @@
         <button type="button" id="inicio-siguiente" aria-label="Mes siguiente">›</button>
         <span class="texto-sec" id="inicio-rango"></span>
       </div>
-      <div class="kpis" id="inicio-kpis"></div>
-      <div class="grilla">
+      <div class="inicio-fila">
         <section class="tarjeta">
           <h2>Actividades del mes</h2>
-          <div id="inicio-actividades"></div>
+          <div class="inicio-scroll" id="inicio-actividades"></div>
         </section>
         <section class="tarjeta">
-          <h2>Días con actividad</h2>
-          <p class="texto-sec">Los días marcados tienen al menos una actividad registrada por el reloj. Los puntos indican el tipo.</p>
+          <h2>Días con actividad <small>· los puntos indican el tipo</small></h2>
           <div class="mini-cal" id="inicio-mini-cal"></div>
         </section>
+      </div>
+      <div class="inicio-fila">
+        <section class="tarjeta tarjeta-grafico">
+          <h2>Pasos por día</h2>
+          <div class="lienzo"><canvas id="g-inicio-pasos"></canvas></div>
+        </section>
+        <div class="kpis-cuadro" id="inicio-kpis"></div>
       </div>
     </section>
 

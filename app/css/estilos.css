@@ -348,10 +348,10 @@ main { padding: 1rem 16px 2rem; max-width: 1400px; }
 .act-lista-nombre { font-weight: 600; }
 .act-lista-n { font-weight: 600; font-variant-numeric: tabular-nums; }
 .act-lista-det { grid-column: 2 / -1; color: var(--texto-sec); font-size: 0.82rem; font-variant-numeric: tabular-nums; }
-.mini-cal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 5px; max-width: 420px; }
+.mini-cal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
 .mini-nombre { text-align: center; font-size: 0.72rem; font-weight: 600; color: var(--texto-muted); }
 .mini-dia {
-  position: relative; aspect-ratio: 1; border-radius: 8px; border: 1px solid var(--borde);
+  position: relative; min-height: 0; border-radius: 6px; border: 1px solid var(--borde);
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
   font-size: 0.85rem; font-variant-numeric: tabular-nums; color: var(--texto-sec);
 }
@@ -363,6 +363,26 @@ main { padding: 1rem 16px 2rem; max-width: 1400px; }
 .mini-dia.hoy { box-shadow: 0 0 0 2px var(--fondo), 0 0 0 4px var(--texto-muted); }
 .mini-puntos { display: flex; gap: 2px; }
 .mini-puntos i { width: 6px; height: 6px; border-radius: 50%; }
+
+/* La portada entra entera en la pantalla (en escritorio): sin la barra superior ni el pie,
+   y con dos filas que se reparten el alto disponible */
+body[data-vista="inicio"] .barra-superior,
+body[data-vista="inicio"] .pie { display: none; }
+body[data-vista="inicio"] main { padding-bottom: 1rem; }
+#panel-inicio:not([hidden]) {
+  display: grid; grid-template-rows: auto minmax(0, 1fr) minmax(0, 1fr); gap: 0.8rem;
+  height: calc(100vh - 2rem); min-height: 560px;
+}
+#panel-inicio .cal-cabecera { margin: 0; }
+.inicio-fila { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 0.8rem; min-height: 0; }
+.inicio-fila > .tarjeta { display: flex; flex-direction: column; min-height: 0; padding: 0.8rem 1rem; }
+.inicio-fila > .tarjeta > h2 { margin-bottom: 0.5rem; }
+.inicio-fila h2 small { font-weight: 400; font-size: 0.75rem; color: var(--texto-muted); }
+.inicio-scroll { flex: 1; min-height: 0; overflow-y: auto; }
+#panel-inicio .mini-cal { flex: 1; min-height: 0; }
+.tarjeta-grafico .lienzo { flex: 1; height: auto; min-height: 0; }
+.kpis-cuadro { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); gap: 0.8rem; min-height: 0; }
+.kpis-cuadro .kpi { display: flex; flex-direction: column; justify-content: center; min-height: 0; overflow: hidden; }
 
 /* ── Diálogo de detalle de sesión ────────────────────────────────────────── */
 .dialogo {
@@ -387,6 +407,15 @@ main { padding: 1rem 16px 2rem; max-width: 1400px; }
   .lienzo { height: 230px; }
 }
 
+/* Portada en pantallas chicas o bajas: se apila y se scrollea */
+@media (max-width: 800px), (max-height: 560px) {
+  #panel-inicio:not([hidden]) { display: flex; flex-direction: column; height: auto; min-height: 0; }
+  .inicio-fila { grid-template-columns: minmax(0, 1fr); }
+  #panel-inicio .mini-dia { aspect-ratio: 1; }
+  .tarjeta-grafico .lienzo { flex: none; height: 230px; }
+  .kpis-cuadro .kpi { min-height: 110px; }
+}
+
 /* Barra lateral como menú desplegable */
 @media (max-width: 900px) {
   .app { grid-template-columns: minmax(0, 1fr); }
@@ -397,6 +426,9 @@ main { padding: 1rem 16px 2rem; max-width: 1400px; }
   .lateral.abierta { transform: none; box-shadow: 0 0 24px rgba(0, 0, 0, 0.3); }
   .fondo-lateral.visible { display: block; position: fixed; inset: 0; z-index: 25; background: rgba(0, 0, 0, 0.35); }
   .boton-menu { display: inline-flex; }
+  /* En la portada queda solo el botón del menú */
+  body[data-vista="inicio"] .barra-superior { display: flex; }
+  body[data-vista="inicio"] .titulo-vista { display: none; }
 }
 
 /* Calendario como agenda: una fila por día */

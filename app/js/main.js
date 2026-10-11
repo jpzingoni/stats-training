@@ -118,6 +118,7 @@
   function mostrarPestana(nombre) {
     if (!SECCIONES[nombre]) nombre = "inicio";
     estado.pestana = nombre;
+    document.body.dataset.vista = nombre;
     for (const b of document.querySelectorAll("[data-pestana]")) {
       if (b.dataset.pestana === nombre) b.setAttribute("aria-current", "page");
       else b.removeAttribute("aria-current");
