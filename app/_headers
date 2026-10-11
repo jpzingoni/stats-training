@@ -1,0 +1,3 @@
+# Cloudflare Pages: los datos cambian a diario, que no queden cacheados mucho tiempo
+/data/*
+  Cache-Control: public, max-age=300, must-revalidate

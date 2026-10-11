@@ -15,12 +15,16 @@ recuperación), pensado para ver mi progreso y para mostrar en mi portfolio.
   complejo, salvo que lo acordemos.
 - **`app/` es la carpeta que se publica** (Cloudflare Pages, output directory `app`). Todo lo
   que el tablero necesita tiene que estar dentro de `app/`: no puede leer `../datos/` en producción.
-- Los datos llegan por **`app/data/*.json`**, generados por `../scripts/generar_datos_app.py`
-  a partir de los CSV. Ese script se ejecuta en el workflow diario después de `diario.py`
-  (el paso ya está previsto en `.github/workflows/diario.yml`).
+- Los datos llegan por **`app/data/datos.js`** (define `window.DATOS_TABLERO`), generado por
+  `../scripts/generar_datos_app.py` a partir de los CSV. Ese script se ejecuta en el workflow
+  diario después de `diario.py` (el paso ya está previsto en `.github/workflows/diario.yml`).
+- **Tiene que funcionar abriendo `index.html` directo, sin servidor** (`file://`): por eso los
+  datos van en un `.js` cargado con `<script>` (nada de `fetch`) y el JavaScript usa scripts
+  clásicos con el espacio de nombres `window.Tablero` (nada de módulos ES `import`/`export`).
+  Los scripts se cargan en orden desde `index.html`.
 - Tiene que funcionar bien en celular y en modo claro y oscuro.
 - Desarrollo local: desde la raíz del repo, `python scripts/generar_datos_app.py` y después
-  `python -m http.server 8000 --directory app` → http://localhost:8000
+  abrir `app/index.html` en el navegador (doble clic).
 
 ## Datos disponibles (en `../datos/`, encoding utf-8-sig)
 
