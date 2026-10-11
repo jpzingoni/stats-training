@@ -2,7 +2,7 @@
 window.DATOS_TABLERO = {
  "meta": {
   "version_esquema": 1,
-  "generado": "2026-10-11 13:52:39",
+  "generado": "2026-10-11 17:58:49",
   "desde": "2026-07-18",
   "hasta": "2026-10-10",
   "actividades_por_categoria": {
@@ -3802,7 +3802,7 @@ window.DATOS_TABLERO = {
    "desnivel_m": 32,
    "tiempo_total_s": 1082,
    "calorias": 202,
-   "trimp": 34.3,
+   "trimp": 34,
    "intensidad_pct": 81.6,
    "recuperacion_fc": null,
    "zonas_s": [
@@ -6333,7 +6333,7 @@ window.DATOS_TABLERO = {
    "sueno_horas": 7.03,
    "sueno_horas_m7": 7.4,
    "sueno_puntaje": 77,
-   "pasos": 867
+   "pasos": 11882
   },
   {
    "fecha": "2026-09-29",
@@ -6341,12 +6341,12 @@ window.DATOS_TABLERO = {
    "atl": 14.8,
    "forma": -0.3,
    "carga_dia": 20,
-   "fc_reposo": null,
-   "fc_reposo_m7": 51.8,
-   "sueno_horas": null,
+   "fc_reposo": 53,
+   "fc_reposo_m7": 52.0,
+   "sueno_horas": 7.32,
    "sueno_horas_m7": 7.5,
-   "sueno_puntaje": null,
-   "pasos": null
+   "sueno_puntaje": 73,
+   "pasos": 14444
   },
   {
    "fecha": "2026-09-30",
@@ -6354,12 +6354,12 @@ window.DATOS_TABLERO = {
    "atl": 12.8,
    "forma": 1.3,
    "carga_dia": 0,
-   "fc_reposo": null,
-   "fc_reposo_m7": 51.6,
-   "sueno_horas": null,
-   "sueno_horas_m7": 7.3,
-   "sueno_puntaje": null,
-   "pasos": null
+   "fc_reposo": 53,
+   "fc_reposo_m7": 52.0,
+   "sueno_horas": 6.72,
+   "sueno_horas_m7": 7.2,
+   "sueno_puntaje": 65,
+   "pasos": 6497
   },
   {
    "fecha": "2026-10-01",
@@ -6367,12 +6367,12 @@ window.DATOS_TABLERO = {
    "atl": 11.1,
    "forma": 2.7,
    "carga_dia": 0,
-   "fc_reposo": null,
-   "fc_reposo_m7": 51.2,
-   "sueno_horas": null,
-   "sueno_horas_m7": 7.3,
-   "sueno_puntaje": null,
-   "pasos": null
+   "fc_reposo": 53,
+   "fc_reposo_m7": 52.0,
+   "sueno_horas": 7.45,
+   "sueno_horas_m7": 7.2,
+   "sueno_puntaje": 71,
+   "pasos": 4034
   },
   {
    "fecha": "2026-10-02",
@@ -6381,7 +6381,7 @@ window.DATOS_TABLERO = {
    "forma": 3.8,
    "carga_dia": 0,
    "fc_reposo": null,
-   "fc_reposo_m7": 52.3,
+   "fc_reposo_m7": 52.7,
    "sueno_horas": null,
    "sueno_horas_m7": 7.2,
    "sueno_puntaje": null,
@@ -6394,9 +6394,9 @@ window.DATOS_TABLERO = {
    "forma": -11.5,
    "carga_dia": 149,
    "fc_reposo": 57,
-   "fc_reposo_m7": 53.7,
+   "fc_reposo_m7": 53.3,
    "sueno_horas": 7,
-   "sueno_horas_m7": 7.8,
+   "sueno_horas_m7": 7.5,
    "sueno_puntaje": 71,
    "pasos": 54121
   },
@@ -6407,9 +6407,9 @@ window.DATOS_TABLERO = {
    "forma": -18.1,
    "carga_dia": 91,
    "fc_reposo": 75,
-   "fc_reposo_m7": 61.3,
+   "fc_reposo_m7": 57.2,
    "sueno_horas": 4.08,
-   "sueno_horas_m7": 6.0,
+   "sueno_horas_m7": 6.6,
    "sueno_puntaje": 39,
    "pasos": 39070
   },
@@ -6420,9 +6420,9 @@ window.DATOS_TABLERO = {
    "forma": -13.7,
    "carga_dia": 0,
    "fc_reposo": null,
-   "fc_reposo_m7": null,
+   "fc_reposo_m7": 58.2,
    "sueno_horas": 9.6,
-   "sueno_horas_m7": 6.9,
+   "sueno_horas_m7": 7.0,
    "sueno_puntaje": 65,
    "pasos": 8097
   },
@@ -6433,9 +6433,9 @@ window.DATOS_TABLERO = {
    "forma": -9.9,
    "carga_dia": 0,
    "fc_reposo": null,
-   "fc_reposo_m7": null,
+   "fc_reposo_m7": 59.5,
    "sueno_horas": 6.2,
-   "sueno_horas_m7": 6.7,
+   "sueno_horas_m7": 6.8,
    "sueno_puntaje": 52,
    "pasos": 8030
   },
@@ -6446,9 +6446,9 @@ window.DATOS_TABLERO = {
    "forma": -6.7,
    "carga_dia": 0,
    "fc_reposo": null,
-   "fc_reposo_m7": null,
+   "fc_reposo_m7": 61.7,
    "sueno_horas": 7.62,
-   "sueno_horas_m7": 6.9,
+   "sueno_horas_m7": 7.0,
    "sueno_puntaje": 66,
    "pasos": 18
   },
@@ -8143,7 +8143,7 @@ window.DATOS_TABLERO = {
      "147",
      "163",
      "20",
-     "34.3",
+     "34.0",
      "81.6",
      "202",
      "32",
@@ -8165,7 +8165,7 @@ window.DATOS_TABLERO = {
      "14.8",
      "ZEPP Amazfit Active 2 (Round)",
      "run.10092807.huami.com 1790719753",
-     "2026-09-30 14:05:45"
+     "2026-10-11 17:58:48"
     ],
     [
      "i193160572",
@@ -13425,11 +13425,11 @@ window.DATOS_TABLERO = {
      "7.03",
      "77.0",
      "3",
-     "867",
+     "11882",
      "",
      "",
      "",
-     "2026-09-29 14:07:39"
+     "2026-10-11 17:58:49"
     ],
     [
      "2026-09-29",
@@ -13438,16 +13438,16 @@ window.DATOS_TABLERO = {
      "-0.3",
      "-0.7",
      "20.0",
+     "53",
+     "26340",
+     "7.32",
+     "73.0",
+     "3",
+     "14444",
      "",
      "",
      "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "2026-09-30 14:05:46"
+     "2026-10-11 17:58:49"
     ],
     [
      "2026-09-30",
@@ -13456,16 +13456,16 @@ window.DATOS_TABLERO = {
      "1.3",
      "-0.7",
      "0",
+     "53",
+     "24180",
+     "6.72",
+     "65.0",
+     "3",
+     "6497",
      "",
      "",
      "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "2026-10-01 14:36:11"
+     "2026-10-11 17:58:49"
     ],
     [
      "2026-10-01",
@@ -13474,16 +13474,16 @@ window.DATOS_TABLERO = {
      "2.7",
      "-0.7",
      "0",
+     "53",
+     "26820",
+     "7.45",
+     "71.0",
+     "3",
+     "4034",
      "",
      "",
      "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "2026-10-02 13:55:12"
+     "2026-10-11 17:58:49"
     ],
     [
      "2026-10-02",
