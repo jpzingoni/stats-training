@@ -341,13 +341,13 @@ main { padding: 1rem 16px 2rem; max-width: 1400px; }
 
 /* ── Este mes (portada) ──────────────────────────────────────────────────── */
 .tarjeta > h2 { margin-bottom: 0.6rem; }
-.act-total { margin-bottom: 0.8rem; }
-.act-total-num { font-size: 2rem; font-weight: 600; line-height: 1.1; }
+.act-total { margin-bottom: 0.4rem; }
+.act-total-num { font-size: 1.7rem; font-weight: 600; line-height: 1.1; }
 .act-total .texto-sec { margin: 0.2rem 0 0; font-size: 0.85rem; }
 .act-lista { list-style: none; margin: 0; padding: 0; }
 .act-lista li {
   display: grid; grid-template-columns: 10px auto minmax(0, 1fr) auto; align-items: baseline; gap: 0.6rem;
-  padding: 0.4rem 0; border-top: 1px solid var(--grilla);
+  padding: 0.3rem 0; border-top: 1px solid var(--grilla);
 }
 .act-lista .muestra { width: 10px; height: 10px; border-radius: 3px; }
 .act-lista-nombre { font-weight: 600; }

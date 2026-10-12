@@ -58,9 +58,9 @@ Una entrada por etapa, de la más reciente a la más antigua.
   chico con los días de actividad marcados. Los promedios se calculan solo con los días
   que tienen dato, y cada tarjeta dice cuántos son: así un día sin reloj no baja el
   promedio. El mes en curso corta en el último día descargado (ayer), no en hoy.
-  La portada entra entera en la pantalla, sin scroll. Arriba van las actividades y el
-  calendario chico; abajo, un gráfico de barras de pasos por día (con el promedio como
-  referencia) y las cuatro tarjetas en 2 × 2. En celular o en ventanas muy bajas se apila
+  La portada entra entera en la pantalla, sin scroll, en una grilla de 2 × 2: arriba el
+  calendario chico y las cuatro tarjetas (también en 2 × 2); abajo las actividades del mes
+  y un gráfico de barras por día (con el promedio como referencia). En celular o en ventanas muy bajas se apila
   y se scrollea. El gráfico diario tiene un selector **Pasos / Sueño** (se recuerda en el
   navegador) y la lista de actividades muestra cada tipo en un solo renglón.
 - **Plantillas de Zepp reconocidas automáticamente.** El FIT no trae el nombre de la
