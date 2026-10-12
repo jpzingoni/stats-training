@@ -61,7 +61,8 @@ Una entrada por etapa, de la más reciente a la más antigua.
   La portada entra entera en la pantalla, sin scroll. Arriba van las actividades y el
   calendario chico; abajo, un gráfico de barras de pasos por día (con el promedio como
   referencia) y las cuatro tarjetas en 2 × 2. En celular o en ventanas muy bajas se apila
-  y se scrollea.
+  y se scrollea. El gráfico diario tiene un selector **Pasos / Sueño** (se recuerda en el
+  navegador) y la lista de actividades muestra cada tipo en un solo renglón.
 - **Plantillas de Zepp reconocidas automáticamente.** El FIT no trae el nombre de la
   plantilla, pero su estructura queda en las vueltas: cada bloque termina por tiempo
   (25:00) o por distancia (2 km). Armé un catálogo con mis plantillas
@@ -75,8 +76,10 @@ Una entrada por etapa, de la más reciente a la más antigua.
   *y* 2 km). Primer resultado: 25 MIN CO ×3, 2KM - 6', 28 MIN CO y Aumento de ritmo; el
   resto son libres (vueltas automáticas de 1 km) o las series del 28/08, que no están en
   el catálogo.
-- Los filtros laterales se aplican a Este mes, al Calendario y al Resumen. En las vistas de cada deporte
-  no, porque ahí ya se ve un único deporte. Se recuerdan en el navegador.
+- **Filtros laterales**: al principio había un filtro por tipo de entrenamiento ("Mostrar
+  entrenamientos"), pero en la práctica no lo usaba y ocupaba lugar, así que lo saqué.
+  Queda solo "Datos diarios" (sueño, FC en reposo, pasos), que aparece en el Calendario y
+  se recuerda en el navegador.
 - La lista de columnas "en uso" vive en el generador (`USO_COLUMNAS`). Cuando un gráfico
   empiece a usar una columna nueva, hay que agregarla ahí.
 

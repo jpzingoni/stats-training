@@ -346,13 +346,13 @@ main { padding: 1rem 16px 2rem; max-width: 1400px; }
 .act-total .texto-sec { margin: 0.2rem 0 0; font-size: 0.85rem; }
 .act-lista { list-style: none; margin: 0; padding: 0; }
 .act-lista li {
-  display: grid; grid-template-columns: 10px 1fr auto; align-items: baseline; gap: 0.15rem 0.6rem;
-  padding: 0.5rem 0; border-top: 1px solid var(--grilla);
+  display: grid; grid-template-columns: 10px auto minmax(0, 1fr) auto; align-items: baseline; gap: 0.6rem;
+  padding: 0.4rem 0; border-top: 1px solid var(--grilla);
 }
 .act-lista .muestra { width: 10px; height: 10px; border-radius: 3px; }
 .act-lista-nombre { font-weight: 600; }
 .act-lista-n { font-weight: 600; font-variant-numeric: tabular-nums; }
-.act-lista-det { grid-column: 2 / -1; color: var(--texto-sec); font-size: 0.82rem; font-variant-numeric: tabular-nums; }
+.act-lista-det { color: var(--texto-sec); font-size: 0.82rem; font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .mini-cal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
 .mini-nombre { text-align: center; font-size: 0.72rem; font-weight: 600; color: var(--texto-muted); }
 .mini-dia {
@@ -384,6 +384,9 @@ body[data-vista="inicio"] main { padding-bottom: 1rem; }
 .inicio-fila > .tarjeta > h2 { margin-bottom: 0.5rem; }
 .inicio-fila h2 small { font-weight: 400; font-size: 0.75rem; color: var(--texto-muted); }
 .inicio-scroll { flex: 1; min-height: 0; overflow-y: auto; }
+.tarjeta-cab { display: flex; align-items: center; justify-content: space-between; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.5rem; }
+.tarjeta-cab h2 { margin: 0; }
+.tarjeta-cab .segmentado button { padding: 0.15rem 0.65rem; font-size: 0.8rem; }
 #panel-inicio .mini-cal { flex: 1; min-height: 0; }
 .tarjeta-grafico .lienzo { flex: 1; height: auto; min-height: 0; }
 .kpis-cuadro { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); gap: 0.8rem; min-height: 0; }

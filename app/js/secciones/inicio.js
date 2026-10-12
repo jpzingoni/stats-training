@@ -8,7 +8,7 @@
   const { numero, duracion, suma, promedio, sumarDias, lunesDe, fechaLarga,
     MESES_LARGOS, hoyLocal, sumarMes, ultimoDiaMes, nombreMes } = Tablero.formato;
 
-  const estado = { mes: null, ctx: null, enlazado: false };
+  const estado = { mes: null, ctx: null, enlazado: false, metrica: null };
   const DIAS = ["L", "M", "X", "J", "V", "S", "D"];
 
   function render(ctx) {
@@ -17,6 +17,14 @@
     if (!estado.mes) estado.mes = estado.limites.max;           // abre en el mes actual
     if (!estado.enlazado) {
       estado.enlazado = true;
+      estado.metrica = leerMetrica();
+      document.getElementById("inicio-metrica").addEventListener("click", (e) => {
+        const b = e.target.closest("[data-metrica]");
+        if (!b) return;
+        estado.metrica = b.dataset.metrica;
+        try { localStorage.setItem("inicio-metrica", estado.metrica); } catch { /* solo esta visita */ }
+        renderDiario(estado.ctx, resumenMes(estado.ctx, estado.mes));
+      });
       document.getElementById("inicio-anterior").onclick = () => { estado.mes = sumarMes(estado.mes, -1); dibujar(); };
       document.getElementById("inicio-siguiente").onclick = () => { estado.mes = sumarMes(estado.mes, 1); dibujar(); };
     }
@@ -86,7 +94,7 @@
 
     renderActividades(m, p, nombreAnt);
     renderMiniCalendario(m);
-    renderPasos(ctx, m);
+    renderDiario(ctx, m);
   }
 
   /** 7.47 → "7 h 28 min" */
@@ -113,8 +121,8 @@
         <li>
           <span class="muestra" style="background:${VAR_GRUPO[x.g]}"></span>
           <span class="act-lista-nombre">${escapar(x.g)}</span>
-          <span class="act-lista-n">${x.n}</span>
           <span class="act-lista-det">${duracion(x.s)}${x.km >= 0.1 ? ` · ${numero(x.km, 1)} km` : ""}</span>
+          <span class="act-lista-n">${x.n}</span>
         </li>`).join("")}</ul>` : '<p class="texto-sec">Todavía no hay actividades este mes.</p>'}`;
   }
 
@@ -145,22 +153,48 @@
     cal.style.gridTemplateRows = `auto repeat(${semanas}, minmax(0, 1fr))`;
   }
 
-  /** Barras verticales: un día por barra, con los pasos. Los días sin dato quedan vacíos. */
-  function renderPasos(ctx, m) {
-    const pasos = new Map(ctx.todo.bienestar.map((d) => [d.fecha, d.pasos]));
+  /** Qué se puede ver en el gráfico diario (el selector Pasos / Sueño). */
+  const METRICAS = {
+    pasos: {
+      titulo: "Pasos por día", etiqueta: "Pasos", clave: "pasos", promedio: (m) => m.pasosProm,
+      eje: (v) => (v >= 1000 ? `${numero(v / 1000)} mil` : v),
+      valor: (v) => `${numero(v)} pasos`,
+    },
+    sueno: {
+      titulo: "Horas de sueño por día", etiqueta: "Sueño", clave: "sueno_horas", promedio: (m) => m.suenoProm,
+      eje: (v) => `${v} h`,
+      valor: (v) => horasMin(v),
+    },
+  };
+
+  function leerMetrica() {
+    try { return METRICAS[localStorage.getItem("inicio-metrica")] ? localStorage.getItem("inicio-metrica") : "pasos"; }
+    catch { return "pasos"; }
+  }
+
+  /** Barras verticales: un día por barra. Los días sin dato quedan vacíos. */
+  function renderDiario(ctx, m) {
+    const met = METRICAS[estado.metrica];
+    document.getElementById("inicio-grafico-titulo").textContent = met.titulo;
+    for (const b of document.querySelectorAll("#inicio-metrica button")) {
+      b.setAttribute("aria-pressed", String(b.dataset.metrica === estado.metrica));
+    }
+    const porDia = new Map(ctx.todo.bienestar.map((d) => [d.fecha, d[met.clave]]));
     const dias = [];
     for (let f = m.desde; f <= m.fin; f = sumarDias(f, 1)) dias.push(f);
-    const valores = dias.map((f) => (f <= m.hasta ? pasos.get(f) ?? null : null));
-    if (!valores.some((v) => v != null)) return sinDatos("g-inicio-pasos", "Sin datos de pasos este mes");
+    const valores = dias.map((f) => (f <= m.hasta ? porDia.get(f) ?? null : null));
+    if (!valores.some((v) => v != null)) {
+      return sinDatos("g-inicio-pasos", `Sin datos de ${met.etiqueta.toLowerCase()} este mes`);
+    }
     const c = colores();
     grafico("g-inicio-pasos", {
       type: "bar",
       data: {
         labels: dias.map((f) => Number(f.slice(8, 10))),
         datasets: [
-          { type: "bar", label: "Pasos", data: valores, ...estiloBarra(c.serie[0]), order: 1 },
+          { type: "bar", label: met.etiqueta, data: valores, ...estiloBarra(c.serie[0]), order: 1 },
           // Promedio de los días con dato, como referencia
-          { type: "line", label: "Promedio", data: dias.map((f) => (f <= m.hasta ? m.pasosProm : null)),
+          { type: "line", label: "Promedio", data: dias.map((f) => (f <= m.hasta ? met.promedio(m) : null)),
             borderColor: c.textoSec, borderWidth: 1.5, borderDash: [5, 4], pointRadius: 0, order: 0 },
         ],
       },
@@ -168,7 +202,7 @@
         interaction: { mode: "index", intersect: false },
         scales: {
           x: { grid: { display: false }, ticks: { maxRotation: 0, autoSkip: true, autoSkipPadding: 6 } },
-          y: ejeY({ beginAtZero: true, ticks: { maxTicksLimit: 4, callback: (v) => (v >= 1000 ? `${numero(v / 1000)} mil` : v) } }),
+          y: ejeY({ beginAtZero: true, ticks: { maxTicksLimit: 4, callback: met.eje } }),
         },
         plugins: {
           legend: { position: "top" },
@@ -176,7 +210,7 @@
             filter: (i) => i.parsed.y != null,
             callbacks: {
               title: (i) => fechaLarga(dias[i[0].dataIndex]),
-              label: (i) => ` ${i.dataset.label}: ${numero(i.parsed.y)} pasos`,
+              label: (i) => ` ${i.dataset.label}: ${met.valor(i.parsed.y)}`,
             },
           },
         },

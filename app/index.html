@@ -34,10 +34,6 @@
         <button type="button" data-pestana="datos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M3 15h18M9 4v16"/></svg><span>Datos</span></button>
       </nav>
       <section class="filtros-lateral" id="filtros-lateral" aria-label="Filtros">
-        <div class="filtros-grupo">
-          <h2>Mostrar entrenamientos</h2>
-          <div id="filtro-categorias"></div>
-        </div>
         <div class="filtros-grupo" id="grupo-bienestar">
           <h2>Datos diarios</h2>
           <div id="filtro-bienestar"></div>
@@ -84,7 +80,13 @@
       </div>
       <div class="inicio-fila">
         <section class="tarjeta tarjeta-grafico">
-          <h2>Pasos por día</h2>
+          <div class="tarjeta-cab">
+            <h2 id="inicio-grafico-titulo">Pasos por día</h2>
+            <div class="segmentado" id="inicio-metrica" role="group" aria-label="Dato a mostrar">
+              <button type="button" data-metrica="pasos">Pasos</button>
+              <button type="button" data-metrica="sueno">Sueño</button>
+            </div>
+          </div>
           <div class="lienzo"><canvas id="g-inicio-pasos"></canvas></div>
         </section>
         <div class="kpis-cuadro" id="inicio-kpis"></div>

@@ -3,7 +3,7 @@
 (() => {
   const Tablero = (window.Tablero ??= { secciones: {} });
 
-  const { aplicarEstiloGlobal, destruirTodos, GRUPOS, VAR_GRUPO, grupoDe } = Tablero.graficos;
+  const { aplicarEstiloGlobal, destruirTodos, GRUPOS } = Tablero.graficos;
   const { iniciarTema } = Tablero.tema;
   const { escapar } = Tablero.componentes;
   const { sumarDias, fechaLarga, ts } = Tablero.formato;
@@ -17,7 +17,6 @@
     inicio: "Este mes", calendario: "Calendario", resumen: "Resumen", carrera: "Carrera", padel: "Pádel",
     ciclismo: "Ciclismo", otras: "Otras actividades", recuperacion: "Recuperación", datos: "Datos",
   };
-  const CON_FILTROS = ["inicio", "calendario", "resumen"];   // vistas a las que aplican los filtros laterales
   const SIN_PERIODO = ["inicio", "calendario", "datos"];     // esas vistas navegan por mes; los datos crudos no se filtran
   const PERIODOS = { 4: "4 semanas", 12: "12 semanas", todo: "todo el historial" };
 
@@ -25,7 +24,7 @@
     pestana: "inicio",
     periodo: "12",
     datos: null,
-    filtros: { grupos: new Set(GRUPOS), bienestar: new Set(S.calendario.DIARIOS.map((d) => d.clave)) },
+    filtros: { bienestar: new Set(S.calendario.DIARIOS.map((d) => d.clave)) },   // datos diarios del calendario
   };
 
   // ─── Filtros (se recuerdan en este navegador) ──────────────────────────────
@@ -33,30 +32,22 @@
   function leerFiltros() {
     try {
       const f = JSON.parse(localStorage.getItem("filtros") ?? "null");
-      if (f?.grupos) estado.filtros.grupos = new Set(f.grupos.filter((g) => GRUPOS.includes(g)));
       if (f?.bienestar) estado.filtros.bienestar = new Set(f.bienestar);
     } catch { /* sin almacenamiento o dato corrupto: se usan los valores por defecto */ }
   }
 
   function guardarFiltros() {
     try {
-      localStorage.setItem("filtros", JSON.stringify({
-        grupos: [...estado.filtros.grupos], bienestar: [...estado.filtros.bienestar],
-      }));
+      localStorage.setItem("filtros", JSON.stringify({ bienestar: [...estado.filtros.bienestar] }));
     } catch { /* sin almacenamiento: vale solo para esta visita */ }
   }
 
   function armarFiltros() {
-    const cuenta = {};
-    for (const a of estado.datos.actividades) cuenta[grupoDe(a)] = (cuenta[grupoDe(a)] ?? 0) + 1;
-    const check = (tipo, valor, texto, extra = "") => `
+    const check = (tipo, valor, texto) => `
       <label class="check">
         <input type="checkbox" data-tipo="${tipo}" value="${escapar(valor)}"${estado.filtros[tipo].has(valor) ? " checked" : ""}>
-        ${extra}<span>${escapar(texto)}</span>${tipo === "grupos" ? `<span class="cuenta">${cuenta[valor] ?? 0}</span>` : ""}
+        <span>${escapar(texto)}</span>
       </label>`;
-    document.getElementById("filtro-categorias").innerHTML = GRUPOS
-      .filter((g) => cuenta[g])
-      .map((g) => check("grupos", g, g, `<span class="muestra" style="background:${VAR_GRUPO[g]}"></span>`)).join("");
     document.getElementById("filtro-bienestar").innerHTML = S.calendario.DIARIOS
       .map((d) => check("bienestar", d.clave, d.nombre)).join("");
     document.getElementById("filtros-lateral").addEventListener("change", (e) => {
@@ -84,12 +75,11 @@
       else anterior = { desde: sumarDias(desde, -dias), hasta: sumarDias(desde, -1) };
     }
     const enRango = (f, r = { desde, hasta }) => f >= r.desde && f <= r.hasta;
-    const aplicaFiltro = CON_FILTROS.includes(estado.pestana);
-    const visible = (a) => !aplicaFiltro || estado.filtros.grupos.has(grupoDe(a));
+    const visible = () => true;   // (hubo un filtro por tipo de entrenamiento; se sacó)
     return {
       meta, desde, hasta, anterior, enRango, visible,
       filtros: estado.filtros,
-      gruposVisibles: aplicaFiltro ? estado.filtros.grupos : new Set(GRUPOS),
+      gruposVisibles: new Set(GRUPOS),
       etiquetaPeriodo: PERIODOS[estado.periodo],
       actividades: actividades.filter((a) => enRango(a.fecha) && visible(a)),
       actividadesAnteriores: anterior ? actividades.filter((a) => enRango(a.fecha, anterior) && visible(a)) : null,
@@ -126,8 +116,7 @@
     for (const s of document.querySelectorAll(".seccion")) s.hidden = s.id !== `panel-${nombre}`;
     document.getElementById("titulo-vista").textContent = TITULOS[nombre];
     document.getElementById("filtro").hidden = SIN_PERIODO.includes(nombre);
-    document.getElementById("filtros-lateral").hidden = !CON_FILTROS.includes(nombre);
-    document.getElementById("grupo-bienestar").hidden = nombre !== "calendario";
+    document.getElementById("filtros-lateral").hidden = nombre !== "calendario";
     cerrarMenu();
     scrollTo(0, 0);
     dibujar();
