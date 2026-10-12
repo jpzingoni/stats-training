@@ -13,7 +13,7 @@ flowchart LR
     A[Amazfit Active 2] --> B[App Zepp]
     B --> C[Intervals.icu]
     C -- API REST --> D[GitHub Actions<br/>todos los días 09:00]
-    D --> E[(CSV en el repo<br/>actividades · bloques · bienestar)]
+    D --> E[(CSV en el repo<br/>actividades · bloques · minutos · bienestar)]
     E --> F[Tablero web<br/>Cloudflare Pages]
     E --> G[Coach virtual<br/>Claude Code]
     G -- informes y planes --> F

@@ -6,6 +6,8 @@ Archivos que genera en la carpeta "datos":
   actividades.csv  -> una fila por sesión (clave: id)
   bloques.csv      -> una fila por vuelta/bloque de cada sesión (clave: id_actividad + nro_bloque)
   bienestar.csv    -> una fila por día (clave: fecha)
+  minutos.csv      -> una fila por minuto de cada sesión, resumida de la grabación segundo a
+                      segundo (clave: id_actividad + minuto)
   registro.log     -> historial de cada ejecución
 """
 
@@ -53,15 +55,24 @@ COLS_ACTIVIDADES = [
     "id", "fecha", "hora_inicio", "tipo_intervals", "categoria", "subtipo", "nombre",
     "duracion_s", "tiempo_total_s", "distancia_m", "ritmo_min_km", "velocidad_media_ms",
     "fc_media", "fc_max", "carga_hrss", "trimp", "intensidad_pct", "calorias",
-    "desnivel_pos_m", "cadencia_ppm", "zancada_m", "contacto_ms", "oscilacion_cm",
+    "desnivel_pos_m", "cadencia_ppm", "zancada_m", "contacto_ms", "oscilacion_cm", "potencia_w",
     "z1_s", "z2_s", "z3_s", "z4_s", "z5_s", "z6_s", "z7_s",
     "recuperacion_fc", "cant_vueltas", "resumen_bloques", "fitness_ctl", "fatiga_atl",
     "dispositivo", "id_zepp", "actualizado",
 ]
 COLS_BLOQUES = [
     "id_actividad", "fecha", "nro_bloque", "tipo", "inicio_s", "duracion_s", "distancia_m",
-    "ritmo_min_km", "fc_media", "fc_max", "cadencia_ppm", "desnivel_pos_m",
+    "ritmo_min_km", "fc_media", "fc_max", "cadencia_ppm", "desnivel_pos_m", "potencia_w",
 ]
+COLS_MINUTOS = [
+    "id_actividad", "fecha", "minuto", "segundos", "distancia_m", "ritmo_min_km",
+    "velocidad_ms", "fc_media", "fc_max", "cadencia_ppm", "potencia_w", "altitud_m",
+    "zancada_m", "contacto_ms", "oscilacion_cm",
+]
+# Datos de la grabación que se piden a la API. La posición GPS (latlng) queda afuera a propósito:
+# el repositorio es público y los recorridos muestran desde dónde salgo a correr.
+TIPOS_STREAMS = ("time,distance,velocity_smooth,heartrate,cadence,watts,altitude,"
+                 "step_length,stance_time,vertical_oscillation")
 COLS_BIENESTAR = [
     "fecha", "fitness_ctl", "fatiga_atl", "forma", "ramp_rate", "carga_dia",
     "fc_reposo", "sueno_s", "sueno_horas", "sueno_puntaje", "sueno_calidad",
@@ -123,8 +134,8 @@ def pedir(s, url, params=None, intentos=4):
 def ritmo(vel_ms):
     if not vel_ms:
         return ""
-    seg = 1000 / vel_ms
-    return f"{int(seg // 60)}:{int(round(seg % 60)):02d}"
+    seg = round(1000 / vel_ms)   # redondear antes de partir, para no dar "10:60"
+    return f"{seg // 60}:{seg % 60:02d}"
 
 
 def r(x, dec=1):
@@ -164,8 +175,18 @@ def subtipo(a, bloques):
     return "Libre"
 
 
+def _validos(datos, desde=0, hasta=None, sin_ceros=False):
+    """Valores no nulos de un tramo de la grabación. sin_ceros descarta las pausas
+    (cadencia, potencia o FC en 0 mientras el reloj espera)."""
+    return [x for x in (datos or [])[desde:hasta] if x is not None and not (sin_ceros and x == 0)]
+
+
+def _prom(valores, dec=0):
+    return r(sum(valores) / len(valores), dec) if valores else ""
+
+
 # ---------------------------------------------------------------- transformación
-def fila_actividad(a, bloques):
+def fila_actividad(a, bloques, st):
     z = (a.get("icu_hr_zone_times") or []) + [None] * 7
     cad = a.get("average_cadence")
     return {
@@ -192,6 +213,8 @@ def fila_actividad(a, bloques):
         "zancada_m": r(a.get("average_stride"), 2),
         "contacto_ms": r(a.get("average_stance_time"), 0),
         "oscilacion_cm": r((a.get("average_vertical_oscillation") or 0) / 10) or "",
+        # Intervals no calcula la potencia de carrera: se promedia desde la grabación
+        "potencia_w": _prom(_validos(st.get("watts"), sin_ceros=True)),
         **{f"z{i + 1}_s": z[i] if z[i] is not None else "" for i in range(7)},
         "recuperacion_fc": (a.get("icu_hrr") or {}).get("hrr", ""),
         "cant_vueltas": a.get("icu_lap_count"),
@@ -204,7 +227,7 @@ def fila_actividad(a, bloques):
     }
 
 
-def filas_bloques(a, bloques):
+def filas_bloques(a, bloques, st):
     filas = []
     for i, b in enumerate(bloques, start=1):
         cad = b.get("average_cadence")
@@ -221,6 +244,46 @@ def filas_bloques(a, bloques):
             "fc_max": b.get("max_heartrate") or "",
             "cadencia_ppm": round(cad * 2) if cad else "",
             "desnivel_pos_m": r(b.get("total_elevation_gain"), 0),
+            "potencia_w": _prom(_validos(st.get("watts"), b.get("start_index") or 0,
+                                         b.get("end_index"), sin_ceros=True)),
+        })
+    return filas
+
+
+def filas_minutos(a, st):
+    """Resume la grabación segundo a segundo en una fila por minuto de sesión."""
+    por_minuto = {}
+    for i, seg in enumerate(st.get("time") or []):
+        por_minuto.setdefault(seg // 60, []).append(i)
+    filas = []
+    for minuto, idx in sorted(por_minuto.items()):
+        ini, fin = idx[0], idx[-1] + 1
+
+        def tramo(tipo, sin_ceros=False):
+            return _validos(st.get(tipo), ini, fin, sin_ceros)
+
+        vel = _prom(tramo("velocity_smooth"), 3)    # con ceros: si paraste, el ritmo lo refleja
+        dist = tramo("distance")
+        cad = _prom(tramo("cadence", sin_ceros=True), 1)
+        zancada = _prom(tramo("step_length", sin_ceros=True), 0)            # viene en mm
+        oscilacion = _prom(tramo("vertical_oscillation", sin_ceros=True), 0)  # viene en mm
+        fc = tramo("heartrate", sin_ceros=True)
+        filas.append({
+            "id_actividad": a["id"],
+            "fecha": a["start_date_local"][:10],
+            "minuto": minuto,
+            "segundos": len(idx),                   # el último minuto suele ser incompleto
+            "distancia_m": r(max(dist), 0) if dist else "",   # acumulada al final del minuto
+            "ritmo_min_km": ritmo(vel or 0),
+            "velocidad_ms": vel,
+            "fc_media": _prom(fc),
+            "fc_max": max(fc) if fc else "",
+            "cadencia_ppm": round(cad * 2) if cad else "",    # por pierna -> pasos por minuto
+            "potencia_w": _prom(tramo("watts", sin_ceros=True)),
+            "altitud_m": _prom(tramo("altitude"), 1),
+            "zancada_m": r(zancada / 1000, 2) if zancada else "",
+            "contacto_ms": _prom(tramo("stance_time", sin_ceros=True)),
+            "oscilacion_cm": r(oscilacion / 10, 1) if oscilacion else "",
         })
     return filas
 
@@ -315,12 +378,15 @@ def descargar(desde: date, hasta: date, etiqueta: str):
     acts = [a for a in acts if desde.isoformat() <= a["start_date_local"][:10] <= hasta.isoformat()]
     well = [w for w in well if desde.isoformat() <= w["id"] <= hasta.isoformat()]
 
-    filas_a, filas_b = [], []
+    filas_a, filas_b, filas_m = [], [], []
     for i, a in enumerate(acts, start=1):
         det = pedir(s, f"{BASE}/activity/{a['id']}/intervals") or {}
         bloques = det.get("icu_intervals") or []
-        filas_a.append(fila_actividad(a, bloques))
-        filas_b += filas_bloques(a, bloques)
+        grabacion = pedir(s, f"{BASE}/activity/{a['id']}/streams.json", {"types": TIPOS_STREAMS}) or []
+        st = {x["type"]: x.get("data") or [] for x in grabacion}
+        filas_a.append(fila_actividad(a, bloques, st))
+        filas_b += filas_bloques(a, bloques, st)
+        filas_m += filas_minutos(a, st)
         print(f"   bloques {i}/{len(acts)}: {a['start_date_local'][:10]} {a.get('type')} ({len(bloques)} bloques)", end="\r")
         time.sleep(0.2)   # pausa corta para no saturar la API
     if acts:
@@ -334,17 +400,21 @@ def descargar(desde: date, hasta: date, etiqueta: str):
     existentes_b = [b for b in leer_csv("bloques.csv") if b["id_actividad"] not in ids and b["fecha"] not in fechas]
     guardar_csv("bloques.csv", COLS_BLOQUES, existentes_b + filas_b,
                 lambda f: (str(f["fecha"]), str(f["id_actividad"]), int(f["nro_bloque"])))
+    # los minutos, igual que los bloques
+    existentes_m = [m for m in leer_csv("minutos.csv") if m["id_actividad"] not in ids and m["fecha"] not in fechas]
+    guardar_csv("minutos.csv", COLS_MINUTOS, existentes_m + filas_m,
+                lambda f: (str(f["fecha"]), str(f["id_actividad"]), int(f["minuto"])))
     nw, tw = actualizar("bienestar.csv", COLS_BIENESTAR, [fila_bienestar(w) for w in well],
                         lambda f: f["fecha"], lambda f: f["fecha"])
 
     resumen = (f"{ahora()} | {etiqueta} {desde} → {hasta} | "
-               f"actividades: {ta} procesadas ({na:+d} nuevas) | bloques: {len(filas_b)} | "
+               f"actividades: {ta} procesadas ({na:+d} nuevas) | bloques: {len(filas_b)} | minutos: {len(filas_m)} | "
                f"bienestar: {tw} días ({nw:+d} nuevos)")
     DATOS.mkdir(exist_ok=True)
     with open(DATOS / "registro.log", "a", encoding="utf-8") as f:
         f.write(resumen + "\n")
 
-    print(f"\n✅ Listo. Actividades: {ta} procesadas ({na:+d} nuevas) · Bloques: {len(filas_b)} · "
+    print(f"\n✅ Listo. Actividades: {ta} procesadas ({na:+d} nuevas) · Bloques: {len(filas_b)} · Minutos: {len(filas_m)} · "
           f"Bienestar: {tw} días ({nw:+d} nuevos)")
     print(f"   Archivos en: {DATOS}")
     if acts:
