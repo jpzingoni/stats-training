@@ -14,7 +14,7 @@
     const conBloque = corridas.filter((a) => a.bloque_principal);
 
     renderKpis(ctx, corridas, anteriores, conBloque);
-    renderComparacion(corridas);
+    renderComparacion(corridas, ctx.meta);
     renderEficiencia(ctx, corridas);
     renderKm(ctx);
     renderZonas(ctx);
@@ -129,8 +129,9 @@
 
   const sesionesDePlantilla = () => comp.corridas.filter((a) => (a.plantilla ?? "Libre") === comp.plantilla);
 
-  function renderComparacion(corridas) {
+  function renderComparacion(corridas, meta = comp.meta) {
     comp.corridas = corridas;
+    comp.meta = meta;
     if (!comp.enlazado) enlazarComp();
     const c = colores();
 
@@ -167,17 +168,36 @@
     for (const b of document.querySelectorAll("#carrera-metrica button")) {
       b.setAttribute("aria-pressed", String(b.dataset.metrica === comp.metrica));
     }
+    // Con plantilla, el eje X sigue los bloques de la plantilla: todas las sesiones comparten
+    // los mismos tramos y lo que cambia es la altura de cada escalón. Sin plantilla ("Libre"),
+    // el eje es el tiempo real desde el inicio de cada sesión.
+    const pasos = comp.meta?.plantillas?.[comp.plantilla];
+    const eje = pasos ? ejePlantilla(pasos, sesiones) : null;
+    const hayDistancia = pasos?.some((p) => p.tipo === "distancia");
     document.getElementById("carrera-comp-nota").textContent =
-      "Cada escalón es el promedio de un bloque (no hay datos segundo a segundo). El eje horizontal es el tiempo desde el inicio de la sesión." +
+      "Cada escalón es el promedio de un bloque (no hay datos segundo a segundo). " +
+      (eje
+        ? "El eje horizontal sigue los bloques de la plantilla, así todas las sesiones quedan alineadas." +
+          (hayDistancia ? " Los bloques por distancia se dibujan con su duración promedio." : "")
+        : "El eje horizontal es el tiempo desde el inicio de la sesión.") +
       (met.invertir ? " Más arriba = más rápido." : "") +
       (sesiones.length > MAX_SESIONES ? ` Se pueden comparar hasta ${MAX_SESIONES} sesiones a la vez.` : "");
     if (!elegidas.length) return sinDatos("g-carrera-comparar", "Elegí al menos una sesión");
 
     const datasets = elegidas.map((a) => {
-      const bloques = a.bloques.filter((b) => (b.duracion_s ?? 0) >= 10);
-      const puntos = bloques.map((b) => ({ x: (b.inicio_s ?? 0) / 60, y: met.valor(b) ?? null, b }));
-      const ultimo = bloques.at(-1);
-      if (ultimo) puntos.push({ x: ((ultimo.inicio_s ?? 0) + ultimo.duracion_s) / 60, y: met.valor(ultimo) ?? null, b: ultimo, fin: true });
+      let puntos;
+      if (eje) {
+        // El k-ésimo bloque con fase corresponde al paso k de la plantilla
+        const conFase = a.bloques.filter((b) => b.fase);
+        puntos = conFase.map((b, k) => ({ x: eje.inicios[k] / 60, y: met.valor(b) ?? null, b }));
+        const k = conFase.length - 1;
+        if (k >= 0) puntos.push({ x: (eje.inicios[k] + eje.anchos[k]) / 60, y: met.valor(conFase[k]) ?? null, b: conFase[k], fin: true });
+      } else {
+        const bloques = a.bloques.filter((b) => (b.duracion_s ?? 0) >= 10);
+        puntos = bloques.map((b) => ({ x: (b.inicio_s ?? 0) / 60, y: met.valor(b) ?? null, b }));
+        const ultimo = bloques.at(-1);
+        if (ultimo) puntos.push({ x: ((ultimo.inicio_s ?? 0) + ultimo.duracion_s) / 60, y: met.valor(ultimo) ?? null, b: ultimo, fin: true });
+      }
       return {
         // "before" en Chart.js: cada tramo conserva el valor del punto donde empieza el bloque
         label: fechaLarga(a.fecha), data: puntos, stepped: "before",
@@ -188,22 +208,27 @@
     grafico("g-carrera-comparar", {
       type: "line",
       data: { datasets },
+      plugins: [LINEAS_BLOQUES],
       options: {
         interaction: { mode: "nearest", intersect: false, axis: "x" },
+        layout: { padding: { top: eje ? 16 : 0 } },
         scales: {
-          x: { type: "linear", min: 0, grid: { display: false }, border: { color: c.eje },
-               title: { display: true, text: "minutos desde el inicio" }, ticks: { callback: (v) => `${v}′` } },
+          x: { type: "linear", min: 0, max: eje ? eje.total / 60 : undefined, grid: { display: false }, border: { color: c.eje },
+               title: { display: true, text: eje ? `minutos según la plantilla ${comp.plantilla}` : "minutos desde el inicio" },
+               ticks: { callback: (v) => (Number.isInteger(v) ? `${v}′` : "") } },   // sin el último valor con decimales
           y: ejeY({ reverse: met.invertir, grace: "8%", ticks: { maxTicksLimit: 10, stepSize: met.paso, callback: met.formato } }),
         },
         plugins: {
-          legend: { display: datasets.length > 1, position: "top" },
+          // Con plantilla, la leyenda va abajo: arriba están los nombres de las fases
+          legend: { display: datasets.length > 1, position: eje ? "bottom" : "top" },
+          lineasBloques: eje ? { limites: eje.inicios.slice(1).map((v) => v / 60), tramos: eje.tramos, linea: c.muted, texto: c.textoSec } : null,
           tooltip: {
             filter: (i) => !i.raw.fin && i.parsed.y != null,
             callbacks: {
               title: (items) => items.length ? `${items[0].dataset.label}` : "",
               label: (i) => {
                 const b = i.raw.b;
-                return ` Bloque ${b.nro}${b.fase ? ` · ${b.fase}` : ""}: ${met.formato(i.parsed.y)} · ${duracion(b.duracion_s)}`;
+                return ` Bloque ${b.nro}${b.fase ? ` · ${b.fase}` : ""}: ${met.formato(i.parsed.y)} · duró ${duracion(b.duracion_s)}`;
               },
             },
           },
@@ -211,6 +236,59 @@
       },
     });
   }
+
+  /**
+   * Eje común de una plantilla: dónde empieza y cuánto ocupa cada paso (en segundos).
+   * Los pasos por tiempo ocupan su objetivo; los de distancia, la duración promedio que tuvo
+   * ese paso en todas las sesiones de la plantilla (si no hay ninguna, se estima a 6 min/km).
+   */
+  function ejePlantilla(pasos, sesiones) {
+    const anchos = pasos.map((p, k) => {
+      if (p.tipo === "tiempo") return p.valor;
+      const reales = sesiones.map((a) => a.bloques.filter((b) => b.fase)[k]?.duracion_s).filter((d) => d != null);
+      return reales.length ? reales.reduce((x, y) => x + y, 0) / reales.length : p.valor * 0.36;
+    });
+    const inicios = [];
+    anchos.reduce((acum, ancho) => { inicios.push(acum); return acum + ancho; }, 0);
+    const objetivo = (p) => (p.tipo === "tiempo"
+      ? (p.valor % 60 ? `${Math.floor(p.valor / 60)}′${String(p.valor % 60).padStart(2, "0")}″` : `${p.valor / 60}′`)
+      : (p.valor >= 1000 ? `${numero(p.valor / 1000, p.valor % 1000 ? 1 : 0)} km` : `${p.valor} m`));
+    const tramos = pasos.map((p, k) => ({
+      desde: inicios[k] / 60, hasta: (inicios[k] + anchos[k]) / 60, texto: p.fase, completo: `${p.fase} · ${objetivo(p)}`,
+    }));
+    return { anchos, inicios, tramos, total: inicios.at(-1) + anchos.at(-1) };
+  }
+
+  /** Plugin de Chart.js: líneas punteadas en cada cambio de bloque y el nombre de la fase arriba. */
+  const LINEAS_BLOQUES = {
+    id: "lineasBloques",
+    afterDatasetsDraw(chart) {
+      const op = chart.options.plugins.lineasBloques;
+      if (!op) return;
+      const { ctx, chartArea: area, scales: { x } } = chart;
+      ctx.save();
+      ctx.strokeStyle = op.linea;
+      ctx.lineWidth = 1;
+      ctx.setLineDash([4, 4]);
+      for (const m of op.limites) {
+        const px = Math.round(x.getPixelForValue(m)) + 0.5;
+        ctx.beginPath(); ctx.moveTo(px, area.top - 14); ctx.lineTo(px, area.bottom); ctx.stroke();
+      }
+      ctx.setLineDash([]);
+      ctx.fillStyle = op.texto;
+      ctx.font = `11px ${Chart.defaults.font.family}`;
+      ctx.textAlign = "center";
+      ctx.textBaseline = "bottom";
+      for (const t of op.tramos) {
+        const a = x.getPixelForValue(t.desde), b = x.getPixelForValue(t.hasta);
+        // En tramos angostos (ciclos de CACO) se usa la inicial; si ni eso entra, no se rotula
+        const entra = (txt) => ctx.measureText(txt).width + 8 < b - a;
+        const texto = entra(t.completo) ? t.completo : entra(t.texto) ? t.texto : (b - a > 14 ? t.texto[0] : "");
+        if (texto) ctx.fillText(texto, (a + b) / 2, area.top - 2);
+      }
+      ctx.restore();
+    },
+  };
 
   function renderEficiencia(ctx, corridas) {
     const c = colores();

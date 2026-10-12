@@ -82,7 +82,12 @@ Una entrada por etapa, de la más reciente a la más antigua.
   escalonadas muestra el ritmo o la FC (selector) en función del tiempo desde el inicio
   de la sesión: un escalón por bloque, porque solo tenemos promedios por bloque y no datos
   segundo a segundo. Ritmo y FC no van juntos: necesitarían dos ejes Y y eso sugiere
-  relaciones que no existen.
+  relaciones que no existen. Con una plantilla elegida, **el eje X sigue los bloques de la
+  plantilla** y no el reloj de cada sesión: así todas comparten los mismos tramos (aunque
+  un calentamiento haya durado 5:37) y lo que varía es la altura de cada escalón. Los
+  bloques por distancia toman su duración promedio. Líneas punteadas verticales marcan
+  cada cambio de bloque, con la fase y el objetivo arriba. En "Libre" el eje es el tiempo
+  real.
 - **Filtros laterales**: al principio había un filtro por tipo de entrenamiento ("Mostrar
   entrenamientos"), pero en la práctica no lo usaba y ocupaba lugar, así que lo saqué.
   Queda solo "Datos diarios" (sueño, FC en reposo, pasos), que aparece en el Calendario y
