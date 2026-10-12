@@ -16,7 +16,7 @@
       grilla: v("--grilla"), eje: v("--eje"), superficie: v("--superficie"),
       categoria: { Carrera: v("--serie-1"), "Pádel": v("--serie-2"), Caminata: v("--serie-3"), Ciclismo: v("--serie-4"), Otras: v("--serie-otras") },
       subtipo: { Bloques: v("--serie-1"), Series: v("--serie-2"), Libre: v("--serie-3"), "Sin subtipo": v("--serie-otras") },
-      serie: [v("--serie-1"), v("--serie-2"), v("--serie-3")],
+      serie: [1, 2, 3, 4, 5, 6, 7, 8].map((i) => v(`--serie-${i}`)),
       rampa: [1, 2, 3, 4, 5, 6, 7].map((i) => v(`--rampa-${i}`)),
       rampaVacio: v("--rampa-vacio"),
     };

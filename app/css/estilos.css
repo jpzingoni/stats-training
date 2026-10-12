@@ -18,6 +18,10 @@
   --serie-2: #eb6834;   /* naranja — Pádel / Series / Fatiga */
   --serie-3: #1baf7a;   /* agua    — Caminata / Libre / Forma */
   --serie-4: #eda100;   /* amarillo — Ciclismo */
+  --serie-5: #e87ba4;
+  --serie-6: #008300;
+  --serie-7: #4a3aa7;
+  --serie-8: #e34948;
   --serie-otras: #898781;
 
   /* Rampa ordinal azul: zonas Z1 → Z7 y calendario de carga */
@@ -50,6 +54,10 @@
     --serie-2: #d95926;
     --serie-3: #199e70;
     --serie-4: #c98500;
+    --serie-5: #d55181;
+    --serie-6: #008300;
+    --serie-7: #9085e9;
+    --serie-8: #e66767;
     --serie-otras: #6f6e69;
     --rampa-1: #184f95;
     --rampa-2: #256abf;
@@ -78,6 +86,10 @@
   --serie-2: #d95926;
   --serie-3: #199e70;
   --serie-4: #c98500;
+  --serie-5: #d55181;
+  --serie-6: #008300;
+  --serie-7: #9085e9;
+  --serie-8: #e66767;
   --serie-otras: #6f6e69;
   --rampa-1: #184f95;
   --rampa-2: #256abf;
@@ -391,6 +403,28 @@ body[data-vista="inicio"] main { padding-bottom: 1rem; }
 .tarjeta-grafico .lienzo { flex: 1; height: auto; min-height: 0; }
 .kpis-cuadro { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); gap: 0.8rem; min-height: 0; }
 .kpis-cuadro .kpi { display: flex; flex-direction: column; justify-content: center; min-height: 0; overflow: hidden; }
+
+/* ── Selectores de la vista Carrera ───────────────────────────────────────── */
+.selectores { display: flex; flex-wrap: wrap; gap: 0.8rem; margin-bottom: 1rem; align-items: flex-end; }
+.selector { display: flex; flex-direction: column; gap: 0.25rem; font-size: 0.78rem; color: var(--texto-muted); }
+.selector select, .desplegable summary {
+  font: inherit; font-size: 0.9rem; color: var(--texto); background: var(--superficie);
+  border: 1px solid var(--borde); border-radius: 8px; padding: 0.4rem 0.7rem; min-width: 220px; cursor: pointer;
+}
+.desplegable { position: relative; }
+.desplegable summary { list-style: none; display: flex; justify-content: space-between; gap: 0.8rem; }
+.desplegable summary::-webkit-details-marker { display: none; }
+.desplegable summary::after { content: "▾"; color: var(--texto-muted); }
+.desplegable-menu {
+  position: absolute; z-index: 15; top: calc(100% + 4px); left: 0; min-width: 100%; max-height: 320px; overflow-y: auto;
+  background: var(--superficie); border: 1px solid var(--borde); border-radius: 8px; padding: 0.4rem;
+  box-shadow: 0 6px 20px rgba(0, 0, 0, 0.15);
+}
+.desplegable-acciones { display: flex; gap: 0.4rem; padding: 0.2rem 0.3rem 0.4rem; border-bottom: 1px solid var(--grilla); margin-bottom: 0.3rem; }
+.desplegable-acciones button { background: none; border: 1px solid var(--borde); border-radius: 6px; padding: 0.1rem 0.5rem; cursor: pointer; font-size: 0.78rem; color: var(--texto); }
+.desplegable .check { white-space: nowrap; font-size: 0.85rem; color: var(--texto); }
+.desplegable .check input:disabled + .muestra { opacity: 0.4; }
+.lienzo.alto { height: 340px; }
 
 /* ── Diálogo de detalle de sesión ────────────────────────────────────────── */
 .dialogo {

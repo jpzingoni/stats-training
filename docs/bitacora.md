@@ -76,6 +76,13 @@ Una entrada por etapa, de la más reciente a la más antigua.
   *y* 2 km). Primer resultado: 25 MIN CO ×3, 2KM - 6', 28 MIN CO y Aumento de ritmo; el
   resto son libres (vueltas automáticas de 1 km) o las series del 28/08, que no están en
   el catálogo.
+- **Vista Carrera para comparar sesiones de una misma plantilla**: sin selector de período
+  (usa todo el historial); un desplegable elige la plantilla y otro, con casillas, las
+  sesiones a comparar (hasta 8, por la paleta de colores). Un único gráfico de líneas
+  escalonadas muestra el ritmo o la FC (selector) en función del tiempo desde el inicio
+  de la sesión: un escalón por bloque, porque solo tenemos promedios por bloque y no datos
+  segundo a segundo. Ritmo y FC no van juntos: necesitarían dos ejes Y y eso sugiere
+  relaciones que no existen.
 - **Filtros laterales**: al principio había un filtro por tipo de entrenamiento ("Mostrar
   entrenamientos"), pero en la práctica no lo usaba y ocupaba lugar, así que lo saqué.
   Queda solo "Datos diarios" (sueño, FC en reposo, pasos), que aparece en el Calendario y

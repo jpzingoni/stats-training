@@ -130,15 +130,37 @@
 
     <!-- ── Carrera ─────────────────────────────────────────────── -->
     <section id="panel-carrera" class="seccion" hidden>
+      <div class="selectores" role="group" aria-label="Sesiones a comparar">
+        <label class="selector">
+          <span>Plantilla</span>
+          <select id="carrera-plantilla"></select>
+        </label>
+        <div class="selector">
+          <span id="carrera-sesiones-etiqueta">Sesiones</span>
+          <details class="desplegable" id="carrera-sesiones">
+            <summary aria-labelledby="carrera-sesiones-etiqueta"><span id="carrera-sesiones-resumen"></span></summary>
+            <div class="desplegable-menu">
+              <div class="desplegable-acciones">
+                <button type="button" data-accion="todas">Todas</button>
+                <button type="button" data-accion="ninguna">Ninguna</button>
+              </div>
+              <div id="carrera-sesiones-lista"></div>
+            </div>
+          </details>
+        </div>
+      </div>
       <div class="kpis" id="carrera-kpis"></div>
       <div class="grilla">
-        <figure class="tarjeta">
-          <figcaption><h2>Ritmo del bloque principal</h2><p>Corridas de «Bloques», bloque 2. Más arriba = más rápido</p></figcaption>
-          <div class="lienzo"><canvas id="g-bp-ritmo"></canvas></div>
-        </figure>
-        <figure class="tarjeta">
-          <figcaption><h2>FC del bloque principal</h2><p>Frecuencia cardíaca media del mismo bloque (ppm)</p></figcaption>
-          <div class="lienzo"><canvas id="g-bp-fc"></canvas></div>
+        <figure class="tarjeta ancha">
+          <div class="tarjeta-cab">
+            <figcaption><h2 id="carrera-comp-titulo">Ritmo a lo largo de la sesión</h2></figcaption>
+            <div class="segmentado" id="carrera-metrica" role="group" aria-label="Dato a mostrar">
+              <button type="button" data-metrica="ritmo">Ritmo</button>
+              <button type="button" data-metrica="fc">FC</button>
+            </div>
+          </div>
+          <p class="texto-sec" id="carrera-comp-nota"></p>
+          <div class="lienzo alto"><canvas id="g-carrera-comparar"></canvas></div>
         </figure>
         <figure class="tarjeta ancha">
           <figcaption><h2>Eficiencia aeróbica</h2><p>Metros por latido (velocidad ÷ FC media). Si sube, corrés más con el mismo esfuerzo</p></figcaption>

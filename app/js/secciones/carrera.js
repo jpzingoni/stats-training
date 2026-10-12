@@ -14,7 +14,7 @@
     const conBloque = corridas.filter((a) => a.bloque_principal);
 
     renderKpis(ctx, corridas, anteriores, conBloque);
-    renderBloquePrincipal(ctx, conBloque);
+    renderComparacion(corridas);
     renderEficiencia(ctx, corridas);
     renderKm(ctx);
     renderZonas(ctx);
@@ -38,7 +38,7 @@
         ...bloque,
         valor: ritmo(ultimo.ritmo_s_km),
         delta: conBloque.length > 1
-          ? `${dif < 0 ? "−" : dif > 0 ? "+" : "±"}${ritmo(Math.abs(dif))} vs. el primero del período`
+          ? `${dif < 0 ? "−" : dif > 0 ? "+" : "±"}${ritmo(Math.abs(dif))} vs. el primero`
           : "",
       };
     }
@@ -72,14 +72,144 @@
     });
   }
 
-  function renderBloquePrincipal(ctx, conBloque) {
+  // ─── Comparar sesiones de una misma plantilla ──────────────────────────────
+
+  const MAX_SESIONES = 8;   // la paleta tiene 8 colores distinguibles; más líneas no se leen
+  const comp = { plantilla: null, elegidas: null, metrica: "ritmo", enlazado: false, corridas: [] };
+  const METRICAS_COMP = {
+    ritmo: { titulo: "Ritmo a lo largo de la sesión", valor: (b) => b.ritmo_s_km, formato: (v) => `${ritmo(v)} /km`, invertir: true, paso: 60 },
+    fc: { titulo: "FC a lo largo de la sesión", valor: (b) => b.fc_media, formato: (v) => `${numero(v)} ppm`, invertir: false },
+  };
+
+  function guardarComp() {
+    try {
+      localStorage.setItem("carrera-comparar", JSON.stringify({ plantilla: comp.plantilla, metrica: comp.metrica }));
+    } catch { /* solo esta visita */ }
+  }
+
+  function enlazarComp() {
+    comp.enlazado = true;
+    try {
+      const g = JSON.parse(localStorage.getItem("carrera-comparar") ?? "null");
+      if (g?.plantilla) comp.plantilla = g.plantilla;
+      if (METRICAS_COMP[g?.metrica]) comp.metrica = g.metrica;
+    } catch { /* valores por defecto */ }
+
+    document.getElementById("carrera-plantilla").addEventListener("change", (e) => {
+      comp.plantilla = e.target.value;
+      comp.elegidas = null;   // al cambiar de plantilla se eligen de nuevo sus sesiones
+      guardarComp();
+      renderComparacion(comp.corridas);
+    });
+    const lista = document.getElementById("carrera-sesiones-lista");
+    lista.addEventListener("change", (e) => {
+      if (e.target.checked) comp.elegidas.add(e.target.value); else comp.elegidas.delete(e.target.value);
+      renderComparacion(comp.corridas);
+    });
+    document.querySelector("#carrera-sesiones .desplegable-acciones").addEventListener("click", (e) => {
+      const accion = e.target.dataset.accion;
+      if (!accion) return;
+      const ids = sesionesDePlantilla().map((a) => a.id);
+      comp.elegidas = new Set(accion === "todas" ? ids.slice(-MAX_SESIONES) : []);
+      renderComparacion(comp.corridas);
+    });
+    document.getElementById("carrera-metrica").addEventListener("click", (e) => {
+      const b = e.target.closest("[data-metrica]");
+      if (!b) return;
+      comp.metrica = b.dataset.metrica;
+      guardarComp();
+      renderComparacion(comp.corridas);
+    });
+    // El desplegable se cierra al tocar afuera
+    document.addEventListener("click", (e) => {
+      const d = document.getElementById("carrera-sesiones");
+      if (d.open && !d.contains(e.target)) d.open = false;
+    });
+  }
+
+  const sesionesDePlantilla = () => comp.corridas.filter((a) => (a.plantilla ?? "Libre") === comp.plantilla);
+
+  function renderComparacion(corridas) {
+    comp.corridas = corridas;
+    if (!comp.enlazado) enlazarComp();
     const c = colores();
-    lineaTiempo("g-bp-ritmo", ctx,
-      conBloque.map((a) => ({ x: ts(a.fecha), y: a.bloque_principal.ritmo_s_km })),
-      { color: c.subtipo.Bloques, etiqueta: "Ritmo", formato: (v) => `${ritmo(v)} /km`, invertir: true });
-    lineaTiempo("g-bp-fc", ctx,
-      conBloque.map((a) => ({ x: ts(a.fecha), y: a.bloque_principal.fc_media })),
-      { color: c.subtipo.Bloques, etiqueta: "FC media", formato: (v) => `${numero(v)} ppm` });
+
+    // Plantillas disponibles, de la más usada a la menos usada ("Libre" al final)
+    const cuenta = new Map();
+    for (const a of corridas) cuenta.set(a.plantilla ?? "Libre", (cuenta.get(a.plantilla ?? "Libre") ?? 0) + 1);
+    const plantillas = [...cuenta.keys()].sort((x, y) =>
+      (x === "Libre") - (y === "Libre") || cuenta.get(y) - cuenta.get(x) || x.localeCompare(y));
+    if (!plantillas.includes(comp.plantilla)) { comp.plantilla = plantillas[0]; comp.elegidas = null; }
+    document.getElementById("carrera-plantilla").innerHTML = plantillas.map((n) =>
+      `<option value="${escapar(n)}"${n === comp.plantilla ? " selected" : ""}>${escapar(n)} (${cuenta.get(n)})</option>`).join("");
+
+    // Sesiones de esa plantilla (por defecto, las más recientes hasta el máximo)
+    const sesiones = sesionesDePlantilla();
+    if (!comp.elegidas) comp.elegidas = new Set(sesiones.slice(-MAX_SESIONES).map((a) => a.id));
+    const elegidas = sesiones.filter((a) => comp.elegidas.has(a.id));
+    const colorDe = new Map(elegidas.map((a, i) => [a.id, c.serie[i]]));   // color fijo por orden cronológico
+    const lleno = elegidas.length >= MAX_SESIONES;
+    document.getElementById("carrera-sesiones-lista").innerHTML = [...sesiones].reverse().map((a) => {
+      const marcada = comp.elegidas.has(a.id);
+      const extra = a.ajuste_plantilla && a.ajuste_plantilla !== "exacta" ? ` (${a.ajuste_plantilla})` : "";
+      return `<label class="check">
+        <input type="checkbox" value="${escapar(a.id)}"${marcada ? " checked" : ""}${!marcada && lleno ? " disabled" : ""}>
+        <span class="muestra" style="background:${marcada ? colorDe.get(a.id) : "transparent"}"></span>
+        <span>${fechaLarga(a.fecha)} · ${duracion(a.duracion_s)}${escapar(extra)}</span>
+      </label>`;
+    }).join("");
+    document.getElementById("carrera-sesiones-resumen").textContent =
+      `${elegidas.length} de ${sesiones.length} ${sesiones.length === 1 ? "sesión" : "sesiones"}`;
+
+    // Gráfico: una línea escalonada por sesión, un escalón por bloque
+    const met = METRICAS_COMP[comp.metrica];
+    document.getElementById("carrera-comp-titulo").textContent = met.titulo;
+    for (const b of document.querySelectorAll("#carrera-metrica button")) {
+      b.setAttribute("aria-pressed", String(b.dataset.metrica === comp.metrica));
+    }
+    document.getElementById("carrera-comp-nota").textContent =
+      "Cada escalón es el promedio de un bloque (no hay datos segundo a segundo). El eje horizontal es el tiempo desde el inicio de la sesión." +
+      (met.invertir ? " Más arriba = más rápido." : "") +
+      (sesiones.length > MAX_SESIONES ? ` Se pueden comparar hasta ${MAX_SESIONES} sesiones a la vez.` : "");
+    if (!elegidas.length) return sinDatos("g-carrera-comparar", "Elegí al menos una sesión");
+
+    const datasets = elegidas.map((a) => {
+      const bloques = a.bloques.filter((b) => (b.duracion_s ?? 0) >= 10);
+      const puntos = bloques.map((b) => ({ x: (b.inicio_s ?? 0) / 60, y: met.valor(b) ?? null, b }));
+      const ultimo = bloques.at(-1);
+      if (ultimo) puntos.push({ x: ((ultimo.inicio_s ?? 0) + ultimo.duracion_s) / 60, y: met.valor(ultimo) ?? null, b: ultimo, fin: true });
+      return {
+        // "before" en Chart.js: cada tramo conserva el valor del punto donde empieza el bloque
+        label: fechaLarga(a.fecha), data: puntos, stepped: "before",
+        borderColor: colorDe.get(a.id), backgroundColor: colorDe.get(a.id),
+        pointRadius: 0, pointHoverRadius: 5, pointHitRadius: 10, spanGaps: false,
+      };
+    });
+    grafico("g-carrera-comparar", {
+      type: "line",
+      data: { datasets },
+      options: {
+        interaction: { mode: "nearest", intersect: false, axis: "x" },
+        scales: {
+          x: { type: "linear", min: 0, grid: { display: false }, border: { color: c.eje },
+               title: { display: true, text: "minutos desde el inicio" }, ticks: { callback: (v) => `${v}′` } },
+          y: ejeY({ reverse: met.invertir, grace: "8%", ticks: { maxTicksLimit: 10, stepSize: met.paso, callback: met.formato } }),
+        },
+        plugins: {
+          legend: { display: datasets.length > 1, position: "top" },
+          tooltip: {
+            filter: (i) => !i.raw.fin && i.parsed.y != null,
+            callbacks: {
+              title: (items) => items.length ? `${items[0].dataset.label}` : "",
+              label: (i) => {
+                const b = i.raw.b;
+                return ` Bloque ${b.nro}${b.fase ? ` · ${b.fase}` : ""}: ${met.formato(i.parsed.y)} · ${duracion(b.duracion_s)}`;
+              },
+            },
+          },
+        },
+      },
+    });
   }
 
   function renderEficiencia(ctx, corridas) {

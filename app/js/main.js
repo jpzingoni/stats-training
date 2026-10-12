@@ -17,7 +17,9 @@
     inicio: "Este mes", calendario: "Calendario", resumen: "Resumen", carrera: "Carrera", padel: "Pádel",
     ciclismo: "Ciclismo", otras: "Otras actividades", recuperacion: "Recuperación", datos: "Datos",
   };
-  const SIN_PERIODO = ["inicio", "calendario", "datos"];     // esas vistas navegan por mes; los datos crudos no se filtran
+  // Vistas sin selector de período: las que navegan por mes, los datos crudos y Carrera
+  // (que se compara por plantilla y sesiones, sobre todo el historial)
+  const SIN_PERIODO = ["inicio", "calendario", "datos", "carrera"];
   const PERIODOS = { 4: "4 semanas", 12: "12 semanas", todo: "todo el historial" };
 
   const estado = {
@@ -68,8 +70,9 @@
     const hasta = meta.hasta;
     let desde = meta.desde;
     let anterior = null;
-    if (estado.periodo !== "todo") {
-      const dias = Number(estado.periodo) * 7;
+    const periodo = SIN_PERIODO.includes(estado.pestana) ? "todo" : estado.periodo;
+    if (periodo !== "todo") {
+      const dias = Number(periodo) * 7;
       desde = sumarDias(hasta, -(dias - 1));
       if (desde < meta.desde) desde = meta.desde;
       else anterior = { desde: sumarDias(desde, -dias), hasta: sumarDias(desde, -1) };
@@ -80,7 +83,7 @@
       meta, desde, hasta, anterior, enRango, visible,
       filtros: estado.filtros,
       gruposVisibles: new Set(GRUPOS),
-      etiquetaPeriodo: PERIODOS[estado.periodo],
+      etiquetaPeriodo: PERIODOS[periodo],
       actividades: actividades.filter((a) => enRango(a.fecha) && visible(a)),
       actividadesAnteriores: anterior ? actividades.filter((a) => enRango(a.fecha, anterior) && visible(a)) : null,
       bienestar: bienestar.filter((d) => enRango(d.fecha)),
