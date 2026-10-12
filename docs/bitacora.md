@@ -87,7 +87,12 @@ Una entrada por etapa, de la más reciente a la más antigua.
   un calentamiento haya durado 5:37) y lo que varía es la altura de cada escalón. Los
   bloques por distancia toman su duración promedio. Líneas punteadas verticales marcan
   cada cambio de bloque, con la fase y el objetivo arriba. En "Libre" el eje es el tiempo
-  real.
+  real. Un tercer selector, **Etapa** (toda la sesión, calentamiento, entrenamiento,
+  relajado, restaurar), filtra tarjetas y gráfico a los bloques de esa fase: así el ritmo
+  y la FC de "lo que corro" no se mezclan con el calentamiento ni la vuelta a la calma.
+  Las tarjetas ahora son de la selección: ritmo medio (distancia y tiempo totales), FC
+  media (ponderada por tiempo), potencia y distancia. **Potencia: sin datos**; el Amazfit
+  Active 2 no la registra en carrera y no viene en lo que bajamos de Intervals.
 - **Filtros laterales**: al principio había un filtro por tipo de entrenamiento ("Mostrar
   entrenamientos"), pero en la práctica no lo usaba y ocupaba lugar, así que lo saqué.
   Queda solo "Datos diarios" (sueño, FC en reposo, pasos), que aparece en el Calendario y

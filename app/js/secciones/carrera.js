@@ -3,52 +3,20 @@
   const Tablero = (window.Tablero ??= { secciones: {} });
 
   const { grafico, sinDatos, colores, ejeFechas, ejeY, tituloFecha, estiloBarra } = Tablero.graficos;
-  const { kpis, delta, escapar } = Tablero.componentes;
+  const { kpis, escapar } = Tablero.componentes;
   const { numero, ritmo, duracion, ts, fechaCorta, fechaLarga, suma, promedio } = Tablero.formato;
 
   const SUBTIPOS = ["Bloques", "Series", "Libre"];
 
   function render(ctx) {
     const corridas = ctx.actividades.filter((a) => a.categoria === "Carrera");
-    const anteriores = ctx.actividadesAnteriores?.filter((a) => a.categoria === "Carrera");
-    const conBloque = corridas.filter((a) => a.bloque_principal);
 
-    renderKpis(ctx, corridas, anteriores, conBloque);
     renderComparacion(corridas, ctx.meta);
     renderEficiencia(ctx, corridas);
     renderKm(ctx);
     renderZonas(ctx);
     renderDinamica(ctx, corridas);
     renderTabla(corridas);
-  }
-
-  function renderKpis(ctx, corridas, anteriores, conBloque) {
-    const per = ctx.etiquetaPeriodo;
-    const kmAct = suma(corridas, (a) => a.distancia_m) / 1000;
-    const kmAnt = anteriores ? suma(anteriores, (a) => a.distancia_m) / 1000 : null;
-    const efAct = promedio(corridas, (a) => a.eficiencia);
-    const efAnt = anteriores ? promedio(anteriores, (a) => a.eficiencia) : null;
-
-    let bloque = { etiqueta: "Último bloque principal", valor: "—", unidad: "/km" };
-    if (conBloque.length) {
-      const ultimo = conBloque.at(-1).bloque_principal;
-      const primero = conBloque[0].bloque_principal;
-      const dif = ultimo.ritmo_s_km - primero.ritmo_s_km;
-      bloque = {
-        ...bloque,
-        valor: ritmo(ultimo.ritmo_s_km),
-        delta: conBloque.length > 1
-          ? `${dif < 0 ? "−" : dif > 0 ? "+" : "±"}${ritmo(Math.abs(dif))} vs. el primero`
-          : "",
-      };
-    }
-
-    kpis("carrera-kpis", [
-      { etiqueta: "Corridas", valor: numero(corridas.length), delta: delta(corridas.length, anteriores?.length, per) },
-      { etiqueta: "Distancia", valor: numero(kmAct, 1), unidad: "km", delta: delta(kmAct, kmAnt, per, (x) => `${numero(x, 1)} km`) },
-      bloque,
-      { etiqueta: "Eficiencia media", valor: numero(efAct, 2), unidad: "m/latido", delta: delta(efAct, efAnt, per, (x) => numero(x, 2)) },
-    ]);
   }
 
   function lineaTiempo(id, ctx, puntos, { color, etiqueta, formato, invertir = false, minimo = 2 }) {
@@ -75,7 +43,7 @@
   // ─── Comparar sesiones de una misma plantilla ──────────────────────────────
 
   const MAX_SESIONES = 8;   // la paleta tiene 8 colores distinguibles; más líneas no se leen
-  const comp = { plantilla: null, elegidas: null, metrica: "ritmo", enlazado: false, corridas: [] };
+  const comp = { plantilla: null, elegidas: null, metrica: "ritmo", etapa: "todas", enlazado: false, corridas: [] };
   const METRICAS_COMP = {
     ritmo: { titulo: "Ritmo a lo largo de la sesión", valor: (b) => b.ritmo_s_km, formato: (v) => `${ritmo(v)} /km`, invertir: true, paso: 60 },
     fc: { titulo: "FC a lo largo de la sesión", valor: (b) => b.fc_media, formato: (v) => `${numero(v)} ppm`, invertir: false },
@@ -83,7 +51,7 @@
 
   function guardarComp() {
     try {
-      localStorage.setItem("carrera-comparar", JSON.stringify({ plantilla: comp.plantilla, metrica: comp.metrica }));
+      localStorage.setItem("carrera-comparar", JSON.stringify({ plantilla: comp.plantilla, metrica: comp.metrica, etapa: comp.etapa }));
     } catch { /* solo esta visita */ }
   }
 
@@ -93,6 +61,7 @@
       const g = JSON.parse(localStorage.getItem("carrera-comparar") ?? "null");
       if (g?.plantilla) comp.plantilla = g.plantilla;
       if (METRICAS_COMP[g?.metrica]) comp.metrica = g.metrica;
+      if (g?.etapa) comp.etapa = g.etapa;
     } catch { /* valores por defecto */ }
 
     document.getElementById("carrera-plantilla").addEventListener("change", (e) => {
@@ -111,6 +80,11 @@
       if (!accion) return;
       const ids = sesionesDePlantilla().map((a) => a.id);
       comp.elegidas = new Set(accion === "todas" ? ids.slice(-MAX_SESIONES) : []);
+      renderComparacion(comp.corridas);
+    });
+    document.getElementById("carrera-etapa").addEventListener("change", (e) => {
+      comp.etapa = e.target.value;
+      guardarComp();
       renderComparacion(comp.corridas);
     });
     document.getElementById("carrera-metrica").addEventListener("click", (e) => {
@@ -168,6 +142,16 @@
     for (const b of document.querySelectorAll("#carrera-metrica button")) {
       b.setAttribute("aria-pressed", String(b.dataset.metrica === comp.metrica));
     }
+    // Etapas: las fases que tiene la plantilla, en orden ("Libre" no tiene fases)
+    const pasosPlantilla = comp.meta?.plantillas?.[comp.plantilla];
+    const fases = pasosPlantilla ? [...new Set(pasosPlantilla.map((p) => p.fase))] : [];
+    if (comp.etapa !== "todas" && !fases.includes(comp.etapa)) comp.etapa = "todas";
+    const selEtapa = document.getElementById("carrera-etapa");
+    selEtapa.disabled = !fases.length;
+    selEtapa.innerHTML = `<option value="todas">${fases.length ? "Toda la sesión" : "Toda la sesión (sin etapas)"}</option>` +
+      fases.map((f) => `<option value="${escapar(f)}"${f === comp.etapa ? " selected" : ""}>${escapar(f)}</option>`).join("");
+    renderKpisComparacion(elegidas);
+
     // Con plantilla, el eje X sigue los bloques de la plantilla: todas las sesiones comparten
     // los mismos tramos y lo que cambia es la altura de cada escalón. Sin plantilla ("Libre"),
     // el eje es el tiempo real desde el inicio de cada sesión.
@@ -176,6 +160,7 @@
     const hayDistancia = pasos?.some((p) => p.tipo === "distancia");
     document.getElementById("carrera-comp-nota").textContent =
       "Cada escalón es el promedio de un bloque (no hay datos segundo a segundo). " +
+      (eje && comp.etapa !== "todas" ? `Se muestran solo los bloques de ${comp.etapa}. ` : "") +
       (eje
         ? "El eje horizontal sigue los bloques de la plantilla, así todas las sesiones quedan alineadas." +
           (hayDistancia ? " Los bloques por distancia se dibujan con su duración promedio." : "")
@@ -186,7 +171,16 @@
 
     const datasets = elegidas.map((a) => {
       let puntos;
-      if (eje) {
+      if (eje && comp.etapa !== "todas") {
+        // Solo la etapa elegida: cada bloque es un tramo horizontal; null corta la línea entre tramos
+        puntos = [];
+        a.bloques.filter((b) => b.fase).forEach((b, k) => {
+          if (b.fase !== comp.etapa) return;
+          const y = met.valor(b) ?? null;
+          puntos.push({ x: eje.inicios[k] / 60, y, b }, { x: (eje.inicios[k] + eje.anchos[k]) / 60, y, b, fin: true },
+            { x: (eje.inicios[k] + eje.anchos[k]) / 60, y: null, b, fin: true });
+        });
+      } else if (eje) {
         // El k-ésimo bloque con fase corresponde al paso k de la plantilla
         const conFase = a.bloques.filter((b) => b.fase);
         puntos = conFase.map((b, k) => ({ x: eje.inicios[k] / 60, y: met.valor(b) ?? null, b }));
@@ -200,7 +194,7 @@
       }
       return {
         // "before" en Chart.js: cada tramo conserva el valor del punto donde empieza el bloque
-        label: fechaLarga(a.fecha), data: puntos, stepped: "before",
+        label: fechaLarga(a.fecha), data: puntos, stepped: comp.etapa === "todas" || !eje ? "before" : false,
         borderColor: colorDe.get(a.id), backgroundColor: colorDe.get(a.id),
         pointRadius: 0, pointHoverRadius: 5, pointHitRadius: 10, spanGaps: false,
       };
@@ -216,7 +210,9 @@
           x: { type: "linear", min: 0, max: eje ? eje.total / 60 : undefined, grid: { display: false }, border: { color: c.eje },
                title: { display: true, text: eje ? `minutos según la plantilla ${comp.plantilla}` : "minutos desde el inicio" },
                ticks: { callback: (v) => (Number.isInteger(v) ? `${v}′` : "") } },   // sin el último valor con decimales
-          y: ejeY({ reverse: met.invertir, grace: "8%", ticks: { maxTicksLimit: 10, stepSize: met.paso, callback: met.formato } }),
+          // Con una sola etapa los valores quedan cerca: marcas automáticas (más finas) y más margen
+          y: ejeY({ reverse: met.invertir, grace: comp.etapa === "todas" ? "8%" : "25%",
+                    ticks: { maxTicksLimit: 8, stepSize: comp.etapa === "todas" ? met.paso : undefined, callback: met.formato } }),
         },
         plugins: {
           // Con plantilla, la leyenda va abajo: arriba están los nombres de las fases
@@ -235,6 +231,40 @@
         },
       },
     });
+  }
+
+  /** Bloques de la etapa elegida (o todos) de una sesión. */
+  const bloquesDeEtapa = (a) => a.bloques.filter((b) =>
+    (b.duracion_s ?? 0) >= 10 && (comp.etapa === "todas" || b.fase === comp.etapa));
+
+  /**
+   * Tarjetas: ritmo, FC, potencia y distancia de las sesiones elegidas, en la etapa elegida.
+   * El ritmo sale de distancia y tiempo totales (no del promedio de ritmos) y la FC se
+   * pondera por el tiempo de cada bloque.
+   */
+  function renderKpisComparacion(elegidas) {
+    const bloques = elegidas.flatMap(bloquesDeEtapa);
+    const dur = suma(bloques, (b) => b.duracion_s);
+    const dist = suma(bloques, (b) => b.distancia_m);
+    const conFc = bloques.filter((b) => b.fc_media != null);
+    const fc = conFc.length ? suma(conFc, (b) => b.fc_media * b.duracion_s) / suma(conFc, (b) => b.duracion_s) : null;
+    const etapa = comp.etapa === "todas" ? "toda la sesión" : comp.etapa.toLowerCase();
+    const alcance = `${elegidas.length} ${elegidas.length === 1 ? "sesión" : "sesiones"} · ${etapa}`;
+    // Última sesión elegida, para ver cómo viene respecto del promedio
+    const ultima = elegidas.at(-1);
+    const bu = ultima ? bloquesDeEtapa(ultima) : [];
+    const durU = suma(bu, (b) => b.duracion_s), distU = suma(bu, (b) => b.distancia_m);
+    const fcU = bu.some((b) => b.fc_media != null)
+      ? suma(bu.filter((b) => b.fc_media != null), (b) => b.fc_media * b.duracion_s) / suma(bu.filter((b) => b.fc_media != null), (b) => b.duracion_s)
+      : null;
+    const ultimaTxt = (v) => (elegidas.length > 1 && v ? ` · última: ${v}` : "");
+    kpis("carrera-kpis", [
+      { etiqueta: "Ritmo medio", valor: dist ? ritmo((dur / dist) * 1000) : "—", unidad: "/km",
+        delta: alcance + ultimaTxt(distU ? `${ritmo((durU / distU) * 1000)} /km` : "") },
+      { etiqueta: "FC media", valor: numero(fc), unidad: "ppm", delta: alcance + ultimaTxt(fcU ? `${numero(fcU)} ppm` : "") },
+      { etiqueta: "Potencia media", valor: "—", unidad: "W", delta: "Sin datos: el reloj no registra potencia de carrera" },
+      { etiqueta: "Distancia", valor: numero(dist / 1000, 1), unidad: "km", delta: alcance },
+    ]);
   }
 
   /**
