@@ -6,6 +6,9 @@ este script prepara todo lo que necesita. Los cálculos (ritmo en segundos, efic
 agregados semanales, medias móviles) se hacen acá para que el JavaScript solo filtre y
 dibuje.
 
+Usa además scripts/plantillas.csv (catálogo de plantillas de Zepp) para reconocer la
+plantilla de cada sesión y la fase de cada bloque (ver scripts/plantillas.py).
+
 Genera un único archivo, app/data/datos.js, que define window.DATOS_TABLERO con:
     meta          rango de fechas, conteos, zonas de FC
     actividades   una entrada por sesión, con sus bloques
@@ -29,6 +32,8 @@ import json
 from collections import defaultdict
 from datetime import date, timedelta
 from pathlib import Path
+
+import plantillas
 
 RAIZ = Path(__file__).resolve().parent.parent
 DATOS = RAIZ / "datos"
@@ -166,10 +171,24 @@ def armar_bloques(filas):
     return por_actividad
 
 
-def armar_actividades(filas, bloques):
+CATEGORIAS_CON_PLANTILLA = ("Carrera", "Caminata")   # las plantillas de Zepp son de correr/caminar
+
+
+def armar_actividades(filas, bloques, catalogo):
     actividades = []
     for a in filas:
         propios = bloques.get(a["id"], [])
+        # Plantilla de Zepp y fase de cada bloque (ver scripts/plantillas.py)
+        plantilla = ajuste = entrenamiento = None
+        if a["categoria"] in CATEGORIAS_CON_PLANTILLA:
+            resultado = plantillas.asignar(propios, catalogo)
+            if resultado:
+                plantilla, ajuste, fases = resultado
+                for b, f in zip(propios, fases):
+                    b["fase"] = f
+                entrenamiento = plantillas.resumen_fase(propios, fases)
+            elif a["categoria"] == "Carrera":
+                plantilla = "Libre"
         principal = None
         if a["subtipo"] == "Bloques":
             principal = next((b for b in propios if b["nro"] == BLOQUE_PRINCIPAL), None)
@@ -205,6 +224,9 @@ def armar_actividades(filas, bloques):
                                      numero(a["fc_media"])),
             "bloques": propios,
             "bloque_principal": principal,
+            "plantilla": plantilla,
+            "ajuste_plantilla": ajuste,
+            "entrenamiento": entrenamiento,
         })
     actividades.sort(key=lambda a: (a["fecha"], a["hora"] or "", a["id"]))
     return actividades
@@ -307,7 +329,8 @@ def main():
     _, filas_blo = tablas["bloques"]
     _, filas_bie = tablas["bienestar"]
 
-    actividades = armar_actividades(filas_act, armar_bloques(filas_blo))
+    catalogo = plantillas.leer_catalogo()
+    actividades = armar_actividades(filas_act, armar_bloques(filas_blo), catalogo)
     bienestar = armar_bienestar(filas_bie)
 
     fechas = [a["fecha"] for a in actividades] + [d["fecha"] for d in bienestar]
@@ -327,6 +350,9 @@ def main():
         "actividades_por_categoria": dict(sorted(conteos.items())),
         "zonas_fc_carrera": ZONAS_FC_CARRERA,
         "bloque_principal": BLOQUE_PRINCIPAL,
+        # Catálogo de plantillas de Zepp (para mostrar su estructura en el tablero)
+        "plantillas": {n: [{"fase": p["fase"], "tipo": p["tipo"], "valor": p["valor"]} for p in pasos]
+                       for n, pasos in catalogo.items()},
     }
 
     SALIDA.mkdir(parents=True, exist_ok=True)

@@ -62,6 +62,19 @@ Una entrada por etapa, de la más reciente a la más antigua.
   calendario chico; abajo, un gráfico de barras de pasos por día (con el promedio como
   referencia) y las cuatro tarjetas en 2 × 2. En celular o en ventanas muy bajas se apila
   y se scrollea.
+- **Plantillas de Zepp reconocidas automáticamente.** El FIT no trae el nombre de la
+  plantilla, pero su estructura queda en las vueltas: cada bloque termina por tiempo
+  (25:00) o por distancia (2 km). Armé un catálogo con mis plantillas
+  (`scripts/plantillas.csv`: fase, objetivo y ciclos de cada paso) y el generador compara
+  cada sesión contra él, con tolerancia (±3 s o 2 %; hasta 25 % en el calentamiento) y
+  aceptando sesiones cortadas antes de terminar (`scripts/plantillas.py`). Cada sesión queda
+  con su plantilla (o "Libre"), el tipo de coincidencia (exacta, aproximada o incompleta)
+  y la **fase de cada bloque**. Con eso se calculan métricas **solo de la parte de
+  entrenamiento**, que son más limpias que el promedio de toda la sesión. El catálogo
+  resolvió casos que la estructura sola no podía (el 22/09 la vuelta a la calma duró 22:00
+  *y* 2 km). Primer resultado: 25 MIN CO ×3, 2KM - 6', 28 MIN CO y Aumento de ritmo; el
+  resto son libres (vueltas automáticas de 1 km) o las series del 28/08, que no están en
+  el catálogo.
 - Los filtros laterales se aplican a Este mes, al Calendario y al Resumen. En las vistas de cada deporte
   no, porque ahí ya se ve un único deporte. Se recuerdan en el navegador.
 - La lista de columnas "en uso" vive en el generador (`USO_COLUMNAS`). Cuando un gráfico

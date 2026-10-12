@@ -39,6 +39,12 @@ recuperación), pensado para ver mi progreso y para mostrar en mi portfolio.
   de la sesión mezcla calentamiento y vuelta a la calma).
 - **bienestar.csv**: una fila por día: `fc_reposo`, `sueno_horas`, `sueno_puntaje`, `pasos`,
   `fitness_ctl`, `fatiga_atl`, `forma`.
+- **Plantillas de Zepp**: el generador reconoce la plantilla de cada sesión comparando sus
+  bloques con `../scripts/plantillas.csv` (lógica en `../scripts/plantillas.py`). En
+  `datos.js` cada actividad trae `plantilla` (nombre, "Libre" o null), `ajuste_plantilla`
+  (exacta / aproximada / incompleta) y `entrenamiento` (tiempo, distancia, ritmo y FC solo
+  de los bloques de fase Entrenamiento); cada bloque trae su `fase`. Para medir progreso,
+  usar `entrenamiento` y comparar sesiones de la misma plantilla.
 - Zonas de FC de carrera (límite superior): 139 / 147 / 155 / 164 / 168 / 173 / 182.
 - No hay HRV, SpO2 ni peso (la integración Zepp → Intervals no los envía).
 

@@ -1,0 +1,21 @@
+plantilla,orden,fase,objetivo,ciclo,repeticiones
+CACO 3' 30'',1,Calentamiento,10:00,,
+CACO 3' 30'',2,Entrenamiento,3:30,A,7
+CACO 3' 30'',3,Relajado,1:30,A,7
+CACO 4' 00'',1,Calentamiento,10:00,,
+CACO 4' 00'',2,Entrenamiento,4:00,A,8
+CACO 4' 00'',3,Relajado,1:00,A,8
+CACO 4' 00'',4,Restaurar,10:00,,
+3KM CO,1,Calentamiento,1 km,,
+3KM CO,2,Entrenamiento,3 km,,
+3KM CO,3,Restaurar,2 km,,
+2KM - 6',1,Calentamiento,5:00,,
+2KM - 6',2,Entrenamiento,2 km,,
+2KM - 6',3,Restaurar,10:00,,
+25 MIN CO,1,Calentamiento,5:00,,
+25 MIN CO,2,Entrenamiento,25:00,,
+25 MIN CO,3,Restaurar,2 km,,
+28 MIN CO,1,Calentamiento,5:00,,
+28 MIN CO,2,Entrenamiento,28:00,,
+28 MIN CO,3,Restaurar,2 km,,
+Aumento de ritmo,1,Entrenamiento,500 m,A,5

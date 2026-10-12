@@ -218,11 +218,11 @@
   function renderTabla(corridas) {
     Tablero.sesiones.tabla("tabla-carreras", corridas, [
       { titulo: "Fecha", valor: (a) => fechaLarga(a.fecha) },
-      { titulo: "Tipo", valor: (a) => escapar(a.subtipo ?? "—") },
+      { titulo: "Plantilla", valor: (a) => escapar(a.plantilla ?? "—") + (a.ajuste_plantilla && a.ajuste_plantilla !== "exacta" ? ` <small class="texto-sec">(${a.ajuste_plantilla})</small>` : "") },
       { titulo: "Km", num: true, valor: (a) => numero(a.distancia_m / 1000, 2) },
       { titulo: "Tiempo", num: true, valor: (a) => duracion(a.duracion_s) },
       { titulo: "Ritmo prom.", num: true, valor: (a) => ritmo(a.ritmo_s_km) },
-      { titulo: "Bloque 2", num: true, valor: (a) => (a.bloque_principal ? ritmo(a.bloque_principal.ritmo_s_km) : "—") },
+      { titulo: "Ritmo entren.", num: true, valor: (a) => (a.entrenamiento?.ritmo_s_km ? ritmo(a.entrenamiento.ritmo_s_km) : "—") },
       { titulo: "FC media / máx", num: true, valor: (a) => `${a.fc_media ?? "—"} / ${a.fc_max ?? "—"}` },
       { titulo: "Carga", num: true, valor: (a) => a.carga ?? "—" },
     ], { vacio: "Sin corridas en este período" });

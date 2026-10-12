@@ -7,6 +7,14 @@
   const { escapar } = Tablero.componentes;
   const { numero, ritmo, duracion, fechaLarga } = Tablero.formato;
 
+  const AJUSTES = { exacta: "", aproximada: " (aproximada)", incompleta: " (incompleta)" };
+
+  /** Nombre corto de una sesión: "Carrera · 25 MIN CO", "Pádel", "Caminata"… */
+  function nombreSesion(a) {
+    const detalle = a.plantilla ?? a.subtipo;
+    return detalle ? `${a.categoria} · ${detalle}` : a.categoria;
+  }
+
   const velocidadKmh = (distancia, segundos) => (distancia && segundos ? (distancia / segundos) * 3.6 : null);
   const usaVelocidad = (a) => a.categoria === "Ciclismo";   // en bici se piensa en km/h, no en min/km
 
@@ -50,8 +58,9 @@
 
   function detalle(a) {
     return `<div class="detalle-sesion">
-      <div class="detalle-titulo">${escapar(a.categoria)}${a.subtipo ? ` · ${escapar(a.subtipo)}` : ""} ·
+      <div class="detalle-titulo">${escapar(nombreSesion(a))}${escapar(AJUSTES[a.ajuste_plantilla] ?? "")} ·
         ${fechaLarga(a.fecha)}${a.hora ? `, ${escapar(a.hora)} h` : ""}</div>
+      ${a.plantilla === "Libre" ? '<p class="texto-sec">No coincide con ninguna plantilla del catálogo (scripts/plantillas.csv).</p>' : ""}
       ${metricas(a)}
       ${zonas(a)}
       ${vueltas(a)}
@@ -67,7 +76,11 @@
       usaVelocidad(a)
         ? ["Velocidad media", a.distancia_m ? `${numero(velocidadKmh(a.distancia_m, a.duracion_s), 1)} km/h` : null]
         : ["Ritmo medio", a.ritmo_s_km ? `${ritmo(a.ritmo_s_km)} /km` : null],
-      ["Bloque principal", a.bloque_principal ? `${ritmo(a.bloque_principal.ritmo_s_km)} /km · ${a.bloque_principal.fc_media} ppm` : null],
+      ["Solo entrenamiento", a.entrenamiento
+        ? `${duracion(a.entrenamiento.duracion_s)} · ${numero(a.entrenamiento.distancia_m / 1000, 2)} km`
+        : null],
+      ["Ritmo en entrenamiento", a.entrenamiento?.ritmo_s_km ? `${ritmo(a.entrenamiento.ritmo_s_km)} /km` : null],
+      ["FC en entrenamiento", a.entrenamiento?.fc_media != null ? `${a.entrenamiento.fc_media} ppm` : null],
       ["FC media / máx", a.fc_media != null ? `${a.fc_media} / ${a.fc_max ?? "—"} ppm` : null],
       ["Recuperación FC (1 min)", a.recuperacion_fc != null ? `−${a.recuperacion_fc} ppm` : null],
       ["Carga", a.carga != null ? `${a.carga} HRSS` : null],
@@ -100,13 +113,16 @@
     if (!a.bloques?.length) return "";
     const bici = usaVelocidad(a);
     const conCadencia = !bici && a.bloques.some((b) => b.cadencia != null);
-    const conTipo = a.bloques.some((b) => b.tipo === "RECOVERY");   // si todo es "trabajo", la columna sobra
+    const conFase = a.bloques.some((b) => b.fase);                     // la sesión coincide con una plantilla
+    const conTipo = !conFase && a.bloques.some((b) => b.tipo === "RECOVERY");   // si todo es "trabajo", sobra
     const velocidades = a.bloques.map((b) => velocidadKmh(b.distancia_m, b.duracion_s) ?? 0);
     const maxVel = Math.max(...velocidades) || 1;
-    const principal = a.bloque_principal?.nro;
+    // Con plantilla se resaltan los bloques de Entrenamiento; sin plantilla, el bloque principal
+    const destacado = (b) => (conFase ? b.fase === "Entrenamiento" : b.nro === a.bloque_principal?.nro);
     const filas = a.bloques.map((b, i) => `
-      <tr${b.nro === principal ? ' class="principal"' : ""}>
-        <td>${b.nro}${b.nro === principal ? " ★" : ""}</td>
+      <tr${destacado(b) ? ' class="principal"' : ""}>
+        <td>${b.nro}${!conFase && destacado(b) ? " ★" : ""}</td>
+        ${conFase ? `<td>${b.fase ? `<span class="fase fase-${b.fase.toLowerCase()}">${escapar(b.fase)}</span>` : "—"}</td>` : ""}
         ${conTipo ? `<td>${b.tipo === "RECOVERY" ? "Recuperación" : "Trabajo"}</td>` : ""}
         <td class="num">${duracion(b.duracion_s)}</td>
         <td class="num">${b.distancia_m ? `${numero(b.distancia_m)} m` : "—"}</td>
@@ -117,11 +133,11 @@
       </tr>`).join("");
     return `<h4>${a.categoria === "Carrera" ? "Bloques" : "Vueltas"} (${a.bloques.length})</h4>
       <div class="tabla-contenedor"><table class="tabla sub">
-        <thead><tr><th>Nro</th>${conTipo ? "<th>Tipo</th>" : ""}<th class="num">Tiempo</th><th class="num">Distancia</th>
+        <thead><tr><th>Nro</th>${conFase ? "<th>Fase</th>" : ""}${conTipo ? "<th>Tipo</th>" : ""}<th class="num">Tiempo</th><th class="num">Distancia</th>
           <th class="num">${bici ? "km/h" : "Ritmo /km"}</th><th class="num">FC media / máx</th>
           ${conCadencia ? '<th class="num">Cadencia</th>' : ""}<th>Velocidad relativa</th></tr></thead>
         <tbody>${filas}</tbody></table></div>`;
   }
 
-  Tablero.sesiones = { tabla, detalle, velocidadKmh };
+  Tablero.sesiones = { tabla, detalle, velocidadKmh, nombreSesion };
 })();

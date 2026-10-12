@@ -20,7 +20,273 @@ window.DATOS_TABLERO = {
    173,
    182
   ],
-  "bloque_principal": 2
+  "bloque_principal": 2,
+  "plantillas": {
+   "CACO 3' 30''": [
+    {
+     "fase": "Calentamiento",
+     "tipo": "tiempo",
+     "valor": 600
+    },
+    {
+     "fase": "Entrenamiento",
+     "tipo": "tiempo",
+     "valor": 210
+    },
+    {
+     "fase": "Relajado",
+     "tipo": "tiempo",
+     "valor": 90
+    },
+    {
+     "fase": "Entrenamiento",
+     "tipo": "tiempo",
+     "valor": 210
+    },
+    {
+     "fase": "Relajado",
+     "tipo": "tiempo",
+     "valor": 90
+    },
+    {
+     "fase": "Entrenamiento",
+     "tipo": "tiempo",
+     "valor": 210
+    },
+    {
+     "fase": "Relajado",
+     "tipo": "tiempo",
+     "valor": 90
+    },
+    {
+     "fase": "Entrenamiento",
+     "tipo": "tiempo",
+     "valor": 210
+    },
+    {
+     "fase": "Relajado",
+     "tipo": "tiempo",
+     "valor": 90
+    },
+    {
+     "fase": "Entrenamiento",
+     "tipo": "tiempo",
+     "valor": 210
+    },
+    {
+     "fase": "Relajado",
+     "tipo": "tiempo",
+     "valor": 90
+    },
+    {
+     "fase": "Entrenamiento",
+     "tipo": "tiempo",
+     "valor": 210
+    },
+    {
+     "fase": "Relajado",
+     "tipo": "tiempo",
+     "valor": 90
+    },
+    {
+     "fase": "Entrenamiento",
+     "tipo": "tiempo",
+     "valor": 210
+    },
+    {
+     "fase": "Relajado",
+     "tipo": "tiempo",
+     "valor": 90
+    }
+   ],
+   "CACO 4' 00''": [
+    {
+     "fase": "Calentamiento",
+     "tipo": "tiempo",
+     "valor": 600
+    },
+    {
+     "fase": "Entrenamiento",
+     "tipo": "tiempo",
+     "valor": 240
+    },
+    {
+     "fase": "Relajado",
+     "tipo": "tiempo",
+     "valor": 60
+    },
+    {
+     "fase": "Entrenamiento",
+     "tipo": "tiempo",
+     "valor": 240
+    },
+    {
+     "fase": "Relajado",
+     "tipo": "tiempo",
+     "valor": 60
+    },
+    {
+     "fase": "Entrenamiento",
+     "tipo": "tiempo",
+     "valor": 240
+    },
+    {
+     "fase": "Relajado",
+     "tipo": "tiempo",
+     "valor": 60
+    },
+    {
+     "fase": "Entrenamiento",
+     "tipo": "tiempo",
+     "valor": 240
+    },
+    {
+     "fase": "Relajado",
+     "tipo": "tiempo",
+     "valor": 60
+    },
+    {
+     "fase": "Entrenamiento",
+     "tipo": "tiempo",
+     "valor": 240
+    },
+    {
+     "fase": "Relajado",
+     "tipo": "tiempo",
+     "valor": 60
+    },
+    {
+     "fase": "Entrenamiento",
+     "tipo": "tiempo",
+     "valor": 240
+    },
+    {
+     "fase": "Relajado",
+     "tipo": "tiempo",
+     "valor": 60
+    },
+    {
+     "fase": "Entrenamiento",
+     "tipo": "tiempo",
+     "valor": 240
+    },
+    {
+     "fase": "Relajado",
+     "tipo": "tiempo",
+     "valor": 60
+    },
+    {
+     "fase": "Entrenamiento",
+     "tipo": "tiempo",
+     "valor": 240
+    },
+    {
+     "fase": "Relajado",
+     "tipo": "tiempo",
+     "valor": 60
+    },
+    {
+     "fase": "Restaurar",
+     "tipo": "tiempo",
+     "valor": 600
+    }
+   ],
+   "3KM CO": [
+    {
+     "fase": "Calentamiento",
+     "tipo": "distancia",
+     "valor": 1000.0
+    },
+    {
+     "fase": "Entrenamiento",
+     "tipo": "distancia",
+     "valor": 3000.0
+    },
+    {
+     "fase": "Restaurar",
+     "tipo": "distancia",
+     "valor": 2000.0
+    }
+   ],
+   "2KM - 6'": [
+    {
+     "fase": "Calentamiento",
+     "tipo": "tiempo",
+     "valor": 300
+    },
+    {
+     "fase": "Entrenamiento",
+     "tipo": "distancia",
+     "valor": 2000.0
+    },
+    {
+     "fase": "Restaurar",
+     "tipo": "tiempo",
+     "valor": 600
+    }
+   ],
+   "25 MIN CO": [
+    {
+     "fase": "Calentamiento",
+     "tipo": "tiempo",
+     "valor": 300
+    },
+    {
+     "fase": "Entrenamiento",
+     "tipo": "tiempo",
+     "valor": 1500
+    },
+    {
+     "fase": "Restaurar",
+     "tipo": "distancia",
+     "valor": 2000.0
+    }
+   ],
+   "28 MIN CO": [
+    {
+     "fase": "Calentamiento",
+     "tipo": "tiempo",
+     "valor": 300
+    },
+    {
+     "fase": "Entrenamiento",
+     "tipo": "tiempo",
+     "valor": 1680
+    },
+    {
+     "fase": "Restaurar",
+     "tipo": "distancia",
+     "valor": 2000.0
+    }
+   ],
+   "Aumento de ritmo": [
+    {
+     "fase": "Entrenamiento",
+     "tipo": "distancia",
+     "valor": 500.0
+    },
+    {
+     "fase": "Entrenamiento",
+     "tipo": "distancia",
+     "valor": 500.0
+    },
+    {
+     "fase": "Entrenamiento",
+     "tipo": "distancia",
+     "valor": 500.0
+    },
+    {
+     "fase": "Entrenamiento",
+     "tipo": "distancia",
+     "valor": 500.0
+    },
+    {
+     "fase": "Entrenamiento",
+     "tipo": "distancia",
+     "valor": 500.0
+    }
+   ]
+  }
  },
  "actividades": [
   {
@@ -120,7 +386,10 @@ window.DATOS_TABLERO = {
      "desnivel_m": 8
     }
    ],
-   "bloque_principal": null
+   "bloque_principal": null,
+   "plantilla": "Libre",
+   "ajuste_plantilla": null,
+   "entrenamiento": null
   },
   {
    "id": "i189773148",
@@ -219,7 +488,10 @@ window.DATOS_TABLERO = {
      "desnivel_m": 9
     }
    ],
-   "bloque_principal": null
+   "bloque_principal": null,
+   "plantilla": "Libre",
+   "ajuste_plantilla": null,
+   "entrenamiento": null
   },
   {
    "id": "i189773049",
@@ -318,7 +590,10 @@ window.DATOS_TABLERO = {
      "desnivel_m": 5
     }
    ],
-   "bloque_principal": null
+   "bloque_principal": null,
+   "plantilla": "Libre",
+   "ajuste_plantilla": null,
+   "entrenamiento": null
   },
   {
    "id": "i189773071",
@@ -405,7 +680,10 @@ window.DATOS_TABLERO = {
      "desnivel_m": 1
     }
    ],
-   "bloque_principal": null
+   "bloque_principal": null,
+   "plantilla": null,
+   "ajuste_plantilla": null,
+   "entrenamiento": null
   },
   {
    "id": "i189773108",
@@ -516,7 +794,10 @@ window.DATOS_TABLERO = {
      "desnivel_m": 7
     }
    ],
-   "bloque_principal": null
+   "bloque_principal": null,
+   "plantilla": "Libre",
+   "ajuste_plantilla": null,
+   "entrenamiento": null
   },
   {
    "id": "i189773094",
@@ -639,7 +920,10 @@ window.DATOS_TABLERO = {
      "desnivel_m": 0
     }
    ],
-   "bloque_principal": null
+   "bloque_principal": null,
+   "plantilla": "Libre",
+   "ajuste_plantilla": null,
+   "entrenamiento": null
   },
   {
    "id": "i189773061",
@@ -738,7 +1022,10 @@ window.DATOS_TABLERO = {
      "desnivel_m": 4
     }
    ],
-   "bloque_principal": null
+   "bloque_principal": null,
+   "plantilla": "Libre",
+   "ajuste_plantilla": null,
+   "entrenamiento": null
   },
   {
    "id": "i189773117",
@@ -837,7 +1124,10 @@ window.DATOS_TABLERO = {
      "desnivel_m": 8
     }
    ],
-   "bloque_principal": null
+   "bloque_principal": null,
+   "plantilla": null,
+   "ajuste_plantilla": null,
+   "entrenamiento": null
   },
   {
    "id": "i189773155",
@@ -888,7 +1178,10 @@ window.DATOS_TABLERO = {
      "desnivel_m": null
     }
    ],
-   "bloque_principal": null
+   "bloque_principal": null,
+   "plantilla": null,
+   "ajuste_plantilla": null,
+   "entrenamiento": null
   },
   {
    "id": "i189773076",
@@ -999,7 +1292,10 @@ window.DATOS_TABLERO = {
      "desnivel_m": 0
     }
    ],
-   "bloque_principal": null
+   "bloque_principal": null,
+   "plantilla": "Libre",
+   "ajuste_plantilla": null,
+   "entrenamiento": null
   },
   {
    "id": "i189773167",
@@ -1086,7 +1382,10 @@ window.DATOS_TABLERO = {
      "desnivel_m": 0
     }
    ],
-   "bloque_principal": null
+   "bloque_principal": null,
+   "plantilla": null,
+   "ajuste_plantilla": null,
+   "entrenamiento": null
   },
   {
    "id": "i189773086",
@@ -1209,7 +1508,10 @@ window.DATOS_TABLERO = {
      "desnivel_m": 5
     }
    ],
-   "bloque_principal": null
+   "bloque_principal": null,
+   "plantilla": "Libre",
+   "ajuste_plantilla": null,
+   "entrenamiento": null
   },
   {
    "id": "i189773058",
@@ -1260,7 +1562,10 @@ window.DATOS_TABLERO = {
      "desnivel_m": null
     }
    ],
-   "bloque_principal": null
+   "bloque_principal": null,
+   "plantilla": null,
+   "ajuste_plantilla": null,
+   "entrenamiento": null
   },
   {
    "id": "i189773102",
@@ -1395,7 +1700,10 @@ window.DATOS_TABLERO = {
      "desnivel_m": 3
     }
    ],
-   "bloque_principal": null
+   "bloque_principal": null,
+   "plantilla": null,
+   "ajuste_plantilla": null,
+   "entrenamiento": null
   },
   {
    "id": "i189773121",
@@ -1518,7 +1826,10 @@ window.DATOS_TABLERO = {
      "desnivel_m": 7
     }
    ],
-   "bloque_principal": null
+   "bloque_principal": null,
+   "plantilla": "Libre",
+   "ajuste_plantilla": null,
+   "entrenamiento": null
   },
   {
    "id": "i189773038",
@@ -1653,7 +1964,10 @@ window.DATOS_TABLERO = {
      "desnivel_m": 0
     }
    ],
-   "bloque_principal": null
+   "bloque_principal": null,
+   "plantilla": "Libre",
+   "ajuste_plantilla": null,
+   "entrenamiento": null
   },
   {
    "id": "i189773153",
@@ -1752,7 +2066,10 @@ window.DATOS_TABLERO = {
      "desnivel_m": 10
     }
    ],
-   "bloque_principal": null
+   "bloque_principal": null,
+   "plantilla": null,
+   "ajuste_plantilla": null,
+   "entrenamiento": null
   },
   {
    "id": "i189773146",
@@ -1863,7 +2180,10 @@ window.DATOS_TABLERO = {
      "desnivel_m": 6
     }
    ],
-   "bloque_principal": null
+   "bloque_principal": null,
+   "plantilla": null,
+   "ajuste_plantilla": null,
+   "entrenamiento": null
   },
   {
    "id": "i189773115",
@@ -1974,7 +2294,10 @@ window.DATOS_TABLERO = {
      "desnivel_m": 0
     }
    ],
-   "bloque_principal": null
+   "bloque_principal": null,
+   "plantilla": null,
+   "ajuste_plantilla": null,
+   "entrenamiento": null
   },
   {
    "id": "i189773140",
@@ -2097,7 +2420,10 @@ window.DATOS_TABLERO = {
      "desnivel_m": 0
     }
    ],
-   "bloque_principal": null
+   "bloque_principal": null,
+   "plantilla": "Libre",
+   "ajuste_plantilla": null,
+   "entrenamiento": null
   },
   {
    "id": "i189773157",
@@ -2208,7 +2534,10 @@ window.DATOS_TABLERO = {
      "desnivel_m": 0
     }
    ],
-   "bloque_principal": null
+   "bloque_principal": null,
+   "plantilla": null,
+   "ajuste_plantilla": null,
+   "entrenamiento": null
   },
   {
    "id": "i189773160",
@@ -2319,7 +2648,10 @@ window.DATOS_TABLERO = {
      "desnivel_m": 0
     }
    ],
-   "bloque_principal": null
+   "bloque_principal": null,
+   "plantilla": "Libre",
+   "ajuste_plantilla": null,
+   "entrenamiento": null
   },
   {
    "id": "i189773104",
@@ -2370,7 +2702,10 @@ window.DATOS_TABLERO = {
      "desnivel_m": null
     }
    ],
-   "bloque_principal": null
+   "bloque_principal": null,
+   "plantilla": null,
+   "ajuste_plantilla": null,
+   "entrenamiento": null
   },
   {
    "id": "i189773134",
@@ -2481,7 +2816,10 @@ window.DATOS_TABLERO = {
      "desnivel_m": 1
     }
    ],
-   "bloque_principal": null
+   "bloque_principal": null,
+   "plantilla": "Libre",
+   "ajuste_plantilla": null,
+   "entrenamiento": null
   },
   {
    "id": "i189400067",
@@ -2529,7 +2867,8 @@ window.DATOS_TABLERO = {
      "fc_media": 117,
      "fc_max": 132,
      "cadencia": 121,
-     "desnivel_m": 4
+     "desnivel_m": 4,
+     "fase": "Calentamiento"
     },
     {
      "nro": 2,
@@ -2541,7 +2880,8 @@ window.DATOS_TABLERO = {
      "fc_media": 153,
      "fc_max": 164,
      "cadencia": 155,
-     "desnivel_m": 26
+     "desnivel_m": 26,
+     "fase": "Entrenamiento"
     },
     {
      "nro": 3,
@@ -2553,7 +2893,8 @@ window.DATOS_TABLERO = {
      "fc_media": 121,
      "fc_max": 153,
      "cadencia": 117,
-     "desnivel_m": 13
+     "desnivel_m": 13,
+     "fase": "Restaurar"
     },
     {
      "nro": 4,
@@ -2565,7 +2906,8 @@ window.DATOS_TABLERO = {
      "fc_media": 118,
      "fc_max": 118,
      "cadencia": 120,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "fase": null
     }
    ],
    "bloque_principal": {
@@ -2578,7 +2920,18 @@ window.DATOS_TABLERO = {
     "fc_media": 153,
     "fc_max": 164,
     "cadencia": 155,
-    "desnivel_m": 26
+    "desnivel_m": 26,
+    "fase": "Entrenamiento"
+   },
+   "plantilla": "25 MIN CO",
+   "ajuste_plantilla": "aproximada",
+   "entrenamiento": {
+    "bloques": 1,
+    "duracion_s": 1499,
+    "distancia_m": 3576,
+    "ritmo_s_km": 419,
+    "fc_media": 153,
+    "eficiencia": 0.936
    }
   },
   {
@@ -2870,7 +3223,10 @@ window.DATOS_TABLERO = {
      "desnivel_m": 4
     }
    ],
-   "bloque_principal": null
+   "bloque_principal": null,
+   "plantilla": "Libre",
+   "ajuste_plantilla": null,
+   "entrenamiento": null
   },
   {
    "id": "i189400074",
@@ -2921,7 +3277,10 @@ window.DATOS_TABLERO = {
      "desnivel_m": null
     }
    ],
-   "bloque_principal": null
+   "bloque_principal": null,
+   "plantilla": null,
+   "ajuste_plantilla": null,
+   "entrenamiento": null
   },
   {
    "id": "i189400079",
@@ -2969,7 +3328,8 @@ window.DATOS_TABLERO = {
      "fc_media": 101,
      "fc_max": 113,
      "cadencia": 124,
-     "desnivel_m": 4
+     "desnivel_m": 4,
+     "fase": "Calentamiento"
     },
     {
      "nro": 2,
@@ -2981,7 +3341,8 @@ window.DATOS_TABLERO = {
      "fc_media": 145,
      "fc_max": 154,
      "cadencia": 151,
-     "desnivel_m": 25
+     "desnivel_m": 25,
+     "fase": "Entrenamiento"
     },
     {
      "nro": 3,
@@ -2993,7 +3354,8 @@ window.DATOS_TABLERO = {
      "fc_media": 129,
      "fc_max": 156,
      "cadencia": 120,
-     "desnivel_m": 13
+     "desnivel_m": 13,
+     "fase": "Restaurar"
     }
    ],
    "bloque_principal": {
@@ -3006,7 +3368,18 @@ window.DATOS_TABLERO = {
     "fc_media": 145,
     "fc_max": 154,
     "cadencia": 151,
-    "desnivel_m": 25
+    "desnivel_m": 25,
+    "fase": "Entrenamiento"
+   },
+   "plantilla": "25 MIN CO",
+   "ajuste_plantilla": "exacta",
+   "entrenamiento": {
+    "bloques": 1,
+    "duracion_s": 1500,
+    "distancia_m": 3585,
+    "ritmo_s_km": 418,
+    "fc_media": 145,
+    "eficiencia": 0.989
    }
   },
   {
@@ -3055,7 +3428,8 @@ window.DATOS_TABLERO = {
      "fc_media": 109,
      "fc_max": 125,
      "cadencia": 122,
-     "desnivel_m": 4
+     "desnivel_m": 4,
+     "fase": "Calentamiento"
     },
     {
      "nro": 2,
@@ -3067,7 +3441,8 @@ window.DATOS_TABLERO = {
      "fc_media": 151,
      "fc_max": 157,
      "cadencia": 153,
-     "desnivel_m": 28
+     "desnivel_m": 28,
+     "fase": "Entrenamiento"
     },
     {
      "nro": 3,
@@ -3079,7 +3454,8 @@ window.DATOS_TABLERO = {
      "fc_media": 124,
      "fc_max": 158,
      "cadencia": 119,
-     "desnivel_m": 11
+     "desnivel_m": 11,
+     "fase": "Restaurar"
     }
    ],
    "bloque_principal": {
@@ -3092,7 +3468,18 @@ window.DATOS_TABLERO = {
     "fc_media": 151,
     "fc_max": 157,
     "cadencia": 153,
-    "desnivel_m": 28
+    "desnivel_m": 28,
+    "fase": "Entrenamiento"
+   },
+   "plantilla": "25 MIN CO",
+   "ajuste_plantilla": "exacta",
+   "entrenamiento": {
+    "bloques": 1,
+    "duracion_s": 1500,
+    "distancia_m": 3673,
+    "ritmo_s_km": 408,
+    "fc_media": 151,
+    "eficiencia": 0.973
    }
   },
   {
@@ -3144,7 +3531,10 @@ window.DATOS_TABLERO = {
      "desnivel_m": null
     }
    ],
-   "bloque_principal": null
+   "bloque_principal": null,
+   "plantilla": null,
+   "ajuste_plantilla": null,
+   "entrenamiento": null
   },
   {
    "id": "i189400086",
@@ -3192,7 +3582,8 @@ window.DATOS_TABLERO = {
      "fc_media": 89,
      "fc_max": 94,
      "cadencia": 107,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "fase": "Calentamiento"
     },
     {
      "nro": 2,
@@ -3204,7 +3595,8 @@ window.DATOS_TABLERO = {
      "fc_media": 137,
      "fc_max": 164,
      "cadencia": 140,
-     "desnivel_m": 19
+     "desnivel_m": 19,
+     "fase": "Entrenamiento"
     },
     {
      "nro": 3,
@@ -3216,7 +3608,8 @@ window.DATOS_TABLERO = {
      "fc_media": 127,
      "fc_max": 155,
      "cadencia": 114,
-     "desnivel_m": 4
+     "desnivel_m": 4,
+     "fase": "Restaurar"
     }
    ],
    "bloque_principal": {
@@ -3229,7 +3622,18 @@ window.DATOS_TABLERO = {
     "fc_media": 137,
     "fc_max": 164,
     "cadencia": 140,
-    "desnivel_m": 19
+    "desnivel_m": 19,
+    "fase": "Entrenamiento"
+   },
+   "plantilla": "2KM - 6'",
+   "ajuste_plantilla": "exacta",
+   "entrenamiento": {
+    "bloques": 1,
+    "duracion_s": 811,
+    "distancia_m": 1999,
+    "ritmo_s_km": 406,
+    "fc_media": 137,
+    "eficiencia": 1.079
    }
   },
   {
@@ -3305,7 +3709,10 @@ window.DATOS_TABLERO = {
      "desnivel_m": 0
     }
    ],
-   "bloque_principal": null
+   "bloque_principal": null,
+   "plantilla": "Libre",
+   "ajuste_plantilla": null,
+   "entrenamiento": null
   },
   {
    "id": "i189400095",
@@ -3356,7 +3763,10 @@ window.DATOS_TABLERO = {
      "desnivel_m": null
     }
    ],
-   "bloque_principal": null
+   "bloque_principal": null,
+   "plantilla": null,
+   "ajuste_plantilla": null,
+   "entrenamiento": null
   },
   {
    "id": "i189400096",
@@ -3404,7 +3814,8 @@ window.DATOS_TABLERO = {
      "fc_media": 126,
      "fc_max": 137,
      "cadencia": 122,
-     "desnivel_m": 4
+     "desnivel_m": 4,
+     "fase": "Calentamiento"
     },
     {
      "nro": 2,
@@ -3416,7 +3827,8 @@ window.DATOS_TABLERO = {
      "fc_media": 157,
      "fc_max": 165,
      "cadencia": 157,
-     "desnivel_m": 30
+     "desnivel_m": 30,
+     "fase": "Entrenamiento"
     },
     {
      "nro": 3,
@@ -3428,7 +3840,8 @@ window.DATOS_TABLERO = {
      "fc_media": 127,
      "fc_max": 158,
      "cadencia": 121,
-     "desnivel_m": 8
+     "desnivel_m": 8,
+     "fase": "Restaurar"
     }
    ],
    "bloque_principal": {
@@ -3441,7 +3854,18 @@ window.DATOS_TABLERO = {
     "fc_media": 157,
     "fc_max": 165,
     "cadencia": 157,
-    "desnivel_m": 30
+    "desnivel_m": 30,
+    "fase": "Entrenamiento"
+   },
+   "plantilla": "28 MIN CO",
+   "ajuste_plantilla": "exacta",
+   "entrenamiento": {
+    "bloques": 1,
+    "duracion_s": 1680,
+    "distancia_m": 4212,
+    "ritmo_s_km": 399,
+    "fc_media": 157,
+    "eficiencia": 0.958
    }
   },
   {
@@ -3721,7 +4145,10 @@ window.DATOS_TABLERO = {
      "desnivel_m": 3
     }
    ],
-   "bloque_principal": null
+   "bloque_principal": null,
+   "plantilla": null,
+   "ajuste_plantilla": null,
+   "entrenamiento": null
   },
   {
    "id": "i191010738",
@@ -3784,7 +4211,10 @@ window.DATOS_TABLERO = {
      "desnivel_m": 0
     }
    ],
-   "bloque_principal": null
+   "bloque_principal": null,
+   "plantilla": null,
+   "ajuste_plantilla": null,
+   "entrenamiento": null
   },
   {
    "id": "i191704058",
@@ -3832,7 +4262,8 @@ window.DATOS_TABLERO = {
      "fc_media": 129,
      "fc_max": 142,
      "cadencia": 154,
-     "desnivel_m": 4
+     "desnivel_m": 4,
+     "fase": "Entrenamiento"
     },
     {
      "nro": 2,
@@ -3844,7 +4275,8 @@ window.DATOS_TABLERO = {
      "fc_media": 145,
      "fc_max": 151,
      "cadencia": 156,
-     "desnivel_m": 4
+     "desnivel_m": 4,
+     "fase": "Entrenamiento"
     },
     {
      "nro": 3,
@@ -3856,7 +4288,8 @@ window.DATOS_TABLERO = {
      "fc_media": 154,
      "fc_max": 158,
      "cadencia": 157,
-     "desnivel_m": 4
+     "desnivel_m": 4,
+     "fase": "Entrenamiento"
     },
     {
      "nro": 4,
@@ -3868,7 +4301,8 @@ window.DATOS_TABLERO = {
      "fc_media": 158,
      "fc_max": 162,
      "cadencia": 157,
-     "desnivel_m": 4
+     "desnivel_m": 4,
+     "fase": "Entrenamiento"
     },
     {
      "nro": 5,
@@ -3880,7 +4314,8 @@ window.DATOS_TABLERO = {
      "fc_media": 148,
      "fc_max": 163,
      "cadencia": 133,
-     "desnivel_m": 4
+     "desnivel_m": 4,
+     "fase": "Entrenamiento"
     }
    ],
    "bloque_principal": {
@@ -3893,7 +4328,18 @@ window.DATOS_TABLERO = {
     "fc_media": 145,
     "fc_max": 151,
     "cadencia": 156,
-    "desnivel_m": 4
+    "desnivel_m": 4,
+    "fase": "Entrenamiento"
+   },
+   "plantilla": "Aumento de ritmo",
+   "ajuste_plantilla": "exacta",
+   "entrenamiento": {
+    "bloques": 5,
+    "duracion_s": 1083,
+    "distancia_m": 2503,
+    "ritmo_s_km": 433,
+    "fc_media": 146,
+    "eficiencia": 0.95
    }
   },
   {
@@ -4101,7 +4547,10 @@ window.DATOS_TABLERO = {
      "desnivel_m": 1
     }
    ],
-   "bloque_principal": null
+   "bloque_principal": null,
+   "plantilla": null,
+   "ajuste_plantilla": null,
+   "entrenamiento": null
   },
   {
    "id": "i193197684",
@@ -4296,7 +4745,10 @@ window.DATOS_TABLERO = {
      "desnivel_m": 0
     }
    ],
-   "bloque_principal": null
+   "bloque_principal": null,
+   "plantilla": null,
+   "ajuste_plantilla": null,
+   "entrenamiento": null
   },
   {
    "id": "i193226821",
@@ -4479,7 +4931,10 @@ window.DATOS_TABLERO = {
      "desnivel_m": 0
     }
    ],
-   "bloque_principal": null
+   "bloque_principal": null,
+   "plantilla": null,
+   "ajuste_plantilla": null,
+   "entrenamiento": null
   },
   {
    "id": "i193347776",
@@ -4662,7 +5117,10 @@ window.DATOS_TABLERO = {
      "desnivel_m": 0
     }
    ],
-   "bloque_principal": null
+   "bloque_principal": null,
+   "plantilla": null,
+   "ajuste_plantilla": null,
+   "entrenamiento": null
   },
   {
    "id": "i193348213",
@@ -4809,7 +5267,10 @@ window.DATOS_TABLERO = {
      "desnivel_m": 0
     }
    ],
-   "bloque_principal": null
+   "bloque_principal": null,
+   "plantilla": null,
+   "ajuste_plantilla": null,
+   "entrenamiento": null
   }
  ],
  "semanas": [

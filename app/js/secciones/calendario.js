@@ -133,7 +133,7 @@
       }
     }
     const entrenamientos = acts.map((a) => {
-      const nombre = `${a.categoria}${a.subtipo ? ` · ${a.subtipo}` : ""}`;
+      const nombre = Tablero.sesiones.nombreSesion(a);
       return `<button type="button" class="act" data-id="${escapar(a.id)}" style="--color-cat:${VAR_GRUPO[Tablero.graficos.grupoDe(a)]}"
         title="${escapar(nombre)} · ${duracion(a.duracion_s)} — tocá para ver el detalle">
         <span class="act-nombre">${escapar(nombre)}</span><small>${duracion(a.duracion_s)}</small></button>`;
