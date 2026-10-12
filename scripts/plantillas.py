@@ -146,13 +146,17 @@ def resumen_fase(bloques, fases, fase="Entrenamiento"):
         return None
     dur = sum(b["duracion_s"] for b in elegidos)
     dist = sum(b["distancia_m"] or 0 for b in elegidos)
-    con_fc = [b for b in elegidos if b["fc_media"] is not None]
-    fc = (sum(b["fc_media"] * b["duracion_s"] for b in con_fc) / sum(b["duracion_s"] for b in con_fc)) if con_fc else None
+    def ponderado(clave):
+        con = [b for b in elegidos if b.get(clave) is not None]
+        return sum(b[clave] * b["duracion_s"] for b in con) / sum(b["duracion_s"] for b in con) if con else None
+    fc = ponderado("fc_media")
+    potencia = ponderado("potencia_w")
     return {
         "bloques": len(elegidos),
         "duracion_s": dur,
         "distancia_m": round(dist),
         "ritmo_s_km": round(dur / dist * 1000) if dist else None,
         "fc_media": round(fc) if fc is not None else None,
+        "potencia_w": round(potencia) if potencia is not None else None,
         "eficiencia": round(dist / dur * 60 / fc, 3) if dist and fc else None,
     }

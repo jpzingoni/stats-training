@@ -161,13 +161,35 @@
             <div class="segmentado" id="carrera-metrica" role="group" aria-label="Dato a mostrar">
               <button type="button" data-metrica="ritmo">Ritmo</button>
               <button type="button" data-metrica="fc">FC</button>
+              <button type="button" data-metrica="potencia">Potencia</button>
+              <button type="button" data-metrica="cadencia">Cadencia</button>
+              <button type="button" data-metrica="zancada">Zancada</button>
             </div>
           </div>
           <p class="texto-sec" id="carrera-comp-nota"></p>
           <div class="lienzo alto"><canvas id="g-carrera-comparar"></canvas></div>
         </figure>
+        <figure class="tarjeta">
+          <figcaption><h2 id="carrera-deriva-titulo">Deriva cardíaca</h2><p id="carrera-deriva-nota"></p></figcaption>
+          <div class="lienzo"><canvas id="g-carrera-deriva"></canvas></div>
+        </figure>
+        <figure class="tarjeta">
+          <div class="tarjeta-cab">
+            <figcaption><h2>Eficiencia por sesión</h2></figcaption>
+            <div class="segmentado" id="carrera-ef-metrica" role="group" aria-label="Eficiencia">
+              <button type="button" data-ef="m">m/latido</button>
+              <button type="button" data-ef="w">W/latido</button>
+            </div>
+          </div>
+          <p class="texto-sec">Sesiones elegidas, en la etapa elegida. Si sube, rendiste más con el mismo esfuerzo cardíaco.</p>
+          <div class="lienzo"><canvas id="g-carrera-ef-plantilla"></canvas></div>
+        </figure>
         <figure class="tarjeta ancha">
-          <figcaption><h2>Eficiencia aeróbica</h2><p>Metros por latido (velocidad ÷ FC media). Si sube, corrés más con el mismo esfuerzo</p></figcaption>
+          <figcaption><h2>Ritmo contra FC, minuto a minuto</h2><p id="carrera-disp-nota"></p></figcaption>
+          <div class="lienzo alto"><canvas id="g-carrera-dispersion"></canvas></div>
+        </figure>
+        <figure class="tarjeta ancha">
+          <figcaption><h2>Eficiencia aeróbica de todas las corridas</h2><p>Metros por latido (velocidad ÷ FC media). Si sube, corrés más con el mismo esfuerzo</p></figcaption>
           <div class="lienzo"><canvas id="g-eficiencia"></canvas></div>
         </figure>
         <figure class="tarjeta">
@@ -198,6 +220,14 @@
     <section id="panel-padel" class="seccion" hidden>
       <div class="kpis" id="padel-kpis"></div>
       <div class="grilla">
+        <figure class="tarjeta ancha">
+          <div class="tarjeta-cab">
+            <figcaption><h2>FC minuto a minuto</h2></figcaption>
+            <label class="selector selector-linea"><span>Partido</span><select id="padel-partido"></select></label>
+          </div>
+          <p class="texto-sec" id="padel-fc-nota"></p>
+          <div class="lienzo alto"><canvas id="g-padel-minutos"></canvas></div>
+        </figure>
         <figure class="tarjeta">
           <figcaption><h2>Carga por sesión</h2><p>HRSS</p></figcaption>
           <div class="lienzo"><canvas id="g-padel-carga"></canvas></div>
@@ -299,6 +329,7 @@
             <button type="button" data-tabla="actividades">actividades.csv</button>
             <button type="button" data-tabla="bloques">bloques.csv</button>
             <button type="button" data-tabla="bienestar">bienestar.csv</button>
+            <button type="button" data-tabla="minutos">minutos.csv</button>
           </div>
           <div class="segmentado" id="datos-filtro" role="group" aria-label="Columnas">
             <button type="button" data-filtro="todas">Todas</button>
@@ -335,6 +366,7 @@
        extensiones o el antivirus interfieran con un script externo -->
   <script src="vendor/chart.umd.min.js"></script>
   <script src="data/datos.js"></script>
+  <script src="data/minutos.js"></script>
   <script src="js/formato.js"></script>
   <script src="js/graficos.js"></script>
   <script src="js/componentes.js"></script>

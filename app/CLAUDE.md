@@ -45,6 +45,13 @@ recuperación), pensado para ver mi progreso y para mostrar en mi portfolio.
   (exacta / aproximada / incompleta) y `entrenamiento` (tiempo, distancia, ritmo y FC solo
   de los bloques de fase Entrenamiento); cada bloque trae su `fase`. Para medir progreso,
   usar `entrenamiento` y comparar sesiones de la misma plantilla.
+- **Minutos** (`app/data/minutos.js`, define `window.MINUTOS_TABLERO`): por actividad, una
+  lista por columna donde la posición es el minuto (los que el reloj no grabó van `null`):
+  `seg`, `dist`, `ritmo` (s/km), `vel`, `fc`, `fcmax`, `cad`, `pot`, `alt`, `zancada`,
+  `contacto`, `osc` y `bloque` (nro del bloque, asignado por el punto medio del minuto).
+  En el ritmo cuentan las pausas. El pádel solo trae FC. En el tablero está en
+  `ctx.todo.minutos`.
+- Potencia de carrera (`potencia_w`) en actividades, bloques, `entrenamiento` y minutos.
 - Zonas de FC de carrera (límite superior): 139 / 147 / 155 / 164 / 168 / 173 / 182.
 - No hay HRV, SpO2 ni peso (la integración Zepp → Intervals no los envía).
 

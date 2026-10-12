@@ -301,6 +301,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": 550,
    "fc_media": 153,
    "fc_max": 182,
+   "potencia_w": 188,
    "carga": 64,
    "desnivel_m": 36,
    "tiempo_total_s": 2700,
@@ -335,7 +336,8 @@ window.DATOS_TABLERO = {
      "fc_media": 110,
      "fc_max": 137,
      "cadencia": 119,
-     "desnivel_m": 5
+     "desnivel_m": 5,
+     "potencia_w": 119
     },
     {
      "nro": 2,
@@ -347,7 +349,8 @@ window.DATOS_TABLERO = {
      "fc_media": 160,
      "fc_max": 175,
      "cadencia": 145,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": 247
     },
     {
      "nro": 3,
@@ -359,7 +362,8 @@ window.DATOS_TABLERO = {
      "fc_media": 165,
      "fc_max": 178,
      "cadencia": 137,
-     "desnivel_m": 4
+     "desnivel_m": 4,
+     "potencia_w": 205
     },
     {
      "nro": 4,
@@ -371,7 +375,8 @@ window.DATOS_TABLERO = {
      "fc_media": 167,
      "fc_max": 182,
      "cadencia": 136,
-     "desnivel_m": 22
+     "desnivel_m": 22,
+     "potencia_w": 195
     },
     {
      "nro": 5,
@@ -383,7 +388,8 @@ window.DATOS_TABLERO = {
      "fc_media": 169,
      "fc_max": 181,
      "cadencia": 138,
-     "desnivel_m": 8
+     "desnivel_m": 8,
+     "potencia_w": 197
     }
    ],
    "bloque_principal": null,
@@ -403,6 +409,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": 546,
    "fc_media": 153,
    "fc_max": 181,
+   "potencia_w": 191,
    "carga": 62,
    "desnivel_m": 37,
    "tiempo_total_s": 2700,
@@ -437,7 +444,8 @@ window.DATOS_TABLERO = {
      "fc_media": 121,
      "fc_max": 154,
      "cadencia": 120,
-     "desnivel_m": 7
+     "desnivel_m": 7,
+     "potencia_w": 119
     },
     {
      "nro": 2,
@@ -449,7 +457,8 @@ window.DATOS_TABLERO = {
      "fc_media": 165,
      "fc_max": 176,
      "cadencia": 146,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": 233
     },
     {
      "nro": 3,
@@ -461,7 +470,8 @@ window.DATOS_TABLERO = {
      "fc_media": 161,
      "fc_max": 171,
      "cadencia": 139,
-     "desnivel_m": 4
+     "desnivel_m": 4,
+     "potencia_w": 211
     },
     {
      "nro": 4,
@@ -473,7 +483,8 @@ window.DATOS_TABLERO = {
      "fc_media": 165,
      "fc_max": 181,
      "cadencia": 138,
-     "desnivel_m": 19
+     "desnivel_m": 19,
+     "potencia_w": 203
     },
     {
      "nro": 5,
@@ -485,7 +496,8 @@ window.DATOS_TABLERO = {
      "fc_media": 161,
      "fc_max": 181,
      "cadencia": 139,
-     "desnivel_m": 9
+     "desnivel_m": 9,
+     "potencia_w": 205
     }
    ],
    "bloque_principal": null,
@@ -505,6 +517,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": 555,
    "fc_media": 146,
    "fc_max": 175,
+   "potencia_w": 158,
    "carga": 48,
    "desnivel_m": 37,
    "tiempo_total_s": 2568,
@@ -539,7 +552,8 @@ window.DATOS_TABLERO = {
      "fc_media": 123,
      "fc_max": 136,
      "cadencia": 127,
-     "desnivel_m": 3
+     "desnivel_m": 3,
+     "potencia_w": 143
     },
     {
      "nro": 2,
@@ -551,7 +565,8 @@ window.DATOS_TABLERO = {
      "fc_media": 147,
      "fc_max": 166,
      "cadencia": 137,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": 189
     },
     {
      "nro": 3,
@@ -563,7 +578,8 @@ window.DATOS_TABLERO = {
      "fc_media": 160,
      "fc_max": 171,
      "cadencia": 137,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": 194
     },
     {
      "nro": 4,
@@ -575,7 +591,8 @@ window.DATOS_TABLERO = {
      "fc_media": 162,
      "fc_max": 175,
      "cadencia": 127,
-     "desnivel_m": 22
+     "desnivel_m": 22,
+     "potencia_w": 161
     },
     {
      "nro": 5,
@@ -587,7 +604,8 @@ window.DATOS_TABLERO = {
      "fc_media": 133,
      "fc_max": 145,
      "cadencia": 118,
-     "desnivel_m": 5
+     "desnivel_m": 5,
+     "potencia_w": 103
     }
    ],
    "bloque_principal": null,
@@ -607,6 +625,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": 649,
    "fc_media": 108,
    "fc_max": 147,
+   "potencia_w": null,
    "carga": 13,
    "desnivel_m": 35,
    "tiempo_total_s": 2029,
@@ -641,7 +660,8 @@ window.DATOS_TABLERO = {
      "fc_media": 87,
      "fc_max": 99,
      "cadencia": 116,
-     "desnivel_m": 3
+     "desnivel_m": 3,
+     "potencia_w": null
     },
     {
      "nro": 2,
@@ -653,7 +673,8 @@ window.DATOS_TABLERO = {
      "fc_media": 123,
      "fc_max": 147,
      "cadencia": 150,
-     "desnivel_m": 16
+     "desnivel_m": 16,
+     "potencia_w": null
     },
     {
      "nro": 3,
@@ -665,7 +686,8 @@ window.DATOS_TABLERO = {
      "fc_media": 115,
      "fc_max": 146,
      "cadencia": 111,
-     "desnivel_m": 8
+     "desnivel_m": 8,
+     "potencia_w": null
     },
     {
      "nro": 4,
@@ -677,7 +699,8 @@ window.DATOS_TABLERO = {
      "fc_media": 111,
      "fc_max": 116,
      "cadencia": 110,
-     "desnivel_m": 1
+     "desnivel_m": 1,
+     "potencia_w": null
     }
    ],
    "bloque_principal": null,
@@ -697,6 +720,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": 583,
    "fc_media": 131,
    "fc_max": 167,
+   "potencia_w": 171,
    "carga": 35,
    "desnivel_m": 41,
    "tiempo_total_s": 3046,
@@ -731,7 +755,8 @@ window.DATOS_TABLERO = {
      "fc_media": 71,
      "fc_max": 114,
      "cadencia": 4,
-     "desnivel_m": 1
+     "desnivel_m": 1,
+     "potencia_w": 118
     },
     {
      "nro": 2,
@@ -743,7 +768,8 @@ window.DATOS_TABLERO = {
      "fc_media": 148,
      "fc_max": 159,
      "cadencia": 157,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": 270
     },
     {
      "nro": 3,
@@ -755,7 +781,8 @@ window.DATOS_TABLERO = {
      "fc_media": 148,
      "fc_max": 153,
      "cadencia": 155,
-     "desnivel_m": 4
+     "desnivel_m": 4,
+     "potencia_w": 268
     },
     {
      "nro": 4,
@@ -767,7 +794,8 @@ window.DATOS_TABLERO = {
      "fc_media": 140,
      "fc_max": 167,
      "cadencia": 125,
-     "desnivel_m": 16
+     "desnivel_m": 16,
+     "potencia_w": 161
     },
     {
      "nro": 5,
@@ -779,7 +807,8 @@ window.DATOS_TABLERO = {
      "fc_media": 120,
      "fc_max": 167,
      "cadencia": 111,
-     "desnivel_m": 9
+     "desnivel_m": 9,
+     "potencia_w": 101
     },
     {
      "nro": 6,
@@ -791,7 +820,8 @@ window.DATOS_TABLERO = {
      "fc_media": 98,
      "fc_max": 109,
      "cadencia": 109,
-     "desnivel_m": 7
+     "desnivel_m": 7,
+     "potencia_w": 101
     }
    ],
    "bloque_principal": null,
@@ -811,6 +841,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": 567,
    "fc_media": 135,
    "fc_max": 165,
+   "potencia_w": 187,
    "carga": 52,
    "desnivel_m": 47,
    "tiempo_total_s": 3600,
@@ -845,7 +876,8 @@ window.DATOS_TABLERO = {
      "fc_media": 100,
      "fc_max": 109,
      "cadencia": 125,
-     "desnivel_m": 7
+     "desnivel_m": 7,
+     "potencia_w": 137
     },
     {
      "nro": 2,
@@ -857,7 +889,8 @@ window.DATOS_TABLERO = {
      "fc_media": 120,
      "fc_max": 129,
      "cadencia": 147,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": 249
     },
     {
      "nro": 3,
@@ -869,7 +902,8 @@ window.DATOS_TABLERO = {
      "fc_media": 139,
      "fc_max": 154,
      "cadencia": 141,
-     "desnivel_m": 3
+     "desnivel_m": 3,
+     "potencia_w": 227
     },
     {
      "nro": 4,
@@ -881,7 +915,8 @@ window.DATOS_TABLERO = {
      "fc_media": 154,
      "fc_max": 162,
      "cadencia": 141,
-     "desnivel_m": 22
+     "desnivel_m": 22,
+     "potencia_w": 228
     },
     {
      "nro": 5,
@@ -893,7 +928,8 @@ window.DATOS_TABLERO = {
      "fc_media": 151,
      "fc_max": 163,
      "cadencia": 144,
-     "desnivel_m": 8
+     "desnivel_m": 8,
+     "potencia_w": 220
     },
     {
      "nro": 6,
@@ -905,7 +941,8 @@ window.DATOS_TABLERO = {
      "fc_media": 148,
      "fc_max": 165,
      "cadencia": 125,
-     "desnivel_m": 5
+     "desnivel_m": 5,
+     "potencia_w": 149
     },
     {
      "nro": 7,
@@ -917,7 +954,8 @@ window.DATOS_TABLERO = {
      "fc_media": 121,
      "fc_max": 129,
      "cadencia": 108,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": 83
     }
    ],
    "bloque_principal": null,
@@ -937,6 +975,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": 558,
    "fc_media": 140,
    "fc_max": 175,
+   "potencia_w": 164,
    "carga": 43,
    "desnivel_m": 36,
    "tiempo_total_s": 2562,
@@ -971,7 +1010,8 @@ window.DATOS_TABLERO = {
      "fc_media": 113,
      "fc_max": 136,
      "cadencia": 130,
-     "desnivel_m": 7
+     "desnivel_m": 7,
+     "potencia_w": 152
     },
     {
      "nro": 2,
@@ -983,7 +1023,8 @@ window.DATOS_TABLERO = {
      "fc_media": 146,
      "fc_max": 159,
      "cadencia": 139,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": 192
     },
     {
      "nro": 3,
@@ -995,7 +1036,8 @@ window.DATOS_TABLERO = {
      "fc_media": 158,
      "fc_max": 173,
      "cadencia": 138,
-     "desnivel_m": 5
+     "desnivel_m": 5,
+     "potencia_w": 202
     },
     {
      "nro": 4,
@@ -1007,7 +1049,8 @@ window.DATOS_TABLERO = {
      "fc_media": 157,
      "fc_max": 175,
      "cadencia": 126,
-     "desnivel_m": 23
+     "desnivel_m": 23,
+     "potencia_w": 161
     },
     {
      "nro": 5,
@@ -1019,7 +1062,8 @@ window.DATOS_TABLERO = {
      "fc_media": 122,
      "fc_max": 133,
      "cadencia": 118,
-     "desnivel_m": 4
+     "desnivel_m": 4,
+     "potencia_w": 108
     }
    ],
    "bloque_principal": null,
@@ -1039,6 +1083,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": 706,
    "fc_media": 89,
    "fc_max": 116,
+   "potencia_w": null,
    "carga": 10,
    "desnivel_m": 36,
    "tiempo_total_s": 3085,
@@ -1073,7 +1118,8 @@ window.DATOS_TABLERO = {
      "fc_media": 85,
      "fc_max": 105,
      "cadencia": 114,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     },
     {
      "nro": 2,
@@ -1085,7 +1131,8 @@ window.DATOS_TABLERO = {
      "fc_media": 81,
      "fc_max": 88,
      "cadencia": 113,
-     "desnivel_m": 2
+     "desnivel_m": 2,
+     "potencia_w": null
     },
     {
      "nro": 3,
@@ -1097,7 +1144,8 @@ window.DATOS_TABLERO = {
      "fc_media": 90,
      "fc_max": 95,
      "cadencia": 113,
-     "desnivel_m": 5
+     "desnivel_m": 5,
+     "potencia_w": null
     },
     {
      "nro": 4,
@@ -1109,7 +1157,8 @@ window.DATOS_TABLERO = {
      "fc_media": 92,
      "fc_max": 113,
      "cadencia": 111,
-     "desnivel_m": 20
+     "desnivel_m": 20,
+     "potencia_w": null
     },
     {
      "nro": 5,
@@ -1121,7 +1170,8 @@ window.DATOS_TABLERO = {
      "fc_media": 110,
      "fc_max": 116,
      "cadencia": 111,
-     "desnivel_m": 8
+     "desnivel_m": 8,
+     "potencia_w": null
     }
    ],
    "bloque_principal": null,
@@ -1141,6 +1191,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": null,
    "fc_media": 149,
    "fc_max": 178,
+   "potencia_w": null,
    "carga": 62,
    "desnivel_m": null,
    "tiempo_total_s": 3162,
@@ -1175,7 +1226,8 @@ window.DATOS_TABLERO = {
      "fc_media": 148,
      "fc_max": 178,
      "cadencia": null,
-     "desnivel_m": null
+     "desnivel_m": null,
+     "potencia_w": null
     }
    ],
    "bloque_principal": null,
@@ -1195,6 +1247,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": 571,
    "fc_media": 146,
    "fc_max": 177,
+   "potencia_w": 185,
    "carga": 54,
    "desnivel_m": 33,
    "tiempo_total_s": 2939,
@@ -1229,7 +1282,8 @@ window.DATOS_TABLERO = {
      "fc_media": 150,
      "fc_max": 162,
      "cadencia": 151,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": 253
     },
     {
      "nro": 2,
@@ -1241,7 +1295,8 @@ window.DATOS_TABLERO = {
      "fc_media": 156,
      "fc_max": 161,
      "cadencia": 147,
-     "desnivel_m": 2
+     "desnivel_m": 2,
+     "potencia_w": 250
     },
     {
      "nro": 3,
@@ -1253,7 +1308,8 @@ window.DATOS_TABLERO = {
      "fc_media": 149,
      "fc_max": 160,
      "cadencia": 140,
-     "desnivel_m": 14
+     "desnivel_m": 14,
+     "potencia_w": 204
     },
     {
      "nro": 4,
@@ -1265,7 +1321,8 @@ window.DATOS_TABLERO = {
      "fc_media": 146,
      "fc_max": 173,
      "cadencia": 128,
-     "desnivel_m": 15
+     "desnivel_m": 15,
+     "potencia_w": 170
     },
     {
      "nro": 5,
@@ -1277,7 +1334,8 @@ window.DATOS_TABLERO = {
      "fc_media": 146,
      "fc_max": 177,
      "cadencia": 120,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": 126
     },
     {
      "nro": 6,
@@ -1289,7 +1347,8 @@ window.DATOS_TABLERO = {
      "fc_media": 110,
      "fc_max": 116,
      "cadencia": 69,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": 66
     }
    ],
    "bloque_principal": null,
@@ -1309,6 +1368,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": 674,
    "fc_media": 84,
    "fc_max": 102,
+   "potencia_w": null,
    "carga": 5,
    "desnivel_m": 32,
    "tiempo_total_s": 2026,
@@ -1343,7 +1403,8 @@ window.DATOS_TABLERO = {
      "fc_media": 85,
      "fc_max": 102,
      "cadencia": 119,
-     "desnivel_m": 5
+     "desnivel_m": 5,
+     "potencia_w": null
     },
     {
      "nro": 2,
@@ -1355,7 +1416,8 @@ window.DATOS_TABLERO = {
      "fc_media": 81,
      "fc_max": 92,
      "cadencia": 122,
-     "desnivel_m": 10
+     "desnivel_m": 10,
+     "potencia_w": null
     },
     {
      "nro": 3,
@@ -1367,7 +1429,8 @@ window.DATOS_TABLERO = {
      "fc_media": 82,
      "fc_max": 91,
      "cadencia": 120,
-     "desnivel_m": 11
+     "desnivel_m": 11,
+     "potencia_w": null
     },
     {
      "nro": 4,
@@ -1379,7 +1442,8 @@ window.DATOS_TABLERO = {
      "fc_media": 88,
      "fc_max": 89,
      "cadencia": 112,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     }
    ],
    "bloque_principal": null,
@@ -1399,6 +1463,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": 548,
    "fc_media": 142,
    "fc_max": 168,
+   "potencia_w": 189,
    "carga": 61,
    "desnivel_m": 53,
    "tiempo_total_s": 3600,
@@ -1433,7 +1498,8 @@ window.DATOS_TABLERO = {
      "fc_media": 109,
      "fc_max": 130,
      "cadencia": 126,
-     "desnivel_m": 4
+     "desnivel_m": 4,
+     "potencia_w": 133
     },
     {
      "nro": 2,
@@ -1445,7 +1511,8 @@ window.DATOS_TABLERO = {
      "fc_media": 152,
      "fc_max": 162,
      "cadencia": 152,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": 247
     },
     {
      "nro": 3,
@@ -1457,7 +1524,8 @@ window.DATOS_TABLERO = {
      "fc_media": 154,
      "fc_max": 168,
      "cadencia": 144,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": 224
     },
     {
      "nro": 4,
@@ -1469,7 +1537,8 @@ window.DATOS_TABLERO = {
      "fc_media": 150,
      "fc_max": 157,
      "cadencia": 149,
-     "desnivel_m": 18
+     "desnivel_m": 18,
+     "potencia_w": 238
     },
     {
      "nro": 5,
@@ -1481,7 +1550,8 @@ window.DATOS_TABLERO = {
      "fc_media": 151,
      "fc_max": 161,
      "cadencia": 146,
-     "desnivel_m": 9
+     "desnivel_m": 9,
+     "potencia_w": 213
     },
     {
      "nro": 6,
@@ -1493,7 +1563,8 @@ window.DATOS_TABLERO = {
      "fc_media": 151,
      "fc_max": 166,
      "cadencia": 131,
-     "desnivel_m": 5
+     "desnivel_m": 5,
+     "potencia_w": 177
     },
     {
      "nro": 7,
@@ -1505,7 +1576,8 @@ window.DATOS_TABLERO = {
      "fc_media": 128,
      "fc_max": 146,
      "cadencia": 113,
-     "desnivel_m": 5
+     "desnivel_m": 5,
+     "potencia_w": 95
     }
    ],
    "bloque_principal": null,
@@ -1525,6 +1597,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": null,
    "fc_media": 145,
    "fc_max": 172,
+   "potencia_w": null,
    "carga": 95,
    "desnivel_m": null,
    "tiempo_total_s": 5282,
@@ -1559,7 +1632,8 @@ window.DATOS_TABLERO = {
      "fc_media": 145,
      "fc_max": 172,
      "cadencia": null,
-     "desnivel_m": null
+     "desnivel_m": null,
+     "potencia_w": null
     }
    ],
    "bloque_principal": null,
@@ -1579,6 +1653,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": 700,
    "fc_media": 95,
    "fc_max": 121,
+   "potencia_w": null,
    "carga": 17,
    "desnivel_m": 61,
    "tiempo_total_s": 4620,
@@ -1613,7 +1688,8 @@ window.DATOS_TABLERO = {
      "fc_media": 97,
      "fc_max": 108,
      "cadencia": 115,
-     "desnivel_m": 1
+     "desnivel_m": 1,
+     "potencia_w": null
     },
     {
      "nro": 2,
@@ -1625,7 +1701,8 @@ window.DATOS_TABLERO = {
      "fc_media": 76,
      "fc_max": 87,
      "cadencia": 114,
-     "desnivel_m": 11
+     "desnivel_m": 11,
+     "potencia_w": null
     },
     {
      "nro": 3,
@@ -1637,7 +1714,8 @@ window.DATOS_TABLERO = {
      "fc_media": 79,
      "fc_max": 87,
      "cadencia": 114,
-     "desnivel_m": 5
+     "desnivel_m": 5,
+     "potencia_w": null
     },
     {
      "nro": 4,
@@ -1649,7 +1727,8 @@ window.DATOS_TABLERO = {
      "fc_media": 102,
      "fc_max": 120,
      "cadencia": 116,
-     "desnivel_m": 1
+     "desnivel_m": 1,
+     "potencia_w": null
     },
     {
      "nro": 5,
@@ -1661,7 +1740,8 @@ window.DATOS_TABLERO = {
      "fc_media": 108,
      "fc_max": 120,
      "cadencia": 114,
-     "desnivel_m": 6
+     "desnivel_m": 6,
+     "potencia_w": null
     },
     {
      "nro": 6,
@@ -1673,7 +1753,8 @@ window.DATOS_TABLERO = {
      "fc_media": 95,
      "fc_max": 101,
      "cadencia": 116,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     },
     {
      "nro": 7,
@@ -1685,7 +1766,8 @@ window.DATOS_TABLERO = {
      "fc_media": 105,
      "fc_max": 121,
      "cadencia": 115,
-     "desnivel_m": 24
+     "desnivel_m": 24,
+     "potencia_w": null
     },
     {
      "nro": 8,
@@ -1697,7 +1779,8 @@ window.DATOS_TABLERO = {
      "fc_media": 113,
      "fc_max": 121,
      "cadencia": 114,
-     "desnivel_m": 3
+     "desnivel_m": 3,
+     "potencia_w": null
     }
    ],
    "bloque_principal": null,
@@ -1717,6 +1800,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": 528,
    "fc_media": 150,
    "fc_max": 177,
+   "potencia_w": 198,
    "carga": 75,
    "desnivel_m": 59,
    "tiempo_total_s": 3600,
@@ -1751,7 +1835,8 @@ window.DATOS_TABLERO = {
      "fc_media": 125,
      "fc_max": 134,
      "cadencia": 128,
-     "desnivel_m": 3
+     "desnivel_m": 3,
+     "potencia_w": 144
     },
     {
      "nro": 2,
@@ -1763,7 +1848,8 @@ window.DATOS_TABLERO = {
      "fc_media": 158,
      "fc_max": 172,
      "cadencia": 152,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": 249
     },
     {
      "nro": 3,
@@ -1775,7 +1861,8 @@ window.DATOS_TABLERO = {
      "fc_media": 160,
      "fc_max": 169,
      "cadencia": 148,
-     "desnivel_m": 1
+     "desnivel_m": 1,
+     "potencia_w": 234
     },
     {
      "nro": 4,
@@ -1787,7 +1874,8 @@ window.DATOS_TABLERO = {
      "fc_media": 164,
      "fc_max": 177,
      "cadencia": 150,
-     "desnivel_m": 16
+     "desnivel_m": 16,
+     "potencia_w": 236
     },
     {
      "nro": 5,
@@ -1799,7 +1887,8 @@ window.DATOS_TABLERO = {
      "fc_media": 157,
      "fc_max": 168,
      "cadencia": 149,
-     "desnivel_m": 9
+     "desnivel_m": 9,
+     "potencia_w": 228
     },
     {
      "nro": 6,
@@ -1811,7 +1900,8 @@ window.DATOS_TABLERO = {
      "fc_media": 165,
      "fc_max": 175,
      "cadencia": 149,
-     "desnivel_m": 4
+     "desnivel_m": 4,
+     "potencia_w": 226
     },
     {
      "nro": 7,
@@ -1823,7 +1913,8 @@ window.DATOS_TABLERO = {
      "fc_media": 127,
      "fc_max": 148,
      "cadencia": 117,
-     "desnivel_m": 7
+     "desnivel_m": 7,
+     "potencia_w": 109
     }
    ],
    "bloque_principal": null,
@@ -1843,6 +1934,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": 504,
    "fc_media": 138,
    "fc_max": 169,
+   "potencia_w": 205,
    "carga": 57,
    "desnivel_m": 58,
    "tiempo_total_s": 3600,
@@ -1877,7 +1969,8 @@ window.DATOS_TABLERO = {
      "fc_media": 98,
      "fc_max": 107,
      "cadencia": 129,
-     "desnivel_m": 7
+     "desnivel_m": 7,
+     "potencia_w": 143
     },
     {
      "nro": 2,
@@ -1889,7 +1982,8 @@ window.DATOS_TABLERO = {
      "fc_media": 129,
      "fc_max": 146,
      "cadencia": 155,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": 263
     },
     {
      "nro": 3,
@@ -1901,7 +1995,8 @@ window.DATOS_TABLERO = {
      "fc_media": 149,
      "fc_max": 157,
      "cadencia": 152,
-     "desnivel_m": 5
+     "desnivel_m": 5,
+     "potencia_w": 258
     },
     {
      "nro": 4,
@@ -1913,7 +2008,8 @@ window.DATOS_TABLERO = {
      "fc_media": 150,
      "fc_max": 156,
      "cadencia": 145,
-     "desnivel_m": 22
+     "desnivel_m": 22,
+     "potencia_w": 240
     },
     {
      "nro": 5,
@@ -1925,7 +2021,8 @@ window.DATOS_TABLERO = {
      "fc_media": 154,
      "fc_max": 165,
      "cadencia": 149,
-     "desnivel_m": 8
+     "desnivel_m": 8,
+     "potencia_w": 243
     },
     {
      "nro": 6,
@@ -1937,7 +2034,8 @@ window.DATOS_TABLERO = {
      "fc_media": 160,
      "fc_max": 169,
      "cadencia": 148,
-     "desnivel_m": 4
+     "desnivel_m": 4,
+     "potencia_w": 238
     },
     {
      "nro": 7,
@@ -1949,7 +2047,8 @@ window.DATOS_TABLERO = {
      "fc_media": 136,
      "fc_max": 162,
      "cadencia": 124,
-     "desnivel_m": 8
+     "desnivel_m": 8,
+     "potencia_w": 130
     },
     {
      "nro": 8,
@@ -1961,7 +2060,8 @@ window.DATOS_TABLERO = {
      "fc_media": 110,
      "fc_max": 116,
      "cadencia": 122,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": 115
     }
    ],
    "bloque_principal": null,
@@ -1981,6 +2081,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": 651,
    "fc_media": 105,
    "fc_max": 121,
+   "potencia_w": null,
    "carga": 16,
    "desnivel_m": 43,
    "tiempo_total_s": 2922,
@@ -2015,7 +2116,8 @@ window.DATOS_TABLERO = {
      "fc_media": 92,
      "fc_max": 105,
      "cadencia": 121,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     },
     {
      "nro": 2,
@@ -2027,7 +2129,8 @@ window.DATOS_TABLERO = {
      "fc_media": 106,
      "fc_max": 120,
      "cadencia": 120,
-     "desnivel_m": 16
+     "desnivel_m": 16,
+     "potencia_w": null
     },
     {
      "nro": 3,
@@ -2039,7 +2142,8 @@ window.DATOS_TABLERO = {
      "fc_media": 112,
      "fc_max": 121,
      "cadencia": 124,
-     "desnivel_m": 10
+     "desnivel_m": 10,
+     "potencia_w": null
     },
     {
      "nro": 4,
@@ -2051,7 +2155,8 @@ window.DATOS_TABLERO = {
      "fc_media": 107,
      "fc_max": 115,
      "cadencia": 122,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     },
     {
      "nro": 5,
@@ -2063,7 +2168,8 @@ window.DATOS_TABLERO = {
      "fc_media": 112,
      "fc_max": 121,
      "cadencia": 120,
-     "desnivel_m": 10
+     "desnivel_m": 10,
+     "potencia_w": null
     }
    ],
    "bloque_principal": null,
@@ -2083,6 +2189,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": 656,
    "fc_media": 103,
    "fc_max": 128,
+   "potencia_w": null,
    "carga": 18,
    "desnivel_m": 31,
    "tiempo_total_s": 3584,
@@ -2117,7 +2224,8 @@ window.DATOS_TABLERO = {
      "fc_media": 90,
      "fc_max": 117,
      "cadencia": 118,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     },
     {
      "nro": 2,
@@ -2129,7 +2237,8 @@ window.DATOS_TABLERO = {
      "fc_media": 109,
      "fc_max": 128,
      "cadencia": 121,
-     "desnivel_m": 2
+     "desnivel_m": 2,
+     "potencia_w": null
     },
     {
      "nro": 3,
@@ -2141,7 +2250,8 @@ window.DATOS_TABLERO = {
      "fc_media": 99,
      "fc_max": 108,
      "cadencia": 121,
-     "desnivel_m": 4
+     "desnivel_m": 4,
+     "potencia_w": null
     },
     {
      "nro": 4,
@@ -2153,7 +2263,8 @@ window.DATOS_TABLERO = {
      "fc_media": 105,
      "fc_max": 112,
      "cadencia": 123,
-     "desnivel_m": 10
+     "desnivel_m": 10,
+     "potencia_w": null
     },
     {
      "nro": 5,
@@ -2165,7 +2276,8 @@ window.DATOS_TABLERO = {
      "fc_media": 107,
      "fc_max": 119,
      "cadencia": 120,
-     "desnivel_m": 7
+     "desnivel_m": 7,
+     "potencia_w": null
     },
     {
      "nro": 6,
@@ -2177,7 +2289,8 @@ window.DATOS_TABLERO = {
      "fc_media": 104,
      "fc_max": 120,
      "cadencia": 118,
-     "desnivel_m": 6
+     "desnivel_m": 6,
+     "potencia_w": null
     }
    ],
    "bloque_principal": null,
@@ -2197,6 +2310,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": 624,
    "fc_media": 101,
    "fc_max": 122,
+   "potencia_w": null,
    "carga": 15,
    "desnivel_m": 49,
    "tiempo_total_s": 3160,
@@ -2231,7 +2345,8 @@ window.DATOS_TABLERO = {
      "fc_media": 100,
      "fc_max": 120,
      "cadencia": 125,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     },
     {
      "nro": 2,
@@ -2243,7 +2358,8 @@ window.DATOS_TABLERO = {
      "fc_media": 111,
      "fc_max": 119,
      "cadencia": 121,
-     "desnivel_m": 19
+     "desnivel_m": 19,
+     "potencia_w": null
     },
     {
      "nro": 3,
@@ -2255,7 +2371,8 @@ window.DATOS_TABLERO = {
      "fc_media": 97,
      "fc_max": 103,
      "cadencia": 124,
-     "desnivel_m": 9
+     "desnivel_m": 9,
+     "potencia_w": null
     },
     {
      "nro": 4,
@@ -2267,7 +2384,8 @@ window.DATOS_TABLERO = {
      "fc_media": 95,
      "fc_max": 104,
      "cadencia": 126,
-     "desnivel_m": 3
+     "desnivel_m": 3,
+     "potencia_w": null
     },
     {
      "nro": 5,
@@ -2279,7 +2397,8 @@ window.DATOS_TABLERO = {
      "fc_media": 96,
      "fc_max": 115,
      "cadencia": 128,
-     "desnivel_m": 11
+     "desnivel_m": 11,
+     "potencia_w": null
     },
     {
      "nro": 6,
@@ -2291,7 +2410,8 @@ window.DATOS_TABLERO = {
      "fc_media": 115,
      "fc_max": 122,
      "cadencia": 117,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     }
    ],
    "bloque_principal": null,
@@ -2311,6 +2431,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": 598,
    "fc_media": 125,
    "fc_max": 157,
+   "potencia_w": 155,
    "carga": 40,
    "desnivel_m": 47,
    "tiempo_total_s": 3586,
@@ -2345,7 +2466,8 @@ window.DATOS_TABLERO = {
      "fc_media": 102,
      "fc_max": 115,
      "cadencia": 114,
-     "desnivel_m": 7
+     "desnivel_m": 7,
+     "potencia_w": 103
     },
     {
      "nro": 2,
@@ -2357,7 +2479,8 @@ window.DATOS_TABLERO = {
      "fc_media": 147,
      "fc_max": 157,
      "cadencia": 156,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": 238
     },
     {
      "nro": 3,
@@ -2369,7 +2492,8 @@ window.DATOS_TABLERO = {
      "fc_media": 149,
      "fc_max": 156,
      "cadencia": 154,
-     "desnivel_m": 5
+     "desnivel_m": 5,
+     "potencia_w": 243
     },
     {
      "nro": 4,
@@ -2381,7 +2505,8 @@ window.DATOS_TABLERO = {
      "fc_media": 146,
      "fc_max": 150,
      "cadencia": 151,
-     "desnivel_m": 22
+     "desnivel_m": 22,
+     "potencia_w": 251
     },
     {
      "nro": 5,
@@ -2393,7 +2518,8 @@ window.DATOS_TABLERO = {
      "fc_media": 119,
      "fc_max": 149,
      "cadencia": 110,
-     "desnivel_m": 8
+     "desnivel_m": 8,
+     "potencia_w": 100
     },
     {
      "nro": 6,
@@ -2405,7 +2531,8 @@ window.DATOS_TABLERO = {
      "fc_media": 112,
      "fc_max": 119,
      "cadencia": 110,
-     "desnivel_m": 5
+     "desnivel_m": 5,
+     "potencia_w": 95
     },
     {
      "nro": 7,
@@ -2417,7 +2544,8 @@ window.DATOS_TABLERO = {
      "fc_media": 106,
      "fc_max": 108,
      "cadencia": 110,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": 106
     }
    ],
    "bloque_principal": null,
@@ -2437,6 +2565,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": 695,
    "fc_media": 104,
    "fc_max": 127,
+   "potencia_w": null,
    "carga": 18,
    "desnivel_m": 39,
    "tiempo_total_s": 3480,
@@ -2471,7 +2600,8 @@ window.DATOS_TABLERO = {
      "fc_media": 106,
      "fc_max": 127,
      "cadencia": 111,
-     "desnivel_m": 3
+     "desnivel_m": 3,
+     "potencia_w": null
     },
     {
      "nro": 2,
@@ -2483,7 +2613,8 @@ window.DATOS_TABLERO = {
      "fc_media": 92,
      "fc_max": 101,
      "cadencia": 115,
-     "desnivel_m": 2
+     "desnivel_m": 2,
+     "potencia_w": null
     },
     {
      "nro": 3,
@@ -2495,7 +2626,8 @@ window.DATOS_TABLERO = {
      "fc_media": 93,
      "fc_max": 114,
      "cadencia": 113,
-     "desnivel_m": 20
+     "desnivel_m": 20,
+     "potencia_w": null
     },
     {
      "nro": 4,
@@ -2507,7 +2639,8 @@ window.DATOS_TABLERO = {
      "fc_media": 110,
      "fc_max": 115,
      "cadencia": 113,
-     "desnivel_m": 8
+     "desnivel_m": 8,
+     "potencia_w": null
     },
     {
      "nro": 5,
@@ -2519,7 +2652,8 @@ window.DATOS_TABLERO = {
      "fc_media": 114,
      "fc_max": 121,
      "cadencia": 115,
-     "desnivel_m": 5
+     "desnivel_m": 5,
+     "potencia_w": null
     },
     {
      "nro": 6,
@@ -2531,7 +2665,8 @@ window.DATOS_TABLERO = {
      "fc_media": 113,
      "fc_max": 117,
      "cadencia": 110,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     }
    ],
    "bloque_principal": null,
@@ -2551,6 +2686,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": 541,
    "fc_media": 136,
    "fc_max": 174,
+   "potencia_w": 172,
    "carga": 47,
    "desnivel_m": 40,
    "tiempo_total_s": 3149,
@@ -2585,7 +2721,8 @@ window.DATOS_TABLERO = {
      "fc_media": 122,
      "fc_max": 164,
      "cadencia": 137,
-     "desnivel_m": 5
+     "desnivel_m": 5,
+     "potencia_w": 172
     },
     {
      "nro": 2,
@@ -2597,7 +2734,8 @@ window.DATOS_TABLERO = {
      "fc_media": 155,
      "fc_max": 163,
      "cadencia": 151,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": 253
     },
     {
      "nro": 3,
@@ -2609,7 +2747,8 @@ window.DATOS_TABLERO = {
      "fc_media": 147,
      "fc_max": 152,
      "cadencia": 149,
-     "desnivel_m": 4
+     "desnivel_m": 4,
+     "potencia_w": 252
     },
     {
      "nro": 4,
@@ -2621,7 +2760,8 @@ window.DATOS_TABLERO = {
      "fc_media": 155,
      "fc_max": 174,
      "cadencia": 136,
-     "desnivel_m": 22
+     "desnivel_m": 22,
+     "potencia_w": 191
     },
     {
      "nro": 5,
@@ -2633,7 +2773,8 @@ window.DATOS_TABLERO = {
      "fc_media": 129,
      "fc_max": 141,
      "cadencia": 116,
-     "desnivel_m": 8
+     "desnivel_m": 8,
+     "potencia_w": 110
     },
     {
      "nro": 6,
@@ -2645,7 +2786,8 @@ window.DATOS_TABLERO = {
      "fc_media": 115,
      "fc_max": 127,
      "cadencia": 118,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": 106
     }
    ],
    "bloque_principal": null,
@@ -2665,6 +2807,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": null,
    "fc_media": 132,
    "fc_max": 168,
+   "potencia_w": null,
    "carga": 68,
    "desnivel_m": null,
    "tiempo_total_s": 5106,
@@ -2699,7 +2842,8 @@ window.DATOS_TABLERO = {
      "fc_media": 132,
      "fc_max": 168,
      "cadencia": null,
-     "desnivel_m": null
+     "desnivel_m": null,
+     "potencia_w": null
     }
    ],
    "bloque_principal": null,
@@ -2719,6 +2863,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": 540,
    "fc_media": 133,
    "fc_max": 159,
+   "potencia_w": 172,
    "carga": 43,
    "desnivel_m": 40,
    "tiempo_total_s": 3177,
@@ -2753,7 +2898,8 @@ window.DATOS_TABLERO = {
      "fc_media": 124,
      "fc_max": 155,
      "cadencia": 134,
-     "desnivel_m": 3
+     "desnivel_m": 3,
+     "potencia_w": 166
     },
     {
      "nro": 2,
@@ -2765,7 +2911,8 @@ window.DATOS_TABLERO = {
      "fc_media": 151,
      "fc_max": 154,
      "cadencia": 152,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": 256
     },
     {
      "nro": 3,
@@ -2777,7 +2924,8 @@ window.DATOS_TABLERO = {
      "fc_media": 150,
      "fc_max": 156,
      "cadencia": 151,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": 250
     },
     {
      "nro": 4,
@@ -2789,7 +2937,8 @@ window.DATOS_TABLERO = {
      "fc_media": 151,
      "fc_max": 159,
      "cadencia": 144,
-     "desnivel_m": 14
+     "desnivel_m": 14,
+     "potencia_w": 225
     },
     {
      "nro": 5,
@@ -2801,7 +2950,8 @@ window.DATOS_TABLERO = {
      "fc_media": 116,
      "fc_max": 142,
      "cadencia": 116,
-     "desnivel_m": 12
+     "desnivel_m": 12,
+     "potencia_w": 107
     },
     {
      "nro": 6,
@@ -2813,7 +2963,8 @@ window.DATOS_TABLERO = {
      "fc_media": 118,
      "fc_max": 128,
      "cadencia": 116,
-     "desnivel_m": 1
+     "desnivel_m": 1,
+     "potencia_w": 98
     }
    ],
    "bloque_principal": null,
@@ -2833,6 +2984,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": 520,
    "fc_media": 137,
    "fc_max": 164,
+   "potencia_w": 177,
    "carga": 45,
    "desnivel_m": 46,
    "tiempo_total_s": 3175,
@@ -2868,6 +3020,7 @@ window.DATOS_TABLERO = {
      "fc_max": 132,
      "cadencia": 121,
      "desnivel_m": 4,
+     "potencia_w": 117,
      "fase": "Calentamiento"
     },
     {
@@ -2881,6 +3034,7 @@ window.DATOS_TABLERO = {
      "fc_max": 164,
      "cadencia": 155,
      "desnivel_m": 26,
+     "potencia_w": 251,
      "fase": "Entrenamiento"
     },
     {
@@ -2894,6 +3048,7 @@ window.DATOS_TABLERO = {
      "fc_max": 153,
      "cadencia": 117,
      "desnivel_m": 13,
+     "potencia_w": 107,
      "fase": "Restaurar"
     },
     {
@@ -2907,6 +3062,7 @@ window.DATOS_TABLERO = {
      "fc_max": 118,
      "cadencia": 120,
      "desnivel_m": 0,
+     "potencia_w": 106,
      "fase": null
     }
    ],
@@ -2921,6 +3077,7 @@ window.DATOS_TABLERO = {
     "fc_max": 164,
     "cadencia": 155,
     "desnivel_m": 26,
+    "potencia_w": 251,
     "fase": "Entrenamiento"
    },
    "plantilla": "25 MIN CO",
@@ -2931,6 +3088,7 @@ window.DATOS_TABLERO = {
     "distancia_m": 3576,
     "ritmo_s_km": 419,
     "fc_media": 153,
+    "potencia_w": 251,
     "eficiencia": 0.936
    }
   },
@@ -2946,6 +3104,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": 526,
    "fc_media": 125,
    "fc_max": 144,
+   "potencia_w": 157,
    "carga": 15,
    "desnivel_m": 35,
    "tiempo_total_s": 1582,
@@ -2980,7 +3139,8 @@ window.DATOS_TABLERO = {
      "fc_media": 112,
      "fc_max": 122,
      "cadencia": 148,
-     "desnivel_m": 1
+     "desnivel_m": 1,
+     "potencia_w": 239
     },
     {
      "nro": 2,
@@ -2992,7 +3152,8 @@ window.DATOS_TABLERO = {
      "fc_media": 122,
      "fc_max": 129,
      "cadencia": 127,
-     "desnivel_m": 1
+     "desnivel_m": 1,
+     "potencia_w": 173
     },
     {
      "nro": 3,
@@ -3004,7 +3165,8 @@ window.DATOS_TABLERO = {
      "fc_media": 127,
      "fc_max": 134,
      "cadencia": 153,
-     "desnivel_m": 1
+     "desnivel_m": 1,
+     "potencia_w": 279
     },
     {
      "nro": 4,
@@ -3016,7 +3178,8 @@ window.DATOS_TABLERO = {
      "fc_media": 131,
      "fc_max": 137,
      "cadencia": 126,
-     "desnivel_m": 2
+     "desnivel_m": 2,
+     "potencia_w": 175
     },
     {
      "nro": 5,
@@ -3028,7 +3191,8 @@ window.DATOS_TABLERO = {
      "fc_media": 128,
      "fc_max": 134,
      "cadencia": 153,
-     "desnivel_m": 2
+     "desnivel_m": 2,
+     "potencia_w": 272
     },
     {
      "nro": 6,
@@ -3040,7 +3204,8 @@ window.DATOS_TABLERO = {
      "fc_media": 130,
      "fc_max": 137,
      "cadencia": 124,
-     "desnivel_m": 1
+     "desnivel_m": 1,
+     "potencia_w": 155
     },
     {
      "nro": 7,
@@ -3052,7 +3217,8 @@ window.DATOS_TABLERO = {
      "fc_media": 134,
      "fc_max": 141,
      "cadencia": 154,
-     "desnivel_m": 1
+     "desnivel_m": 1,
+     "potencia_w": 293
     },
     {
      "nro": 8,
@@ -3064,7 +3230,8 @@ window.DATOS_TABLERO = {
      "fc_media": 137,
      "fc_max": 144,
      "cadencia": 126,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": 166
     },
     {
      "nro": 9,
@@ -3076,7 +3243,8 @@ window.DATOS_TABLERO = {
      "fc_media": 129,
      "fc_max": 138,
      "cadencia": 153,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": 266
     },
     {
      "nro": 10,
@@ -3088,7 +3256,8 @@ window.DATOS_TABLERO = {
      "fc_media": 132,
      "fc_max": 141,
      "cadencia": 126,
-     "desnivel_m": 1
+     "desnivel_m": 1,
+     "potencia_w": 155
     },
     {
      "nro": 11,
@@ -3100,7 +3269,8 @@ window.DATOS_TABLERO = {
      "fc_media": 126,
      "fc_max": 132,
      "cadencia": 157,
-     "desnivel_m": 3
+     "desnivel_m": 3,
+     "potencia_w": 281
     },
     {
      "nro": 12,
@@ -3112,7 +3282,8 @@ window.DATOS_TABLERO = {
      "fc_media": 131,
      "fc_max": 135,
      "cadencia": 124,
-     "desnivel_m": 3
+     "desnivel_m": 3,
+     "potencia_w": 171
     },
     {
      "nro": 13,
@@ -3124,7 +3295,8 @@ window.DATOS_TABLERO = {
      "fc_media": 129,
      "fc_max": 134,
      "cadencia": 154,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": 272
     },
     {
      "nro": 14,
@@ -3136,7 +3308,8 @@ window.DATOS_TABLERO = {
      "fc_media": 132,
      "fc_max": 140,
      "cadencia": 124,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": 155
     },
     {
      "nro": 15,
@@ -3148,7 +3321,8 @@ window.DATOS_TABLERO = {
      "fc_media": 129,
      "fc_max": 134,
      "cadencia": 155,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": 286
     },
     {
      "nro": 16,
@@ -3160,7 +3334,8 @@ window.DATOS_TABLERO = {
      "fc_media": 125,
      "fc_max": 138,
      "cadencia": 127,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": 170
     },
     {
      "nro": 17,
@@ -3172,7 +3347,8 @@ window.DATOS_TABLERO = {
      "fc_media": 125,
      "fc_max": 135,
      "cadencia": 155,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": 290
     },
     {
      "nro": 18,
@@ -3184,7 +3360,8 @@ window.DATOS_TABLERO = {
      "fc_media": 139,
      "fc_max": 144,
      "cadencia": 122,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": 149
     },
     {
      "nro": 19,
@@ -3196,7 +3373,8 @@ window.DATOS_TABLERO = {
      "fc_media": 135,
      "fc_max": 140,
      "cadencia": 147,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": 282
     },
     {
      "nro": 20,
@@ -3208,7 +3386,8 @@ window.DATOS_TABLERO = {
      "fc_media": 131,
      "fc_max": 144,
      "cadencia": 121,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": 145
     },
     {
      "nro": 21,
@@ -3220,7 +3399,8 @@ window.DATOS_TABLERO = {
      "fc_media": 117,
      "fc_max": 131,
      "cadencia": 118,
-     "desnivel_m": 4
+     "desnivel_m": 4,
+     "potencia_w": 101
     }
    ],
    "bloque_principal": null,
@@ -3240,6 +3420,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": null,
    "fc_media": 147,
    "fc_max": 174,
+   "potencia_w": null,
    "carga": 54,
    "desnivel_m": null,
    "tiempo_total_s": 2974,
@@ -3274,7 +3455,8 @@ window.DATOS_TABLERO = {
      "fc_media": 147,
      "fc_max": 174,
      "cadencia": null,
-     "desnivel_m": null
+     "desnivel_m": null,
+     "potencia_w": null
     }
    ],
    "bloque_principal": null,
@@ -3294,6 +3476,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": 505,
    "fc_media": 135,
    "fc_max": 156,
+   "potencia_w": 182,
    "carga": 41,
    "desnivel_m": 44,
    "tiempo_total_s": 3080,
@@ -3329,6 +3512,7 @@ window.DATOS_TABLERO = {
      "fc_max": 113,
      "cadencia": 124,
      "desnivel_m": 4,
+     "potencia_w": 127,
      "fase": "Calentamiento"
     },
     {
@@ -3342,6 +3526,7 @@ window.DATOS_TABLERO = {
      "fc_max": 154,
      "cadencia": 151,
      "desnivel_m": 25,
+     "potencia_w": 251,
      "fase": "Entrenamiento"
     },
     {
@@ -3355,6 +3540,7 @@ window.DATOS_TABLERO = {
      "fc_max": 156,
      "cadencia": 120,
      "desnivel_m": 13,
+     "potencia_w": 113,
      "fase": "Restaurar"
     }
    ],
@@ -3369,6 +3555,7 @@ window.DATOS_TABLERO = {
     "fc_max": 154,
     "cadencia": 151,
     "desnivel_m": 25,
+    "potencia_w": 251,
     "fase": "Entrenamiento"
    },
    "plantilla": "25 MIN CO",
@@ -3379,6 +3566,7 @@ window.DATOS_TABLERO = {
     "distancia_m": 3585,
     "ritmo_s_km": 418,
     "fc_media": 145,
+    "potencia_w": 251,
     "eficiencia": 0.989
    }
   },
@@ -3394,6 +3582,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": 504,
    "fc_media": 136,
    "fc_max": 158,
+   "potencia_w": 182,
    "carga": 43,
    "desnivel_m": 47,
    "tiempo_total_s": 3107,
@@ -3429,6 +3618,7 @@ window.DATOS_TABLERO = {
      "fc_max": 125,
      "cadencia": 122,
      "desnivel_m": 4,
+     "potencia_w": 122,
      "fase": "Calentamiento"
     },
     {
@@ -3442,6 +3632,7 @@ window.DATOS_TABLERO = {
      "fc_max": 157,
      "cadencia": 153,
      "desnivel_m": 28,
+     "potencia_w": 255,
      "fase": "Entrenamiento"
     },
     {
@@ -3455,6 +3646,7 @@ window.DATOS_TABLERO = {
      "fc_max": 158,
      "cadencia": 119,
      "desnivel_m": 11,
+     "potencia_w": 111,
      "fase": "Restaurar"
     }
    ],
@@ -3469,6 +3661,7 @@ window.DATOS_TABLERO = {
     "fc_max": 157,
     "cadencia": 153,
     "desnivel_m": 28,
+    "potencia_w": 255,
     "fase": "Entrenamiento"
    },
    "plantilla": "25 MIN CO",
@@ -3479,6 +3672,7 @@ window.DATOS_TABLERO = {
     "distancia_m": 3673,
     "ritmo_s_km": 408,
     "fc_media": 151,
+    "potencia_w": 255,
     "eficiencia": 0.973
    }
   },
@@ -3494,6 +3688,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": null,
    "fc_media": 133,
    "fc_max": 155,
+   "potencia_w": null,
    "carga": 59,
    "desnivel_m": null,
    "tiempo_total_s": 5005,
@@ -3528,7 +3723,8 @@ window.DATOS_TABLERO = {
      "fc_media": 132,
      "fc_max": 155,
      "cadencia": null,
-     "desnivel_m": null
+     "desnivel_m": null,
+     "potencia_w": null
     }
    ],
    "bloque_principal": null,
@@ -3548,6 +3744,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": 525,
    "fc_media": 126,
    "fc_max": 164,
+   "potencia_w": 174,
    "carga": 19,
    "desnivel_m": 40,
    "tiempo_total_s": 1712,
@@ -3583,6 +3780,7 @@ window.DATOS_TABLERO = {
      "fc_max": 94,
      "cadencia": 107,
      "desnivel_m": 0,
+     "potencia_w": 90,
      "fase": "Calentamiento"
     },
     {
@@ -3596,6 +3794,7 @@ window.DATOS_TABLERO = {
      "fc_max": 164,
      "cadencia": 140,
      "desnivel_m": 19,
+     "potencia_w": 252,
      "fase": "Entrenamiento"
     },
     {
@@ -3609,6 +3808,7 @@ window.DATOS_TABLERO = {
      "fc_max": 155,
      "cadencia": 114,
      "desnivel_m": 4,
+     "potencia_w": 110,
      "fase": "Restaurar"
     }
    ],
@@ -3623,6 +3823,7 @@ window.DATOS_TABLERO = {
     "fc_max": 164,
     "cadencia": 140,
     "desnivel_m": 19,
+    "potencia_w": 252,
     "fase": "Entrenamiento"
    },
    "plantilla": "2KM - 6'",
@@ -3633,6 +3834,7 @@ window.DATOS_TABLERO = {
     "distancia_m": 1999,
     "ritmo_s_km": 406,
     "fc_media": 137,
+    "potencia_w": 252,
     "eficiencia": 1.079
    }
   },
@@ -3648,6 +3850,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": 485,
    "fc_media": 142,
    "fc_max": 154,
+   "potencia_w": 221,
    "carga": 18,
    "desnivel_m": 28,
    "tiempo_total_s": 1127,
@@ -3682,7 +3885,8 @@ window.DATOS_TABLERO = {
      "fc_media": 145,
      "fc_max": 154,
      "cadencia": 149,
-     "desnivel_m": 27
+     "desnivel_m": 27,
+     "potencia_w": 248
     },
     {
      "nro": 2,
@@ -3694,7 +3898,8 @@ window.DATOS_TABLERO = {
      "fc_media": 129,
      "fc_max": 149,
      "cadencia": 117,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": 116
     },
     {
      "nro": 3,
@@ -3706,7 +3911,8 @@ window.DATOS_TABLERO = {
      "fc_media": 116,
      "fc_max": 116,
      "cadencia": 98,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": 78
     }
    ],
    "bloque_principal": null,
@@ -3726,6 +3932,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": null,
    "fc_media": 144,
    "fc_max": 175,
+   "potencia_w": null,
    "carga": 63,
    "desnivel_m": null,
    "tiempo_total_s": 3771,
@@ -3760,7 +3967,8 @@ window.DATOS_TABLERO = {
      "fc_media": 144,
      "fc_max": 175,
      "cadencia": null,
-     "desnivel_m": null
+     "desnivel_m": null,
+     "potencia_w": null
     }
    ],
    "bloque_principal": null,
@@ -3780,6 +3988,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": 494,
    "fc_media": 143,
    "fc_max": 165,
+   "potencia_w": 195,
    "carga": 55,
    "desnivel_m": 50,
    "tiempo_total_s": 3300,
@@ -3815,6 +4024,7 @@ window.DATOS_TABLERO = {
      "fc_max": 137,
      "cadencia": 122,
      "desnivel_m": 4,
+     "potencia_w": 114,
      "fase": "Calentamiento"
     },
     {
@@ -3828,6 +4038,7 @@ window.DATOS_TABLERO = {
      "fc_max": 165,
      "cadencia": 157,
      "desnivel_m": 30,
+     "potencia_w": 271,
      "fase": "Entrenamiento"
     },
     {
@@ -3841,6 +4052,7 @@ window.DATOS_TABLERO = {
      "fc_max": 158,
      "cadencia": 121,
      "desnivel_m": 8,
+     "potencia_w": 115,
      "fase": "Restaurar"
     }
    ],
@@ -3855,6 +4067,7 @@ window.DATOS_TABLERO = {
     "fc_max": 165,
     "cadencia": 157,
     "desnivel_m": 30,
+    "potencia_w": 271,
     "fase": "Entrenamiento"
    },
    "plantilla": "28 MIN CO",
@@ -3865,6 +4078,7 @@ window.DATOS_TABLERO = {
     "distancia_m": 4212,
     "ritmo_s_km": 399,
     "fc_media": 157,
+    "potencia_w": 271,
     "eficiencia": 0.958
    }
   },
@@ -3880,6 +4094,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": 261,
    "fc_media": 124,
    "fc_max": 171,
+   "potencia_w": null,
    "carga": 49,
    "desnivel_m": 103,
    "tiempo_total_s": 5012,
@@ -3914,7 +4129,8 @@ window.DATOS_TABLERO = {
      "fc_media": 97,
      "fc_max": 105,
      "cadencia": null,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     },
     {
      "nro": 2,
@@ -3926,7 +4142,8 @@ window.DATOS_TABLERO = {
      "fc_media": 101,
      "fc_max": 108,
      "cadencia": null,
-     "desnivel_m": 2
+     "desnivel_m": 2,
+     "potencia_w": null
     },
     {
      "nro": 3,
@@ -3938,7 +4155,8 @@ window.DATOS_TABLERO = {
      "fc_media": 114,
      "fc_max": 123,
      "cadencia": null,
-     "desnivel_m": 7
+     "desnivel_m": 7,
+     "potencia_w": null
     },
     {
      "nro": 4,
@@ -3950,7 +4168,8 @@ window.DATOS_TABLERO = {
      "fc_media": 118,
      "fc_max": 130,
      "cadencia": null,
-     "desnivel_m": 6
+     "desnivel_m": 6,
+     "potencia_w": null
     },
     {
      "nro": 5,
@@ -3962,7 +4181,8 @@ window.DATOS_TABLERO = {
      "fc_media": 114,
      "fc_max": 121,
      "cadencia": null,
-     "desnivel_m": 2
+     "desnivel_m": 2,
+     "potencia_w": null
     },
     {
      "nro": 6,
@@ -3974,7 +4194,8 @@ window.DATOS_TABLERO = {
      "fc_media": 126,
      "fc_max": 136,
      "cadencia": null,
-     "desnivel_m": 4
+     "desnivel_m": 4,
+     "potencia_w": null
     },
     {
      "nro": 7,
@@ -3986,7 +4207,8 @@ window.DATOS_TABLERO = {
      "fc_media": 138,
      "fc_max": 153,
      "cadencia": null,
-     "desnivel_m": 2
+     "desnivel_m": 2,
+     "potencia_w": null
     },
     {
      "nro": 8,
@@ -3998,7 +4220,8 @@ window.DATOS_TABLERO = {
      "fc_media": 139,
      "fc_max": 150,
      "cadencia": null,
-     "desnivel_m": 8
+     "desnivel_m": 8,
+     "potencia_w": null
     },
     {
      "nro": 9,
@@ -4010,7 +4233,8 @@ window.DATOS_TABLERO = {
      "fc_media": 150,
      "fc_max": 158,
      "cadencia": null,
-     "desnivel_m": 4
+     "desnivel_m": 4,
+     "potencia_w": null
     },
     {
      "nro": 10,
@@ -4022,7 +4246,8 @@ window.DATOS_TABLERO = {
      "fc_media": 125,
      "fc_max": 171,
      "cadencia": null,
-     "desnivel_m": 9
+     "desnivel_m": 9,
+     "potencia_w": null
     },
     {
      "nro": 11,
@@ -4034,7 +4259,8 @@ window.DATOS_TABLERO = {
      "fc_media": 107,
      "fc_max": 117,
      "cadencia": null,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     },
     {
      "nro": 12,
@@ -4046,7 +4272,8 @@ window.DATOS_TABLERO = {
      "fc_media": 106,
      "fc_max": 118,
      "cadencia": null,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     },
     {
      "nro": 13,
@@ -4058,7 +4285,8 @@ window.DATOS_TABLERO = {
      "fc_media": 114,
      "fc_max": 125,
      "cadencia": null,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     },
     {
      "nro": 14,
@@ -4070,7 +4298,8 @@ window.DATOS_TABLERO = {
      "fc_media": 111,
      "fc_max": 125,
      "cadencia": null,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     },
     {
      "nro": 15,
@@ -4082,7 +4311,8 @@ window.DATOS_TABLERO = {
      "fc_media": 114,
      "fc_max": 123,
      "cadencia": null,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     },
     {
      "nro": 16,
@@ -4094,7 +4324,8 @@ window.DATOS_TABLERO = {
      "fc_media": 121,
      "fc_max": 127,
      "cadencia": null,
-     "desnivel_m": 1
+     "desnivel_m": 1,
+     "potencia_w": null
     },
     {
      "nro": 17,
@@ -4106,7 +4337,8 @@ window.DATOS_TABLERO = {
      "fc_media": 115,
      "fc_max": 144,
      "cadencia": null,
-     "desnivel_m": 8
+     "desnivel_m": 8,
+     "potencia_w": null
     },
     {
      "nro": 18,
@@ -4118,7 +4350,8 @@ window.DATOS_TABLERO = {
      "fc_media": 140,
      "fc_max": 149,
      "cadencia": null,
-     "desnivel_m": 11
+     "desnivel_m": 11,
+     "potencia_w": null
     },
     {
      "nro": 19,
@@ -4130,7 +4363,8 @@ window.DATOS_TABLERO = {
      "fc_media": 152,
      "fc_max": 166,
      "cadencia": null,
-     "desnivel_m": 24
+     "desnivel_m": 24,
+     "potencia_w": null
     },
     {
      "nro": 20,
@@ -4142,7 +4376,8 @@ window.DATOS_TABLERO = {
      "fc_media": 139,
      "fc_max": 165,
      "cadencia": null,
-     "desnivel_m": 3
+     "desnivel_m": 3,
+     "potencia_w": null
     }
    ],
    "bloque_principal": null,
@@ -4162,6 +4397,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": 666,
    "fc_media": 95,
    "fc_max": 107,
+   "potencia_w": null,
    "carga": 3,
    "desnivel_m": 3,
    "tiempo_total_s": 804,
@@ -4196,7 +4432,8 @@ window.DATOS_TABLERO = {
      "fc_media": 93,
      "fc_max": 101,
      "cadencia": 118,
-     "desnivel_m": 5
+     "desnivel_m": 5,
+     "potencia_w": null
     },
     {
      "nro": 2,
@@ -4208,7 +4445,8 @@ window.DATOS_TABLERO = {
      "fc_media": 101,
      "fc_max": 107,
      "cadencia": 119,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     }
    ],
    "bloque_principal": null,
@@ -4228,6 +4466,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": 433,
    "fc_media": 147,
    "fc_max": 163,
+   "potencia_w": 243,
    "carga": 20,
    "desnivel_m": 32,
    "tiempo_total_s": 1082,
@@ -4263,6 +4502,7 @@ window.DATOS_TABLERO = {
      "fc_max": 142,
      "cadencia": 154,
      "desnivel_m": 4,
+     "potencia_w": 233,
      "fase": "Entrenamiento"
     },
     {
@@ -4276,6 +4516,7 @@ window.DATOS_TABLERO = {
      "fc_max": 151,
      "cadencia": 156,
      "desnivel_m": 4,
+     "potencia_w": 264,
      "fase": "Entrenamiento"
     },
     {
@@ -4289,6 +4530,7 @@ window.DATOS_TABLERO = {
      "fc_max": 158,
      "cadencia": 157,
      "desnivel_m": 4,
+     "potencia_w": 272,
      "fase": "Entrenamiento"
     },
     {
@@ -4302,6 +4544,7 @@ window.DATOS_TABLERO = {
      "fc_max": 162,
      "cadencia": 157,
      "desnivel_m": 4,
+     "potencia_w": 285,
      "fase": "Entrenamiento"
     },
     {
@@ -4315,6 +4558,7 @@ window.DATOS_TABLERO = {
      "fc_max": 163,
      "cadencia": 133,
      "desnivel_m": 4,
+     "potencia_w": 181,
      "fase": "Entrenamiento"
     }
    ],
@@ -4329,6 +4573,7 @@ window.DATOS_TABLERO = {
     "fc_max": 151,
     "cadencia": 156,
     "desnivel_m": 4,
+    "potencia_w": 264,
     "fase": "Entrenamiento"
    },
    "plantilla": "Aumento de ritmo",
@@ -4339,6 +4584,7 @@ window.DATOS_TABLERO = {
     "distancia_m": 2503,
     "ritmo_s_km": 433,
     "fc_media": 146,
+    "potencia_w": 243,
     "eficiencia": 0.95
    }
   },
@@ -4354,6 +4600,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": 751,
    "fc_media": 108,
    "fc_max": 129,
+   "potencia_w": null,
    "carga": 61,
    "desnivel_m": 12,
    "tiempo_total_s": 10097,
@@ -4388,7 +4635,8 @@ window.DATOS_TABLERO = {
      "fc_media": 100,
      "fc_max": 110,
      "cadencia": 106,
-     "desnivel_m": 1
+     "desnivel_m": 1,
+     "potencia_w": null
     },
     {
      "nro": 2,
@@ -4400,7 +4648,8 @@ window.DATOS_TABLERO = {
      "fc_media": 104,
      "fc_max": 114,
      "cadencia": 110,
-     "desnivel_m": 3
+     "desnivel_m": 3,
+     "potencia_w": null
     },
     {
      "nro": 3,
@@ -4412,7 +4661,8 @@ window.DATOS_TABLERO = {
      "fc_media": 101,
      "fc_max": 115,
      "cadencia": 111,
-     "desnivel_m": 3
+     "desnivel_m": 3,
+     "potencia_w": null
     },
     {
      "nro": 4,
@@ -4424,7 +4674,8 @@ window.DATOS_TABLERO = {
      "fc_media": 109,
      "fc_max": 118,
      "cadencia": 113,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     },
     {
      "nro": 5,
@@ -4436,7 +4687,8 @@ window.DATOS_TABLERO = {
      "fc_media": 117,
      "fc_max": 127,
      "cadencia": 115,
-     "desnivel_m": 3
+     "desnivel_m": 3,
+     "potencia_w": null
     },
     {
      "nro": 6,
@@ -4448,7 +4700,8 @@ window.DATOS_TABLERO = {
      "fc_media": 114,
      "fc_max": 129,
      "cadencia": 115,
-     "desnivel_m": 3
+     "desnivel_m": 3,
+     "potencia_w": null
     },
     {
      "nro": 7,
@@ -4460,7 +4713,8 @@ window.DATOS_TABLERO = {
      "fc_media": 115,
      "fc_max": 125,
      "cadencia": 116,
-     "desnivel_m": 1
+     "desnivel_m": 1,
+     "potencia_w": null
     },
     {
      "nro": 8,
@@ -4472,7 +4726,8 @@ window.DATOS_TABLERO = {
      "fc_media": 108,
      "fc_max": 123,
      "cadencia": 116,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     },
     {
      "nro": 9,
@@ -4484,7 +4739,8 @@ window.DATOS_TABLERO = {
      "fc_media": 115,
      "fc_max": 127,
      "cadencia": 115,
-     "desnivel_m": 1
+     "desnivel_m": 1,
+     "potencia_w": null
     },
     {
      "nro": 10,
@@ -4496,7 +4752,8 @@ window.DATOS_TABLERO = {
      "fc_media": 108,
      "fc_max": 121,
      "cadencia": 113,
-     "desnivel_m": 1
+     "desnivel_m": 1,
+     "potencia_w": null
     },
     {
      "nro": 11,
@@ -4508,7 +4765,8 @@ window.DATOS_TABLERO = {
      "fc_media": 100,
      "fc_max": 117,
      "cadencia": 104,
-     "desnivel_m": 1
+     "desnivel_m": 1,
+     "potencia_w": null
     },
     {
      "nro": 12,
@@ -4520,7 +4778,8 @@ window.DATOS_TABLERO = {
      "fc_media": 104,
      "fc_max": 114,
      "cadencia": 108,
-     "desnivel_m": 1
+     "desnivel_m": 1,
+     "potencia_w": null
     },
     {
      "nro": 13,
@@ -4532,7 +4791,8 @@ window.DATOS_TABLERO = {
      "fc_media": 108,
      "fc_max": 121,
      "cadencia": 113,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     },
     {
      "nro": 14,
@@ -4544,7 +4804,8 @@ window.DATOS_TABLERO = {
      "fc_media": 114,
      "fc_max": 122,
      "cadencia": 109,
-     "desnivel_m": 1
+     "desnivel_m": 1,
+     "potencia_w": null
     }
    ],
    "bloque_principal": null,
@@ -4564,6 +4825,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": 815,
    "fc_media": 100,
    "fc_max": 118,
+   "potencia_w": null,
    "carga": 47,
    "desnivel_m": 9,
    "tiempo_total_s": 10393,
@@ -4598,7 +4860,8 @@ window.DATOS_TABLERO = {
      "fc_media": 95,
      "fc_max": 106,
      "cadencia": 107,
-     "desnivel_m": 1
+     "desnivel_m": 1,
+     "potencia_w": null
     },
     {
      "nro": 2,
@@ -4610,7 +4873,8 @@ window.DATOS_TABLERO = {
      "fc_media": 88,
      "fc_max": 101,
      "cadencia": 108,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     },
     {
      "nro": 3,
@@ -4622,7 +4886,8 @@ window.DATOS_TABLERO = {
      "fc_media": 101,
      "fc_max": 109,
      "cadencia": 107,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     },
     {
      "nro": 4,
@@ -4634,7 +4899,8 @@ window.DATOS_TABLERO = {
      "fc_media": 107,
      "fc_max": 117,
      "cadencia": 108,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     },
     {
      "nro": 5,
@@ -4646,7 +4912,8 @@ window.DATOS_TABLERO = {
      "fc_media": 102,
      "fc_max": 116,
      "cadencia": 109,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     },
     {
      "nro": 6,
@@ -4658,7 +4925,8 @@ window.DATOS_TABLERO = {
      "fc_media": 98,
      "fc_max": 108,
      "cadencia": 110,
-     "desnivel_m": 4
+     "desnivel_m": 4,
+     "potencia_w": null
     },
     {
      "nro": 7,
@@ -4670,7 +4938,8 @@ window.DATOS_TABLERO = {
      "fc_media": 104,
      "fc_max": 116,
      "cadencia": 110,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     },
     {
      "nro": 8,
@@ -4682,7 +4951,8 @@ window.DATOS_TABLERO = {
      "fc_media": 99,
      "fc_max": 114,
      "cadencia": 109,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     },
     {
      "nro": 9,
@@ -4694,7 +4964,8 @@ window.DATOS_TABLERO = {
      "fc_media": 102,
      "fc_max": 116,
      "cadencia": 109,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     },
     {
      "nro": 10,
@@ -4706,7 +4977,8 @@ window.DATOS_TABLERO = {
      "fc_media": 106,
      "fc_max": 118,
      "cadencia": 110,
-     "desnivel_m": 1
+     "desnivel_m": 1,
+     "potencia_w": null
     },
     {
      "nro": 11,
@@ -4718,7 +4990,8 @@ window.DATOS_TABLERO = {
      "fc_media": 105,
      "fc_max": 117,
      "cadencia": 110,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     },
     {
      "nro": 12,
@@ -4730,7 +5003,8 @@ window.DATOS_TABLERO = {
      "fc_media": 95,
      "fc_max": 110,
      "cadencia": 106,
-     "desnivel_m": 1
+     "desnivel_m": 1,
+     "potencia_w": null
     },
     {
      "nro": 13,
@@ -4742,7 +5016,8 @@ window.DATOS_TABLERO = {
      "fc_media": 90,
      "fc_max": 103,
      "cadencia": 108,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     }
    ],
    "bloque_principal": null,
@@ -4762,6 +5037,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": 864,
    "fc_media": 98,
    "fc_max": 115,
+   "potencia_w": null,
    "carga": 41,
    "desnivel_m": 6,
    "tiempo_total_s": 9933,
@@ -4796,7 +5072,8 @@ window.DATOS_TABLERO = {
      "fc_media": 97,
      "fc_max": 108,
      "cadencia": 106,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     },
     {
      "nro": 2,
@@ -4808,7 +5085,8 @@ window.DATOS_TABLERO = {
      "fc_media": 87,
      "fc_max": 106,
      "cadencia": 109,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     },
     {
      "nro": 3,
@@ -4820,7 +5098,8 @@ window.DATOS_TABLERO = {
      "fc_media": 98,
      "fc_max": 111,
      "cadencia": 107,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     },
     {
      "nro": 4,
@@ -4832,7 +5111,8 @@ window.DATOS_TABLERO = {
      "fc_media": 101,
      "fc_max": 112,
      "cadencia": 106,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     },
     {
      "nro": 5,
@@ -4844,7 +5124,8 @@ window.DATOS_TABLERO = {
      "fc_media": 91,
      "fc_max": 103,
      "cadencia": 101,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     },
     {
      "nro": 6,
@@ -4856,7 +5137,8 @@ window.DATOS_TABLERO = {
      "fc_media": 96,
      "fc_max": 105,
      "cadencia": 102,
-     "desnivel_m": 1
+     "desnivel_m": 1,
+     "potencia_w": null
     },
     {
      "nro": 7,
@@ -4868,7 +5150,8 @@ window.DATOS_TABLERO = {
      "fc_media": 105,
      "fc_max": 115,
      "cadencia": 109,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     },
     {
      "nro": 8,
@@ -4880,7 +5163,8 @@ window.DATOS_TABLERO = {
      "fc_media": 102,
      "fc_max": 111,
      "cadencia": 109,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     },
     {
      "nro": 9,
@@ -4892,7 +5176,8 @@ window.DATOS_TABLERO = {
      "fc_media": 94,
      "fc_max": 108,
      "cadencia": 111,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     },
     {
      "nro": 10,
@@ -4904,7 +5189,8 @@ window.DATOS_TABLERO = {
      "fc_media": 104,
      "fc_max": 115,
      "cadencia": 111,
-     "desnivel_m": 1
+     "desnivel_m": 1,
+     "potencia_w": null
     },
     {
      "nro": 11,
@@ -4916,7 +5202,8 @@ window.DATOS_TABLERO = {
      "fc_media": 94,
      "fc_max": 108,
      "cadencia": 110,
-     "desnivel_m": 1
+     "desnivel_m": 1,
+     "potencia_w": null
     },
     {
      "nro": 12,
@@ -4928,7 +5215,8 @@ window.DATOS_TABLERO = {
      "fc_media": 97,
      "fc_max": 107,
      "cadencia": 108,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     }
    ],
    "bloque_principal": null,
@@ -4948,6 +5236,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": 898,
    "fc_media": 101,
    "fc_max": 120,
+   "potencia_w": null,
    "carga": 48,
    "desnivel_m": 9,
    "tiempo_total_s": 10084,
@@ -4982,7 +5271,8 @@ window.DATOS_TABLERO = {
      "fc_media": 104,
      "fc_max": 119,
      "cadencia": 102,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     },
     {
      "nro": 2,
@@ -4994,7 +5284,8 @@ window.DATOS_TABLERO = {
      "fc_media": 99,
      "fc_max": 109,
      "cadencia": 106,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     },
     {
      "nro": 3,
@@ -5006,7 +5297,8 @@ window.DATOS_TABLERO = {
      "fc_media": 92,
      "fc_max": 103,
      "cadencia": 108,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     },
     {
      "nro": 4,
@@ -5018,7 +5310,8 @@ window.DATOS_TABLERO = {
      "fc_media": 100,
      "fc_max": 116,
      "cadencia": 108,
-     "desnivel_m": 1
+     "desnivel_m": 1,
+     "potencia_w": null
     },
     {
      "nro": 5,
@@ -5030,7 +5323,8 @@ window.DATOS_TABLERO = {
      "fc_media": 100,
      "fc_max": 115,
      "cadencia": 104,
-     "desnivel_m": 1
+     "desnivel_m": 1,
+     "potencia_w": null
     },
     {
      "nro": 6,
@@ -5042,7 +5336,8 @@ window.DATOS_TABLERO = {
      "fc_media": 98,
      "fc_max": 108,
      "cadencia": 106,
-     "desnivel_m": 3
+     "desnivel_m": 3,
+     "potencia_w": null
     },
     {
      "nro": 7,
@@ -5054,7 +5349,8 @@ window.DATOS_TABLERO = {
      "fc_media": 106,
      "fc_max": 116,
      "cadencia": 109,
-     "desnivel_m": 1
+     "desnivel_m": 1,
+     "potencia_w": null
     },
     {
      "nro": 8,
@@ -5066,7 +5362,8 @@ window.DATOS_TABLERO = {
      "fc_media": 110,
      "fc_max": 120,
      "cadencia": 111,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     },
     {
      "nro": 9,
@@ -5078,7 +5375,8 @@ window.DATOS_TABLERO = {
      "fc_media": 103,
      "fc_max": 119,
      "cadencia": 109,
-     "desnivel_m": 1
+     "desnivel_m": 1,
+     "potencia_w": null
     },
     {
      "nro": 10,
@@ -5090,7 +5388,8 @@ window.DATOS_TABLERO = {
      "fc_media": 96,
      "fc_max": 106,
      "cadencia": 108,
-     "desnivel_m": 1
+     "desnivel_m": 1,
+     "potencia_w": null
     },
     {
      "nro": 11,
@@ -5102,7 +5401,8 @@ window.DATOS_TABLERO = {
      "fc_media": 102,
      "fc_max": 120,
      "cadencia": 108,
-     "desnivel_m": 1
+     "desnivel_m": 1,
+     "potencia_w": null
     },
     {
      "nro": 12,
@@ -5114,7 +5414,8 @@ window.DATOS_TABLERO = {
      "fc_media": 107,
      "fc_max": 111,
      "cadencia": 108,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     }
    ],
    "bloque_principal": null,
@@ -5134,6 +5435,7 @@ window.DATOS_TABLERO = {
    "ritmo_s_km": 1046,
    "fc_media": 102,
    "fc_max": 123,
+   "potencia_w": null,
    "carga": 43,
    "desnivel_m": 9,
    "tiempo_total_s": 9202,
@@ -5168,7 +5470,8 @@ window.DATOS_TABLERO = {
      "fc_media": 98,
      "fc_max": 114,
      "cadencia": 102,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     },
     {
      "nro": 2,
@@ -5180,7 +5483,8 @@ window.DATOS_TABLERO = {
      "fc_media": 104,
      "fc_max": 113,
      "cadencia": 107,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     },
     {
      "nro": 3,
@@ -5192,7 +5496,8 @@ window.DATOS_TABLERO = {
      "fc_media": 105,
      "fc_max": 113,
      "cadencia": 110,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     },
     {
      "nro": 4,
@@ -5204,7 +5509,8 @@ window.DATOS_TABLERO = {
      "fc_media": 106,
      "fc_max": 115,
      "cadencia": 108,
-     "desnivel_m": 1
+     "desnivel_m": 1,
+     "potencia_w": null
     },
     {
      "nro": 5,
@@ -5216,7 +5522,8 @@ window.DATOS_TABLERO = {
      "fc_media": 103,
      "fc_max": 114,
      "cadencia": 107,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     },
     {
      "nro": 6,
@@ -5228,7 +5535,8 @@ window.DATOS_TABLERO = {
      "fc_media": 99,
      "fc_max": 107,
      "cadencia": 100,
-     "desnivel_m": 1
+     "desnivel_m": 1,
+     "potencia_w": null
     },
     {
      "nro": 7,
@@ -5240,7 +5548,8 @@ window.DATOS_TABLERO = {
      "fc_media": 102,
      "fc_max": 108,
      "cadencia": 104,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     },
     {
      "nro": 8,
@@ -5252,7 +5561,8 @@ window.DATOS_TABLERO = {
      "fc_media": 101,
      "fc_max": 108,
      "cadencia": 104,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     },
     {
      "nro": 9,
@@ -5264,7 +5574,8 @@ window.DATOS_TABLERO = {
      "fc_media": 95,
      "fc_max": 123,
      "cadencia": 98,
-     "desnivel_m": 0
+     "desnivel_m": 0,
+     "potencia_w": null
     }
    ],
    "bloque_principal": null,
@@ -6967,6 +7278,86 @@ window.DATOS_TABLERO = {
   }
  ],
  "crudos": {
+  "minutos": {
+   "columnas": [
+    {
+     "nombre": "id_actividad",
+     "en_uso": true,
+     "uso": "Vínculo con la actividad"
+    },
+    {
+     "nombre": "fecha",
+     "en_uso": false,
+     "uso": null
+    },
+    {
+     "nombre": "minuto",
+     "en_uso": true,
+     "uso": "Carrera: curvas minuto a minuto"
+    },
+    {
+     "nombre": "segundos",
+     "en_uso": true,
+     "uso": "Carrera: curvas (descarta minutos muy incompletos)"
+    },
+    {
+     "nombre": "distancia_m",
+     "en_uso": false,
+     "uso": null
+    },
+    {
+     "nombre": "ritmo_min_km",
+     "en_uso": true,
+     "uso": "Carrera: curva de ritmo"
+    },
+    {
+     "nombre": "velocidad_ms",
+     "en_uso": true,
+     "uso": "Carrera: deriva cardíaca"
+    },
+    {
+     "nombre": "fc_media",
+     "en_uso": true,
+     "uso": "Carrera: curva de FC y deriva; Pádel: FC por minuto"
+    },
+    {
+     "nombre": "fc_max",
+     "en_uso": false,
+     "uso": null
+    },
+    {
+     "nombre": "cadencia_ppm",
+     "en_uso": true,
+     "uso": "Carrera: curva de cadencia"
+    },
+    {
+     "nombre": "potencia_w",
+     "en_uso": true,
+     "uso": "Carrera: curva de potencia"
+    },
+    {
+     "nombre": "altitud_m",
+     "en_uso": false,
+     "uso": null
+    },
+    {
+     "nombre": "zancada_m",
+     "en_uso": true,
+     "uso": "Carrera: curva de zancada"
+    },
+    {
+     "nombre": "contacto_ms",
+     "en_uso": false,
+     "uso": null
+    },
+    {
+     "nombre": "oscilacion_cm",
+     "en_uso": false,
+     "uso": null
+    }
+   ],
+   "filas": null
+  },
   "actividades": {
    "columnas": [
     {
@@ -7086,8 +7477,8 @@ window.DATOS_TABLERO = {
     },
     {
      "nombre": "potencia_w",
-     "en_uso": false,
-     "uso": null
+     "en_uso": true,
+     "uso": "Carrera: tarjeta de potencia; detalle de sesión"
     },
     {
      "nombre": "z1_s",
@@ -8954,8 +9345,8 @@ window.DATOS_TABLERO = {
     },
     {
      "nombre": "potencia_w",
-     "en_uso": false,
-     "uso": null
+     "en_uso": true,
+     "uso": "Carrera: potencia por etapa"
     }
    ],
    "filas": [

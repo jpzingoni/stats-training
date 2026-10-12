@@ -5,6 +5,48 @@ Una entrada por etapa, de la más reciente a la más antigua.
 
 ---
 
+## Etapa 2 (tablero): curvas minuto a minuto, potencia y análisis nuevos (11/10/2026)
+
+### Qué hice
+- El generador produce un archivo nuevo, `app/data/minutos.js`, con los minutos de cada
+  sesión: una línea por actividad y una lista por columna (~120 KB). Cada minuto trae
+  además el **bloque al que pertenece**. Agrega también `potencia_w` a actividades, bloques
+  y al resumen de la fase de entrenamiento.
+- **Carrera**:
+  - El gráfico "… a lo largo de la sesión" pasó de un escalón por bloque a la **curva real
+    minuto a minuto**, con selector Ritmo / FC / Potencia / Cadencia / Zancada. Mantiene la
+    alineación por plantilla y las líneas punteadas entre bloques: cada minuto se ubica en
+    el tramo de su bloque según la parte del bloque que había transcurrido.
+  - La tarjeta **Potencia media** usa el dato real (ponderado por tiempo).
+  - **Deriva cardíaca**: cuánto cae la eficiencia (velocidad ÷ FC) de la primera a la
+    segunda mitad del bloque de entrenamiento, con referencia en 5 %. En las plantillas por
+    ciclos muestra la FC de cada bloque de entrenamiento.
+  - **Eficiencia por sesión**: m/latido o W/latido de cada sesión elegida, en la etapa elegida.
+  - **Ritmo contra FC, minuto a minuto**: dispersión de hasta 3 sesiones.
+- **Pádel**: FC minuto a minuto de cada partido, con las zonas de FC como bandas de fondo y
+  los minutos en zona 3 o más.
+- **Detalle de cada sesión** (tablas y calendario): gráficos chicos de FC y ritmo por minuto
+  (velocidad en la bici).
+- **Datos**: se suma `minutos.csv`, que se arma desde `minutos.js` para no duplicarlo.
+
+### Decisiones
+- **Minutos en un archivo aparte** de `datos.js`: este sigue liviano y legible, y en GitHub
+  cada día solo se agregan las líneas de las sesiones nuevas.
+- **Cada minuto se asigna a un bloque por su punto medio**, no por su inicio. El bloque 2 del
+  03/09 empieza en el segundo 301: el minuto 5 (300–359 s) es casi entero del bloque 2.
+- **El eje Y de las curvas usa los percentiles 3 y 97** con un margen: un minuto con pausa
+  (14:31 /km) quedaría contra el borde en lugar de aplastar toda la curva.
+- **Deriva**: saltea los 2 primeros minutos del bloque (la FC tarda en estabilizarse) y los
+  minutos muy incompletos, y compara mitades de igual duración. Primer resultado en 25 MIN CO:
+  2,7 % el 26/08, 7,6 % el 03/09 y 6,8 % el 08/09.
+
+### Problemas
+- **Dos sesiones tenían minutos faltantes** en la grabación (pausas en las que el reloj no
+  grabó). Como `minutos.js` usa la posición en la lista como número de minuto, se corría
+  todo. Ahora los minutos faltantes van vacíos.
+
+---
+
 ## Etapa 2 (datos): grabación minuto a minuto (11/10/2026)
 
 ### Qué hice

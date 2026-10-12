@@ -425,6 +425,11 @@ body[data-vista="inicio"] main { padding-bottom: 1rem; }
 .desplegable .check { white-space: nowrap; font-size: 0.85rem; color: var(--texto); }
 .desplegable .check input:disabled + .muestra { opacity: 0.4; }
 .lienzo.alto { height: 340px; }
+.detalle-graficos { display: grid; grid-template-columns: repeat(auto-fit, minmax(260px, 1fr)); gap: 0.8rem; }
+.detalle-graficos h5 { margin: 0 0 0.2rem; font-size: 0.75rem; font-weight: 600; color: var(--texto-muted); }
+.lienzo.detalle { height: 140px; }
+.selector-linea { flex-direction: row; align-items: center; gap: 0.5rem; }
+.selector-linea select { min-width: 200px; padding: 0.25rem 0.6rem; }
 
 /* ── Diálogo de detalle de sesión ────────────────────────────────────────── */
 .dialogo {

@@ -46,6 +46,7 @@
       fila.setAttribute("aria-expanded", "true");
       fila.insertAdjacentHTML("afterend",
         `<tr class="detalle"><td colspan="${columnas.length}">${detalle(porId.get(fila.dataset.id))}</td></tr>`);
+      montarMinutos(fila.nextElementSibling, porId.get(fila.dataset.id));
     };
     t.onclick = (e) => { const f = e.target.closest(".fila-sesion"); if (f) alternar(f); };
     t.onkeydown = (e) => {
@@ -62,6 +63,12 @@
         ${fechaLarga(a.fecha)}${a.hora ? `, ${escapar(a.hora)} h` : ""}</div>
       ${a.plantilla === "Libre" ? '<p class="texto-sec">No coincide con ninguna plantilla del catálogo (scripts/plantillas.csv).</p>' : ""}
       ${metricas(a)}
+      ${window.MINUTOS_TABLERO?.[a.id]?.fc ? `<h4>Minuto a minuto</h4>
+        <div class="detalle-graficos" data-minutos="${escapar(a.id)}">
+          <div><h5>FC (ppm)</h5><div class="lienzo detalle"><canvas id="g-det-${escapar(a.id)}-fc"></canvas></div></div>
+          ${window.MINUTOS_TABLERO[a.id].ritmo ? `<div><h5>${usaVelocidad(a) ? "Velocidad (km/h)" : "Ritmo (/km)"}</h5>
+            <div class="lienzo detalle"><canvas id="g-det-${escapar(a.id)}-ritmo"></canvas></div></div>` : ""}
+        </div>` : ""}
       ${zonas(a)}
       ${vueltas(a)}
     </div>`;
@@ -82,6 +89,8 @@
       ["Ritmo en entrenamiento", a.entrenamiento?.ritmo_s_km ? `${ritmo(a.entrenamiento.ritmo_s_km)} /km` : null],
       ["FC en entrenamiento", a.entrenamiento?.fc_media != null ? `${a.entrenamiento.fc_media} ppm` : null],
       ["FC media / máx", a.fc_media != null ? `${a.fc_media} / ${a.fc_max ?? "—"} ppm` : null],
+      ["Potencia media", a.potencia_w != null ? `${a.potencia_w} W` : null],
+      ["Potencia en entrenamiento", a.entrenamiento?.potencia_w != null ? `${a.entrenamiento.potencia_w} W` : null],
       ["Recuperación FC (1 min)", a.recuperacion_fc != null ? `−${a.recuperacion_fc} ppm` : null],
       ["Carga", a.carga != null ? `${a.carga} HRSS` : null],
       ["TRIMP", a.trimp != null ? numero(a.trimp, 1) : null],
@@ -139,5 +148,39 @@
         <tbody>${filas}</tbody></table></div>`;
   }
 
-  Tablero.sesiones = { tabla, detalle, velocidadKmh, nombreSesion };
+  /** Dibuja los gráficos chicos de minuto a minuto de un detalle ya insertado en la página. */
+  function montarMinutos(raiz, a) {
+    const m = window.MINUTOS_TABLERO?.[a.id];
+    if (!m?.fc || !raiz?.querySelector(`[data-minutos]`)) return;
+    const { grafico, colores, ejeY } = Tablero.graficos;
+    const c = colores();
+    const xs = m.fc.map((_, i) => i + (m.seg?.[i] ?? 60) / 120);
+    const linea = (id, valores, formato, invertir = false) => {
+      const data = valores.map((y, i) => ({ x: xs[i], y })).filter((p) => (m.seg?.[Math.floor(p.x)] ?? 60) >= 20);
+      const vals = data.map((p) => p.y).filter((v) => v != null).sort((p, q) => p - q);
+      const q = (f) => vals[Math.round(f * (vals.length - 1))];
+      const margen = vals.length ? (q(0.97) - q(0.03)) * 0.15 || 1 : 0;
+      grafico(id, {
+        type: "line",
+        data: { datasets: [{ data, borderColor: c.serie[0], borderWidth: 1.5, pointRadius: 0, pointHitRadius: 6, spanGaps: false }] },
+        options: {
+          interaction: { mode: "nearest", intersect: false, axis: "x" },
+          scales: {
+            x: { type: "linear", min: 0, max: Math.ceil(xs.at(-1)), grid: { display: false }, ticks: { maxTicksLimit: 6, callback: (v) => `${v}′` } },
+            y: ejeY({ reverse: invertir, min: vals.length > 9 ? q(0.03) - margen : undefined, max: vals.length > 9 ? q(0.97) + margen : undefined,
+                      ticks: { maxTicksLimit: 4, callback: (v, i, t) => (i === 0 || i === t.length - 1 ? "" : formato(v)) } }),
+          },
+          plugins: { legend: { display: false },
+            tooltip: { callbacks: { title: (i) => `Minuto ${Math.floor(i[0].parsed.x) + 1}`, label: (i) => ` ${formato(i.parsed.y)}` } } },
+        },
+      });
+    };
+    linea(`g-det-${a.id}-fc`, m.fc, (v) => `${Math.round(v)} ppm`);
+    if (m.ritmo) {
+      if (usaVelocidad(a)) linea(`g-det-${a.id}-ritmo`, m.vel.map((v) => (v == null ? null : v * 3.6)), (v) => `${numero(v, 1)} km/h`);
+      else linea(`g-det-${a.id}-ritmo`, m.ritmo, (v) => `${ritmo(v)} /km`, true);
+    }
+  }
+
+  Tablero.sesiones = { tabla, detalle, montarMinutos, velocidadKmh, nombreSesion };
 })();

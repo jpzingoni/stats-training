@@ -59,6 +59,7 @@
       const a = estado.ctx.todo.actividades.find((x) => x.id === b.dataset.id);
       document.getElementById("dialogo-cuerpo").innerHTML = Tablero.sesiones.detalle(a);
       dialogo.showModal();
+      Tablero.sesiones.montarMinutos(document.getElementById("dialogo-cuerpo"), a);
     });
   }
 

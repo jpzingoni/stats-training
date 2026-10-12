@@ -16,6 +16,10 @@ Genera un único archivo, app/data/datos.js, que define window.DATOS_TABLERO con
     bienestar     una entrada por día, con medias móviles de 7 días
     crudos        los tres CSV tal cual vienen + qué columnas usa el tablero
 
+Además genera app/data/minutos.js (window.MINUTOS_TABLERO) con la grabación de cada
+sesión resumida por minuto (datos/minutos.csv), en un archivo aparte para que datos.js
+siga liviano y legible: una línea por actividad y una lista por columna.
+
 Es un .js (y no JSON) porque se carga con <script>: así el tablero funciona abriendo
 app/index.html directo desde el disco, sin levantar un servidor (el navegador bloquea
 fetch() sobre file://). Va indentado para que los diffs en GitHub se puedan leer.
@@ -78,6 +82,7 @@ USO_COLUMNAS = {
         "trimp": "Detalle de sesión",
         "intensidad_pct": "Detalle de sesión",
         "recuperacion_fc": "Detalle de sesión",
+        "potencia_w": "Carrera: tarjeta de potencia; detalle de sesión",
     },
     "bloques": {
         "id_actividad": "Detalle de sesión: vueltas",
@@ -90,6 +95,18 @@ USO_COLUMNAS = {
         "fc_max": "Detalle de sesión: vueltas",
         "cadencia_ppm": "Detalle de sesión: vueltas",
         "desnivel_pos_m": "Detalle de sesión: vueltas",
+        "potencia_w": "Carrera: potencia por etapa",
+    },
+    "minutos": {
+        "id_actividad": "Vínculo con la actividad",
+        "minuto": "Carrera: curvas minuto a minuto",
+        "segundos": "Carrera: curvas (descarta minutos muy incompletos)",
+        "ritmo_min_km": "Carrera: curva de ritmo",
+        "velocidad_ms": "Carrera: deriva cardíaca",
+        "fc_media": "Carrera: curva de FC y deriva; Pádel: FC por minuto",
+        "potencia_w": "Carrera: curva de potencia",
+        "cadencia_ppm": "Carrera: curva de cadencia",
+        "zancada_m": "Carrera: curva de zancada",
     },
     "bienestar": {
         "fecha": "Resumen y Recuperación",
@@ -165,6 +182,7 @@ def armar_bloques(filas):
             "fc_max": numero(b["fc_max"]),
             "cadencia": numero(b["cadencia_ppm"]),
             "desnivel_m": numero(b["desnivel_pos_m"]),
+            "potencia_w": numero(b.get("potencia_w", "")),
         })
     for lista in por_actividad.values():
         lista.sort(key=lambda b: b["nro"])
@@ -206,6 +224,7 @@ def armar_actividades(filas, bloques, catalogo):
             "ritmo_s_km": ritmo_a_segundos(a["ritmo_min_km"]),
             "fc_media": numero(a["fc_media"]),
             "fc_max": numero(a["fc_max"]),
+            "potencia_w": numero(a.get("potencia_w", "")),
             "carga": numero(a["carga_hrss"]),
             "desnivel_m": numero(a["desnivel_pos_m"]),
             "tiempo_total_s": numero(a["tiempo_total_s"]),
@@ -296,8 +315,13 @@ def armar_bienestar(filas):
     return dias
 
 
-def armar_crudos(tablas):
+def armar_crudos(tablas, columnas_minutos):
     salida = {}
+    uso = USO_COLUMNAS["minutos"]
+    salida["minutos"] = {
+        "columnas": [{"nombre": c, "en_uso": c in uso, "uso": uso.get(c)} for c in columnas_minutos],
+        "filas": None,      # se reconstruyen en el tablero a partir de minutos.js
+    }
     for nombre, (columnas, filas) in tablas.items():
         uso = USO_COLUMNAS[nombre]
         desconocidas = set(uso) - set(columnas)
@@ -315,6 +339,63 @@ def escribir(contenido):
     ruta = SALIDA / "datos.js"
     texto = ("// Generado por scripts/generar_datos_app.py a partir de datos/*.csv. No editar a mano.\n"
              "window.DATOS_TABLERO = " + json.dumps(contenido, ensure_ascii=False, indent=1) + ";\n")
+    if ruta.exists() and ruta.read_text(encoding="utf-8") == texto:
+        return False
+    ruta.write_text(texto, encoding="utf-8", newline="\n")
+    return True
+
+
+# ─── Minutos ─────────────────────────────────────────────────────────────────
+
+# Columnas de minutos.csv → clave corta en minutos.js
+CLAVES_MINUTOS = {
+    "segundos": "seg", "distancia_m": "dist", "ritmo_min_km": "ritmo", "velocidad_ms": "vel",
+    "fc_media": "fc", "fc_max": "fcmax", "cadencia_ppm": "cad", "potencia_w": "pot",
+    "altitud_m": "alt", "zancada_m": "zancada", "contacto_ms": "contacto", "oscilacion_cm": "osc",
+}
+
+
+def armar_minutos(filas, actividades):
+    """
+    {id: {seg: [...], ritmo: [...], ..., bloque: [...]}} con una lista por columna.
+    "bloque" es el nro del bloque de cada minuto, asignado por el punto medio del minuto
+    (un minuto que empieza 1 s antes de un cambio de bloque pertenece casi entero al siguiente).
+    """
+    bloques = {a["id"]: a["bloques"] for a in actividades}
+    por_act = defaultdict(list)
+    for f in filas:
+        por_act[f["id_actividad"]].append(f)
+    salida = {}
+    for id_act in sorted(por_act):
+        por_minuto = {int(f["minuto"]): f for f in por_act[id_act]}
+        serie = {clave: [] for clave in CLAVES_MINUTOS.values()}
+        serie["bloque"] = []
+        # La posición en cada lista ES el minuto: si el reloj no grabó algunos (pausa), van vacíos
+        for minuto in range(max(por_minuto) + 1):
+            f = por_minuto.get(minuto)
+            if f is None:
+                for lista in serie.values():
+                    lista.append(None)
+                continue
+            for col, clave in CLAVES_MINUTOS.items():
+                serie[clave].append(ritmo_a_segundos(f[col]) if col == "ritmo_min_km" else numero(f[col]))
+            medio = int(f["minuto"]) * 60 + (numero(f["segundos"]) or 60) / 2
+            nro = next((b["nro"] for b in bloques.get(id_act, [])
+                        if b["inicio_s"] is not None and b["duracion_s"]
+                        and b["inicio_s"] <= medio < b["inicio_s"] + b["duracion_s"]), None)
+            serie["bloque"].append(nro)
+        # Columnas totalmente vacías (p. ej., pádel sin ritmo) no se escriben
+        salida[id_act] = {k: v for k, v in serie.items() if any(x is not None for x in v)}
+    return salida
+
+
+def escribir_minutos(minutos):
+    """Una línea por actividad: los diffs diarios solo agregan las sesiones nuevas."""
+    ruta = SALIDA / "minutos.js"
+    lineas = [f" {json.dumps(k)}: {json.dumps(v, ensure_ascii=False, separators=(',', ':'))}"
+              for k, v in minutos.items()]
+    texto = ("// Generado por scripts/generar_datos_app.py a partir de datos/minutos.csv. No editar a mano.\n"
+             "window.MINUTOS_TABLERO = {\n" + ",\n".join(lineas) + "\n};\n")
     if ruta.exists() and ruta.read_text(encoding="utf-8") == texto:
         return False
     ruta.write_text(texto, encoding="utf-8", newline="\n")
@@ -356,15 +437,19 @@ def main():
     }
 
     SALIDA.mkdir(parents=True, exist_ok=True)
+    columnas_min, filas_min = leer_csv("minutos.csv") if (DATOS / "minutos.csv").exists() else ([], [])
+    cambio_min = escribir_minutos(armar_minutos(filas_min, actividades))
+
     cambio = escribir({
         "meta": meta,
         "actividades": actividades,
         "semanas": armar_semanas(actividades, desde, hasta),
         "bienestar": bienestar,
-        "crudos": armar_crudos(tablas),
+        "crudos": armar_crudos(tablas, columnas_min),
     })
     print(f"✅ Datos del tablero: {len(actividades)} actividades, {len(bienestar)} días "
-          f"({desde} → {hasta}). {'datos.js actualizado' if cambio else 'Sin cambios'}")
+          f"({desde} → {hasta}), {len(filas_min)} minutos. "
+          f"datos.js: {'actualizado' if cambio else 'sin cambios'} · minutos.js: {'actualizado' if cambio_min else 'sin cambios'}")
 
 
 if __name__ == "__main__":

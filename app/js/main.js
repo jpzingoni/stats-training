@@ -168,6 +168,7 @@
       return;
     }
     estado.datos = window.DATOS_TABLERO;
+    estado.datos.minutos = window.MINUTOS_TABLERO ?? {};   // data/minutos.js (puede faltar)
     const { meta } = estado.datos;
     const [fecha, hora] = meta.generado.split(" ");
     document.getElementById("actualizado").textContent =

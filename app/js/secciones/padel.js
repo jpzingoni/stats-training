@@ -3,7 +3,7 @@
   const Tablero = (window.Tablero ??= { secciones: {} });
 
   const { grafico, sinDatos, colores, ejeY, estiloBarra } = Tablero.graficos;
-  const { kpis, delta } = Tablero.componentes;
+  const { kpis, delta, escapar } = Tablero.componentes;
   const { numero, duracion, fechaCorta, fechaLarga, suma, promedio } = Tablero.formato;
 
   function render(ctx) {
@@ -22,6 +22,8 @@
       { etiqueta: "Carga media", valor: numero(cargaMedia), unidad: "HRSS" },
       { etiqueta: "FC media", valor: numero(fcMedia), unidad: "ppm" },
     ]);
+
+    renderFcMinutos(ctx, sesiones);
 
     Tablero.sesiones.tabla("tabla-padel", sesiones, [
       { titulo: "Fecha", valor: (a) => fechaLarga(a.fecha) },
@@ -89,6 +91,94 @@
       },
     });
   }
+
+  // ─── FC minuto a minuto de un partido ──────────────────────────────────────
+
+  let partidoElegido = null;
+
+  function renderFcMinutos(ctx, sesiones) {
+    const sel = document.getElementById("padel-partido");
+    const nota = document.getElementById("padel-fc-nota");
+    const conMinutos = sesiones.filter((a) => ctx.todo.minutos?.[a.id]?.fc);
+    if (!conMinutos.length) {
+      sel.innerHTML = ""; nota.textContent = "";
+      return sinDatos("g-padel-minutos", "Sin partidos con FC por minuto en este período");
+    }
+    if (!conMinutos.some((a) => a.id === partidoElegido)) partidoElegido = conMinutos.at(-1).id;   // el último
+    sel.innerHTML = [...conMinutos].reverse().map((a) =>
+      `<option value="${escapar(a.id)}"${a.id === partidoElegido ? " selected" : ""}>${fechaLarga(a.fecha)} · ${duracion(a.duracion_s)}</option>`).join("");
+    sel.onchange = () => { partidoElegido = sel.value; renderFcMinutos(ctx, sesiones); };
+
+    const m = ctx.todo.minutos[partidoElegido];
+    const limites = ctx.meta.zonas_fc_carrera;                 // límite superior de Z1…Z7
+    const zonaDe = (fc) => { const z = limites.findIndex((l) => fc <= l); return z === -1 ? limites.length - 1 : z; };
+    const puntos = m.fc.map((fc, i) => ({ x: i + (m.seg?.[i] ?? 60) / 120, y: fc })).filter((p) => p.y != null);
+    const minutosPorZona = limites.map(() => 0);
+    m.fc.forEach((fc, i) => { if (fc != null) minutosPorZona[zonaDe(fc)] += (m.seg?.[i] ?? 60) / 60; });
+    const altos = minutosPorZona.slice(2).reduce((x, y) => x + y, 0);
+    const total = minutosPorZona.reduce((x, y) => x + y, 0) || 1;
+    const pico = Math.max(...m.fc.filter((x) => x != null));
+    nota.textContent = `${numero(altos)} de ${numero(total)} min en zona 3 o más (${numero((altos / total) * 100)} %) · pico de ${pico} ppm. ` +
+      "Las bandas de fondo son tus zonas de FC.";
+
+    const c = colores();
+    grafico("g-padel-minutos", {
+      type: "line",
+      data: { datasets: [{ label: "FC", data: puntos, borderColor: c.categoria["Pádel"], backgroundColor: c.categoria["Pádel"],
+        borderWidth: 2, pointRadius: 0, pointHoverRadius: 4, pointHitRadius: 8, tension: 0 }] },
+      plugins: [BANDAS_ZONAS],
+      options: {
+        interaction: { mode: "nearest", intersect: false, axis: "x" },
+        scales: {
+          x: { type: "linear", min: 0, max: Math.ceil(puntos.at(-1).x), grid: { display: false }, title: { display: true, text: "minutos desde el inicio" },
+               ticks: { callback: (v) => (Number.isInteger(v) ? `${v}′` : "") } },
+          y: ejeY({ suggestedMin: 80, suggestedMax: limites.at(-1), ticks: { callback: (v) => `${v} ppm` } }),
+        },
+        plugins: {
+          legend: { display: false },
+          bandasZonas: { limites, colores: c.rampa },
+          tooltip: { callbacks: {
+            title: (i) => `Minuto ${Math.floor(i[0].parsed.x) + 1}`,
+            label: (i) => ` FC: ${i.parsed.y} ppm · Z${zonaDe(i.parsed.y) + 1}`,
+          } },
+        },
+      },
+    });
+  }
+
+  /** Plugin: bandas horizontales de fondo con las zonas de FC (Z1 abajo, Z7 arriba). */
+  const BANDAS_ZONAS = {
+    id: "bandasZonas",
+    beforeDatasetsDraw(chart) {
+      const op = chart.options.plugins.bandasZonas;
+      if (!op) return;
+      const { ctx, chartArea: area, scales: { y } } = chart;
+      ctx.save();
+      ctx.globalAlpha = 0.14;
+      let inferior = y.min;
+      op.limites.forEach((sup, z) => {
+        const desde = Math.max(inferior, y.min), hasta = Math.min(z === op.limites.length - 1 ? y.max : sup, y.max);
+        if (hasta > desde) {
+          const top = y.getPixelForValue(hasta), bottom = y.getPixelForValue(desde);
+          ctx.fillStyle = op.colores[z];
+          ctx.fillRect(area.left, top, area.right - area.left, bottom - top);
+        }
+        inferior = sup;
+      });
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = Chart.defaults.color;
+      ctx.font = `10px ${Chart.defaults.font.family}`;
+      ctx.textAlign = "right"; ctx.textBaseline = "middle";
+      inferior = y.min;
+      op.limites.forEach((sup, z) => {
+        const desde = Math.max(inferior, y.min), hasta = Math.min(z === op.limites.length - 1 ? y.max : sup, y.max);
+        const alto = y.getPixelForValue(desde) - y.getPixelForValue(hasta);
+        if (alto > 12) ctx.fillText(`Z${z + 1}`, area.right - 4, y.getPixelForValue((desde + hasta) / 2));
+        inferior = sup;
+      });
+      ctx.restore();
+    },
+  };
 
   Tablero.secciones.padel = { render };
 })();

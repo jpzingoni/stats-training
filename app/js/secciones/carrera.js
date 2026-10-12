@@ -11,7 +11,7 @@
   function render(ctx) {
     const corridas = ctx.actividades.filter((a) => a.categoria === "Carrera");
 
-    renderComparacion(corridas, ctx.meta);
+    renderComparacion(corridas, ctx.meta, ctx.todo.minutos ?? {});
     renderEficiencia(ctx, corridas);
     renderKm(ctx);
     renderZonas(ctx);
@@ -43,15 +43,19 @@
   // ─── Comparar sesiones de una misma plantilla ──────────────────────────────
 
   const MAX_SESIONES = 8;   // la paleta tiene 8 colores distinguibles; más líneas no se leen
-  const comp = { plantilla: null, elegidas: null, metrica: "ritmo", etapa: "todas", enlazado: false, corridas: [] };
+  const comp = { plantilla: null, elegidas: null, metrica: "ritmo", etapa: "todas", ef: "m", enlazado: false, corridas: [], minutos: {} };
+  // Cada métrica: su columna en minutos.js, su valor por bloque (si no hay minutos) y su formato
   const METRICAS_COMP = {
-    ritmo: { titulo: "Ritmo a lo largo de la sesión", valor: (b) => b.ritmo_s_km, formato: (v) => `${ritmo(v)} /km`, invertir: true, paso: 60 },
-    fc: { titulo: "FC a lo largo de la sesión", valor: (b) => b.fc_media, formato: (v) => `${numero(v)} ppm`, invertir: false },
+    ritmo: { nombre: "Ritmo", clave: "ritmo", valor: (b) => b.ritmo_s_km, formato: (v) => `${ritmo(v)} /km`, invertir: true },
+    fc: { nombre: "FC", clave: "fc", valor: (b) => b.fc_media, formato: (v) => `${numero(v)} ppm` },
+    potencia: { nombre: "Potencia", clave: "pot", valor: (b) => b.potencia_w, formato: (v) => `${numero(v)} W` },
+    cadencia: { nombre: "Cadencia", clave: "cad", valor: (b) => b.cadencia, formato: (v) => `${numero(v)} ppm` },
+    zancada: { nombre: "Zancada", clave: "zancada", valor: () => null, formato: (v) => `${numero(v, 2)} m` },
   };
 
   function guardarComp() {
     try {
-      localStorage.setItem("carrera-comparar", JSON.stringify({ plantilla: comp.plantilla, metrica: comp.metrica, etapa: comp.etapa }));
+      localStorage.setItem("carrera-comparar", JSON.stringify({ plantilla: comp.plantilla, metrica: comp.metrica, etapa: comp.etapa, ef: comp.ef }));
     } catch { /* solo esta visita */ }
   }
 
@@ -61,6 +65,7 @@
       const g = JSON.parse(localStorage.getItem("carrera-comparar") ?? "null");
       if (g?.plantilla) comp.plantilla = g.plantilla;
       if (METRICAS_COMP[g?.metrica]) comp.metrica = g.metrica;
+      if (g?.ef === "m" || g?.ef === "w") comp.ef = g.ef;
       if (g?.etapa) comp.etapa = g.etapa;
     } catch { /* valores por defecto */ }
 
@@ -80,6 +85,13 @@
       if (!accion) return;
       const ids = sesionesDePlantilla().map((a) => a.id);
       comp.elegidas = new Set(accion === "todas" ? ids.slice(-MAX_SESIONES) : []);
+      renderComparacion(comp.corridas);
+    });
+    document.getElementById("carrera-ef-metrica").addEventListener("click", (e) => {
+      const b = e.target.closest("[data-ef]");
+      if (!b) return;
+      comp.ef = b.dataset.ef;
+      guardarComp();
       renderComparacion(comp.corridas);
     });
     document.getElementById("carrera-etapa").addEventListener("change", (e) => {
@@ -103,9 +115,10 @@
 
   const sesionesDePlantilla = () => comp.corridas.filter((a) => (a.plantilla ?? "Libre") === comp.plantilla);
 
-  function renderComparacion(corridas, meta = comp.meta) {
+  function renderComparacion(corridas, meta = comp.meta, minutos = comp.minutos) {
     comp.corridas = corridas;
     comp.meta = meta;
+    comp.minutos = minutos;
     if (!comp.enlazado) enlazarComp();
     const c = colores();
 
@@ -136,9 +149,9 @@
     document.getElementById("carrera-sesiones-resumen").textContent =
       `${elegidas.length} de ${sesiones.length} ${sesiones.length === 1 ? "sesión" : "sesiones"}`;
 
-    // Gráfico: una línea escalonada por sesión, un escalón por bloque
+    // Gráfico: la curva minuto a minuto de cada sesión
     const met = METRICAS_COMP[comp.metrica];
-    document.getElementById("carrera-comp-titulo").textContent = met.titulo;
+    document.getElementById("carrera-comp-titulo").textContent = `${met.nombre} a lo largo de la sesión`;
     for (const b of document.querySelectorAll("#carrera-metrica button")) {
       b.setAttribute("aria-pressed", String(b.dataset.metrica === comp.metrica));
     }
@@ -159,72 +172,56 @@
     const eje = pasos ? ejePlantilla(pasos, sesiones) : null;
     const hayDistancia = pasos?.some((p) => p.tipo === "distancia");
     document.getElementById("carrera-comp-nota").textContent =
-      "Cada escalón es el promedio de un bloque (no hay datos segundo a segundo). " +
-      (eje && comp.etapa !== "todas" ? `Se muestran solo los bloques de ${comp.etapa}. ` : "") +
+      "Curva minuto a minuto de cada sesión. " +
+      (eje && comp.etapa !== "todas" ? `Se muestran solo los minutos de ${comp.etapa}. ` : "") +
       (eje
-        ? "El eje horizontal sigue los bloques de la plantilla, así todas las sesiones quedan alineadas." +
-          (hayDistancia ? " Los bloques por distancia se dibujan con su duración promedio." : "")
-        : "El eje horizontal es el tiempo desde el inicio de la sesión.") +
-      (met.invertir ? " Más arriba = más rápido." : "") +
+        ? "El eje sigue los bloques de la plantilla: cada bloque se estira o se comprime a su tramo, así todas las sesiones quedan alineadas." +
+          (hayDistancia ? " Los bloques por distancia toman su duración promedio." : "")
+        : "El eje es el tiempo desde el inicio de la sesión.") +
+      (comp.metrica === "ritmo" ? " Más arriba = más rápido; los minutos con pausas quedan contra el borde." : "") +
       (sesiones.length > MAX_SESIONES ? ` Se pueden comparar hasta ${MAX_SESIONES} sesiones a la vez.` : "");
+    renderDeriva(elegidas, colorDe, pasos);
+    renderEficienciaPlantilla(elegidas, colorDe);
+    renderDispersion(elegidas, colorDe);
     if (!elegidas.length) return sinDatos("g-carrera-comparar", "Elegí al menos una sesión");
 
-    const datasets = elegidas.map((a) => {
-      let puntos;
-      if (eje && comp.etapa !== "todas") {
-        // Solo la etapa elegida: cada bloque es un tramo horizontal; null corta la línea entre tramos
-        puntos = [];
-        a.bloques.filter((b) => b.fase).forEach((b, k) => {
-          if (b.fase !== comp.etapa) return;
-          const y = met.valor(b) ?? null;
-          puntos.push({ x: eje.inicios[k] / 60, y, b }, { x: (eje.inicios[k] + eje.anchos[k]) / 60, y, b, fin: true },
-            { x: (eje.inicios[k] + eje.anchos[k]) / 60, y: null, b, fin: true });
-        });
-      } else if (eje) {
-        // El k-ésimo bloque con fase corresponde al paso k de la plantilla
-        const conFase = a.bloques.filter((b) => b.fase);
-        puntos = conFase.map((b, k) => ({ x: eje.inicios[k] / 60, y: met.valor(b) ?? null, b }));
-        const k = conFase.length - 1;
-        if (k >= 0) puntos.push({ x: (eje.inicios[k] + eje.anchos[k]) / 60, y: met.valor(conFase[k]) ?? null, b: conFase[k], fin: true });
-      } else {
-        const bloques = a.bloques.filter((b) => (b.duracion_s ?? 0) >= 10);
-        puntos = bloques.map((b) => ({ x: (b.inicio_s ?? 0) / 60, y: met.valor(b) ?? null, b }));
-        const ultimo = bloques.at(-1);
-        if (ultimo) puntos.push({ x: ((ultimo.inicio_s ?? 0) + ultimo.duracion_s) / 60, y: met.valor(ultimo) ?? null, b: ultimo, fin: true });
-      }
-      return {
-        // "before" en Chart.js: cada tramo conserva el valor del punto donde empieza el bloque
-        label: fechaLarga(a.fecha), data: puntos, stepped: comp.etapa === "todas" || !eje ? "before" : false,
-        borderColor: colorDe.get(a.id), backgroundColor: colorDe.get(a.id),
-        pointRadius: 0, pointHoverRadius: 5, pointHitRadius: 10, spanGaps: false,
-      };
-    });
+    const datasets = elegidas.map((a) => ({
+      label: fechaLarga(a.fecha), data: puntosSesion(a, met, eje),
+      borderColor: colorDe.get(a.id), backgroundColor: colorDe.get(a.id),
+      borderWidth: 1.75, pointRadius: 0, pointHoverRadius: 4, pointHitRadius: 8, spanGaps: false,
+    }));
+    if (!datasets.some((d) => d.data.some((pt) => pt.y != null))) {
+      return sinDatos("g-carrera-comparar", `Sin datos de ${met.nombre.toLowerCase()} para estas sesiones`);
+    }
+    const rango = rangoRobusto(datasets.flatMap((d) => d.data.map((pt) => pt.y)));
     grafico("g-carrera-comparar", {
       type: "line",
       data: { datasets },
       plugins: [LINEAS_BLOQUES],
       options: {
         interaction: { mode: "nearest", intersect: false, axis: "x" },
+        elements: { line: { tension: 0 } },
         layout: { padding: { top: eje ? 16 : 0 } },
         scales: {
           x: { type: "linear", min: 0, max: eje ? eje.total / 60 : undefined, grid: { display: false }, border: { color: c.eje },
                title: { display: true, text: eje ? `minutos según la plantilla ${comp.plantilla}` : "minutos desde el inicio" },
                ticks: { callback: (v) => (Number.isInteger(v) ? `${v}′` : "") } },   // sin el último valor con decimales
-          // Con una sola etapa los valores quedan cerca: marcas automáticas (más finas) y más margen
-          y: ejeY({ reverse: met.invertir, grace: comp.etapa === "todas" ? "8%" : "25%",
-                    ticks: { maxTicksLimit: 8, stepSize: comp.etapa === "todas" ? met.paso : undefined, callback: met.formato } }),
+          // Rango del 3 % al 97 % de los valores: un minuto con pausa no aplasta toda la curva
+          y: ejeY({ reverse: met.invertir, min: rango?.min, max: rango?.max,
+                    ticks: { maxTicksLimit: 8, callback: (v, i, t) => (rango && (i === 0 || i === t.length - 1) ? "" : met.formato(v)) } }),
         },
         plugins: {
           // Con plantilla, la leyenda va abajo: arriba están los nombres de las fases
           legend: { display: datasets.length > 1, position: eje ? "bottom" : "top" },
           lineasBloques: eje ? { limites: eje.inicios.slice(1).map((v) => v / 60), tramos: eje.tramos, linea: c.muted, texto: c.textoSec } : null,
           tooltip: {
-            filter: (i) => !i.raw.fin && i.parsed.y != null,
+            filter: (i) => i.parsed.y != null,
             callbacks: {
               title: (items) => items.length ? `${items[0].dataset.label}` : "",
               label: (i) => {
-                const b = i.raw.b;
-                return ` Bloque ${b.nro}${b.fase ? ` · ${b.fase}` : ""}: ${met.formato(i.parsed.y)} · duró ${duracion(b.duracion_s)}`;
+                const pt = i.raw;
+                const donde = pt.b ? `bloque ${pt.b.nro}${pt.b.fase ? ` · ${pt.b.fase}` : ""}` : "";
+                return ` Min ${pt.minuto + 1}${donde ? ` (${donde})` : ""}: ${met.formato(i.parsed.y)}`;
               },
             },
           },
@@ -232,6 +229,242 @@
       },
     });
   }
+
+  /**
+   * Puntos minuto a minuto de una sesión. Con plantilla, cada minuto se ubica en el tramo de
+   * su bloque según la parte del bloque transcurrida (el bloque se estira o se comprime al
+   * ancho de la plantilla). Un null corta la línea donde se saltean minutos (otra etapa).
+   * Si la sesión no tiene minutos, cae a un escalón por bloque.
+   */
+  function puntosSesion(a, met, eje) {
+    const m = comp.minutos[a.id];
+    const serie = m?.[met.clave];
+    const conFase = a.bloques.filter((b) => b.fase);
+    const indiceFase = new Map(conFase.map((b, k) => [b.nro, k]));
+    const porNro = new Map(a.bloques.map((b) => [b.nro, b]));
+    if (!serie) {
+      // Sin minutos: un escalón por bloque (como antes)
+      const bloques = eje ? conFase : a.bloques.filter((b) => (b.duracion_s ?? 0) >= 10);
+      return bloques.flatMap((b, k) => {
+        if (comp.etapa !== "todas" && b.fase !== comp.etapa) return [];
+        const x0 = eje ? eje.inicios[k] : b.inicio_s ?? 0, ancho = eje ? eje.anchos[k] : b.duracion_s;
+        return [{ x: x0 / 60, y: met.valor(b) ?? null, b, minuto: 0 }, { x: (x0 + ancho) / 60, y: met.valor(b) ?? null, b, minuto: 0 },
+          { x: (x0 + ancho) / 60, y: null }];
+      });
+    }
+    const puntos = [];
+    let anterior = null;
+    serie.forEach((valor, i) => {
+      if ((m.seg?.[i] ?? 60) < 20) return;                  // último minuto casi vacío
+      const b = porNro.get(m.bloque?.[i]);
+      if (comp.etapa !== "todas" && b?.fase !== comp.etapa) return;
+      const medio = i * 60 + (m.seg?.[i] ?? 60) / 2;
+      let x = medio / 60;
+      if (eje) {
+        const k = indiceFase.get(b?.nro);
+        if (k === undefined) return;                         // corte de 1 s sin fase
+        const frac = Math.min(Math.max((medio - b.inicio_s) / b.duracion_s, 0), 1);
+        x = (eje.inicios[k] + frac * eje.anchos[k]) / 60;
+      }
+      if (anterior !== null && i !== anterior + 1) puntos.push({ x, y: null });
+      puntos.push({ x, y: valor, b, minuto: i });
+      anterior = i;
+    });
+    return puntos;
+  }
+
+  /** Mínimo y máximo del eje: percentiles 3 y 97 con un margen (si hay suficientes valores). */
+  function rangoRobusto(valores) {
+    const v = valores.filter((x) => x != null).sort((a, b) => a - b);
+    if (v.length < 10) return null;
+    const p = (q) => v[Math.min(v.length - 1, Math.max(0, Math.round(q * (v.length - 1))))];
+    const bajo = p(0.03), alto = p(0.97);
+    const margen = (alto - bajo) * 0.12 || Math.abs(alto) * 0.05 || 1;
+    return { min: bajo - margen, max: alto + margen };
+  }
+
+  // ─── Deriva cardíaca y eficiencia entre sesiones ───────────────────────────
+
+  /**
+   * Deriva cardíaca de una sesión: cuánto cae la eficiencia (velocidad ÷ FC) de la primera a
+   * la segunda mitad del bloque de entrenamiento continuo. Se saltean sus 2 primeros minutos
+   * (la FC tarda en estabilizarse) y los minutos muy incompletos.
+   */
+  function deriva(a) {
+    const m = comp.minutos[a.id];
+    const entrenamiento = a.bloques.filter((b) => b.fase === "Entrenamiento");
+    if (!m?.vel || !m?.fc || entrenamiento.length !== 1 || entrenamiento[0].duracion_s < 600) return null;
+    const nro = entrenamiento[0].nro;
+    const usados = m.bloque.map((n, i) => i)
+      .filter((i) => m.bloque[i] === nro && (m.seg[i] ?? 0) >= 50 && m.vel[i] != null && m.fc[i] != null)
+      .slice(2);
+    if (usados.length < 6) return null;
+    const mitad = Math.floor(usados.length / 2);
+    const ef = (ix) => promedio(ix, (i) => m.vel[i]) / promedio(ix, (i) => m.fc[i]);
+    const ef1 = ef(usados.slice(0, mitad)), ef2 = ef(usados.slice(-mitad));
+    return {
+      valor: ((ef1 - ef2) / ef1) * 100, minutos: usados.length,
+      fc1: promedio(usados.slice(0, mitad), (i) => m.fc[i]), fc2: promedio(usados.slice(-mitad), (i) => m.fc[i]),
+      v1: promedio(usados.slice(0, mitad), (i) => m.vel[i]), v2: promedio(usados.slice(-mitad), (i) => m.vel[i]),
+    };
+  }
+
+  function renderDeriva(elegidas, colorDe, pasos) {
+    const c = colores();
+    const titulo = document.getElementById("carrera-deriva-titulo");
+    const nota = document.getElementById("carrera-deriva-nota");
+    const bloquesEntrenamiento = pasos ? pasos.filter((p) => p.fase === "Entrenamiento").length : 0;
+    if (!pasos) {
+      titulo.textContent = "Deriva cardíaca";
+      nota.textContent = "Se calcula sobre el bloque de entrenamiento de una plantilla; las sesiones libres no lo tienen.";
+      return sinDatos("g-carrera-deriva", "Elegí una plantilla");
+    }
+    if (bloquesEntrenamiento > 1) {
+      // Plantillas por ciclos (CACO, Aumento de ritmo): FC de cada bloque de entrenamiento
+      titulo.textContent = "FC en cada bloque de entrenamiento";
+      nota.textContent = "En las plantillas por ciclos, la deriva se ve en cómo sube la FC de un ciclo al siguiente.";
+      const datasets = elegidas.map((a) => ({
+        label: fechaLarga(a.fecha),
+        data: a.bloques.filter((b) => b.fase === "Entrenamiento").map((b, k) => ({ x: k + 1, y: b.fc_media })),
+        borderColor: colorDe.get(a.id), backgroundColor: colorDe.get(a.id), pointRadius: 3,
+      }));
+      if (!datasets.length) return sinDatos("g-carrera-deriva", "Elegí al menos una sesión");
+      return grafico("g-carrera-deriva", {
+        type: "line", data: { datasets },
+        options: {
+          scales: { x: { type: "linear", min: 1, max: bloquesEntrenamiento, grid: { display: false },
+                         ticks: { stepSize: 1, callback: (v) => `${v}` }, title: { display: true, text: "bloque de entrenamiento" } },
+                    y: ejeY({ grace: "10%", ticks: { callback: (v) => `${v} ppm` } }) },
+          plugins: { legend: { display: datasets.length > 1, position: "bottom" },
+                     tooltip: { callbacks: { title: (i) => `Bloque ${i[0].parsed.x}`, label: (i) => ` ${i.dataset.label}: ${i.parsed.y} ppm` } } },
+        },
+      });
+    }
+    titulo.textContent = "Deriva cardíaca";
+    nota.textContent = "Cuánto cae la eficiencia (velocidad ÷ FC) de la primera a la segunda mitad del bloque de entrenamiento. " +
+      "Por debajo de 5 %, ritmo y FC se mantuvieron acoplados (referencia que usan Intervals y TrainingPeaks).";
+    const filas = elegidas.map((a) => ({ a, d: deriva(a) })).filter((x) => x.d);
+    if (!filas.length) return sinDatos("g-carrera-deriva", "Sin minutos suficientes para calcularla");
+    grafico("g-carrera-deriva", {
+      type: "bar",
+      data: {
+        labels: filas.map((x) => fechaCorta(x.a.fecha)),
+        datasets: [{ label: "Deriva", data: filas.map((x) => x.d.valor),
+          backgroundColor: filas.map((x) => colorDe.get(x.a.id)), borderRadius: 4, maxBarThickness: 48 }],
+      },
+      plugins: [LINEA_REFERENCIA],
+      options: {
+        scales: { x: { grid: { display: false } }, y: ejeY({ suggestedMin: 0, suggestedMax: 8, ticks: { callback: (v) => `${v} %` } }) },
+        plugins: {
+          legend: { display: false },
+          lineaReferencia: { valor: 5, texto: "5 %", color: c.muted },
+          tooltip: { callbacks: {
+            title: (i) => fechaLarga(filas[i[0].dataIndex].a.fecha),
+            label: (i) => {
+              const d = filas[i.dataIndex].d;
+              return [` Deriva: ${numero(d.valor, 1)} %`,
+                ` 1.ª mitad: ${ritmo(1000 / d.v1)} /km a ${numero(d.fc1)} ppm`,
+                ` 2.ª mitad: ${ritmo(1000 / d.v2)} /km a ${numero(d.fc2)} ppm`];
+            },
+          } },
+        },
+      },
+    });
+  }
+
+  /** Eficiencia de cada sesión elegida en la etapa elegida: m por latido o W por latido. */
+  function renderEficienciaPlantilla(elegidas, colorDe) {
+    const c = colores();
+    for (const b of document.querySelectorAll("#carrera-ef-metrica button")) {
+      b.setAttribute("aria-pressed", String(b.dataset.ef === comp.ef));
+    }
+    const puntos = elegidas.map((a) => {
+      const bl = bloquesDeEtapa(a);
+      const dur = suma(bl, (b) => b.duracion_s), dist = suma(bl, (b) => b.distancia_m);
+      const fc = ponderado(bl, "fc_media"), pot = ponderado(bl, "potencia_w");
+      const valor = comp.ef === "m" ? (dist && fc ? (dist / dur) * 60 / fc : null) : (pot && fc ? pot / fc : null);
+      return { a, valor };
+    }).filter((x) => x.valor != null);
+    if (!puntos.length) return sinDatos("g-carrera-ef-plantilla", "Sin datos para estas sesiones");
+    const unidad = comp.ef === "m" ? "m/latido" : "W/latido";
+    grafico("g-carrera-ef-plantilla", {
+      type: "line",
+      data: {
+        labels: puntos.map((x) => fechaCorta(x.a.fecha)),
+        datasets: [{ label: unidad, data: puntos.map((x) => x.valor), borderColor: c.muted,
+          pointBackgroundColor: puntos.map((x) => colorDe.get(x.a.id)), pointBorderColor: c.superficie,
+          pointBorderWidth: 2, pointRadius: 6, pointHoverRadius: 8 }],
+      },
+      options: {
+        scales: { x: { grid: { display: false } }, y: ejeY({ grace: "20%", ticks: { callback: (v) => numero(v, 2) } }) },
+        plugins: { legend: { display: false },
+          tooltip: { callbacks: { title: (i) => fechaLarga(puntos[i[0].dataIndex].a.fecha), label: (i) => ` ${numero(i.parsed.y, 3)} ${unidad}` } } },
+      },
+    });
+  }
+
+  /**
+   * Dispersión ritmo–FC: cada punto es un minuto completo de la etapa elegida. Con el tiempo,
+   * si los puntos se corren hacia "más rápido con la misma FC", la forma mejora.
+   * Máximo 3 sesiones (las más recientes de las elegidas): con más colores los puntos no se distinguen.
+   */
+  const MAX_DISPERSION = 3;
+  function renderDispersion(elegidas, colorDe) {
+    const nota = document.getElementById("carrera-disp-nota");
+    const usadas = elegidas.slice(-MAX_DISPERSION);
+    const datasets = usadas.map((a) => {
+      const m = comp.minutos[a.id];
+      const porNro = new Map(a.bloques.map((b) => [b.nro, b]));
+      const data = (m?.ritmo ?? []).map((r, i) => ({ x: m.fc?.[i], y: r, b: porNro.get(m.bloque?.[i]), minuto: i, seg: m.seg?.[i] }))
+        .filter((p) => p.x != null && p.y != null && (p.seg ?? 0) >= 50 && (comp.etapa === "todas" || p.b?.fase === comp.etapa));
+      return { label: fechaLarga(a.fecha), data, backgroundColor: colorDe.get(a.id), borderColor: colores().superficie,
+        borderWidth: 1, pointRadius: 4, pointHoverRadius: 6 };
+    });
+    const etapa = comp.etapa === "todas" ? "toda la sesión" : comp.etapa.toLowerCase();
+    nota.textContent = `Cada punto es un minuto completo (${etapa}). Más arriba = más rápido, más a la izquierda = menos pulsaciones: ` +
+      "arriba a la izquierda es mejor." + (elegidas.length > MAX_DISPERSION ? ` Se muestran las ${MAX_DISPERSION} sesiones elegidas más recientes.` : "");
+    if (!datasets.some((d) => d.data.length)) return sinDatos("g-carrera-dispersion", "Sin minutos para estas sesiones");
+    const rangoY = rangoRobusto(datasets.flatMap((d) => d.data.map((p) => p.y)));
+    grafico("g-carrera-dispersion", {
+      type: "scatter",
+      data: { datasets },
+      options: {
+        scales: {
+          x: { grid: { color: colores().grilla }, border: { display: false }, title: { display: true, text: "FC (ppm)" } },
+          y: ejeY({ reverse: true, min: rangoY?.min, max: rangoY?.max,
+                    ticks: { maxTicksLimit: 7, callback: (v, i, t) => (rangoY && (i === 0 || i === t.length - 1) ? "" : `${ritmo(v)} /km`) } }),
+        },
+        plugins: {
+          legend: { display: datasets.length > 1, position: "top" },
+          tooltip: { callbacks: { label: (i) => ` ${i.dataset.label}, min ${i.raw.minuto + 1}: ${ritmo(i.raw.y)} /km a ${i.raw.x} ppm` } },
+        },
+      },
+    });
+  }
+
+  /** Promedio de una columna de los bloques, ponderado por la duración de cada uno. */
+  function ponderado(bloques, clave) {
+    const con = bloques.filter((b) => b[clave] != null);
+    return con.length ? suma(con, (b) => b[clave] * b.duracion_s) / suma(con, (b) => b.duracion_s) : null;
+  }
+
+  /** Plugin: línea horizontal de referencia (p. ej., 5 % de deriva). */
+  const LINEA_REFERENCIA = {
+    id: "lineaReferencia",
+    afterDatasetsDraw(chart) {
+      const op = chart.options.plugins.lineaReferencia;
+      if (!op) return;
+      const { ctx, chartArea: area, scales: { y } } = chart;
+      const py = Math.round(y.getPixelForValue(op.valor)) + 0.5;
+      if (py < area.top || py > area.bottom) return;
+      ctx.save();
+      ctx.strokeStyle = op.color; ctx.setLineDash([5, 4]); ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(area.left, py); ctx.lineTo(area.right, py); ctx.stroke();
+      ctx.setLineDash([]); ctx.fillStyle = op.color; ctx.font = `11px ${Chart.defaults.font.family}`;
+      ctx.textAlign = "right"; ctx.textBaseline = "bottom"; ctx.fillText(op.texto, area.right - 2, py - 2);
+      ctx.restore();
+    },
+  };
 
   /** Bloques de la etapa elegida (o todos) de una sesión. */
   const bloquesDeEtapa = (a) => a.bloques.filter((b) =>
@@ -257,12 +490,14 @@
     const fcU = bu.some((b) => b.fc_media != null)
       ? suma(bu.filter((b) => b.fc_media != null), (b) => b.fc_media * b.duracion_s) / suma(bu.filter((b) => b.fc_media != null), (b) => b.duracion_s)
       : null;
+    const pot = ponderado(bloques, "potencia_w");
+    const potU = ponderado(bu, "potencia_w");
     const ultimaTxt = (v) => (elegidas.length > 1 && v ? ` · última: ${v}` : "");
     kpis("carrera-kpis", [
       { etiqueta: "Ritmo medio", valor: dist ? ritmo((dur / dist) * 1000) : "—", unidad: "/km",
         delta: alcance + ultimaTxt(distU ? `${ritmo((durU / distU) * 1000)} /km` : "") },
       { etiqueta: "FC media", valor: numero(fc), unidad: "ppm", delta: alcance + ultimaTxt(fcU ? `${numero(fcU)} ppm` : "") },
-      { etiqueta: "Potencia media", valor: "—", unidad: "W", delta: "Sin datos: el reloj no registra potencia de carrera" },
+      { etiqueta: "Potencia media", valor: numero(pot), unidad: "W", delta: alcance + ultimaTxt(potU ? `${numero(potU)} W` : "") },
       { etiqueta: "Distancia", valor: numero(dist / 1000, 1), unidad: "km", delta: alcance },
     ]);
   }
