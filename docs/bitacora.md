@@ -5,6 +5,37 @@ Una entrada por etapa, de la más reciente a la más antigua.
 
 ---
 
+## Etapa 2 (datos): grabación minuto a minuto (11/10/2026)
+
+### Qué hice
+- Verifiqué que la API de Intervals devuelve la grabación completa de cada actividad,
+  segundo a segundo: FC, velocidad, distancia, altitud, cadencia, zancada, tiempo de
+  contacto, oscilación vertical y potencia. En el pádel solo llega la FC.
+- Agregué `datos/minutos.csv`: una fila por minuto de cada sesión, resumida de esa
+  grabación (clave: actividad + minuto). Lo cargan el histórico y el diario, así que el
+  workflow lo actualiza solo sin cambios en GitHub Actions.
+- Agregué la columna `potencia_w` a `actividades.csv` y a `bloques.csv`.
+
+### Hallazgos
+- **El reloj sí registra potencia de carrera**, pero Intervals no la promedia (los campos
+  de potencia media llegan vacíos). La calculo yo desde la grabación, sin contar las pausas.
+- **Dentro de un bloque el ritmo varía bastante.** En el bloque principal del 22/09
+  (promedio 6:39 /km), los minutos van de 6:23 a 7:12 y la FC sube de 150 a 163.
+
+### Decisiones
+- **Resumir por minuto y no guardar segundo a segundo**: unas 45 filas por corrida en lugar
+  de unas 2700, suficiente para ver la curva dentro de cada bloque.
+- **No descargar la posición GPS.** El repositorio es público y los recorridos muestran
+  desde dónde salgo a correr. Se piden a la API solo los datos necesarios.
+- **Para el ritmo de cada minuto, las pausas cuentan** (si paré, el minuto sale más lento).
+  Para la cadencia, la potencia y la FC, las pausas no cuentan.
+
+### Problemas
+- **Algunos ritmos salían como `10:60`** en lugar de `11:00`: se redondeaban los segundos
+  después de separar los minutos. Lo corregí y volví a bajar todo el histórico.
+
+---
+
 ## Etapa 2: tablero web (28/09 – 11/10/2026)
 
 ### Qué hice
