@@ -30,7 +30,11 @@
       return;
     }
     const ordenadas = [...sesiones].reverse();
-    const clase = (c) => (c.num ? ' class="num"' : "");
+    // num: alineada a la derecha con cifras tabulares · fuerte: columna protagonista (peso 600)
+    const clase = (c) => {
+      const cl = [c.num && "num", c.fuerte && "fuerte"].filter(Boolean).join(" ");
+      return cl ? ` class="${cl}"` : "";
+    };
     t.innerHTML = `
       <thead><tr>${columnas.map((c) => `<th${clase(c)}>${escapar(c.titulo)}</th>`).join("")}</tr></thead>
       <tbody>${ordenadas.map((a) => `

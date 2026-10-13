@@ -256,7 +256,7 @@
       const t = tipografia();
       const { ctx } = chart;
       ctx.save();
-      ctx.font = `${t.chico}px ${t.familia}`;
+      ctx.font = t.chico.canvas;
       ctx.fillStyle = op.color;
       ctx.textAlign = "left";
       ctx.textBaseline = "bottom";

@@ -486,7 +486,7 @@
       ctx.save();
       ctx.strokeStyle = op.color; ctx.setLineDash([5, 4]); ctx.lineWidth = 1;
       ctx.beginPath(); ctx.moveTo(area.left, py); ctx.lineTo(area.right, py); ctx.stroke();
-      ctx.setLineDash([]); ctx.fillStyle = op.color; ctx.font = `11px ${Chart.defaults.font.family}`;
+      ctx.setLineDash([]); ctx.fillStyle = op.color; ctx.font = Tablero.graficos.tipografia().chico.canvas;
       ctx.textAlign = "right"; ctx.textBaseline = "bottom"; ctx.fillText(op.texto, area.right - 2, py - 2);
       ctx.restore();
     },
@@ -545,7 +545,8 @@
       ? (p.valor % 60 ? `${Math.floor(p.valor / 60)}′${String(p.valor % 60).padStart(2, "0")}″` : `${p.valor / 60}′`)
       : (p.valor >= 1000 ? `${numero(p.valor / 1000, p.valor % 1000 ? 1 : 0)} km` : `${p.valor} m`));
     const tramos = pasos.map((p, k) => ({
-      desde: inicios[k] / 60, hasta: (inicios[k] + anchos[k]) / 60, texto: p.fase, completo: `${p.fase} · ${objetivo(p)}`,
+      desde: inicios[k] / 60, hasta: (inicios[k] + anchos[k]) / 60,
+      texto: p.fase.toUpperCase(), completo: `${p.fase} · ${objetivo(p)}`.toUpperCase(),
     }));
     return { anchos, inicios, tramos, total: inicios.at(-1) + anchos.at(-1) };
   }
@@ -567,7 +568,10 @@
       }
       ctx.setLineDash([]);
       ctx.fillStyle = op.texto;
-      ctx.font = `11px ${Chart.defaults.font.family}`;
+      // Nombres de bloque en --t-etiqueta: mayúsculas con espaciado .06em
+      const et = Tablero.graficos.tipografia().etiqueta;
+      ctx.font = et.canvas;
+      ctx.letterSpacing = `${(et.size * 0.06).toFixed(2)}px`;
       ctx.textAlign = "center";
       ctx.textBaseline = "bottom";
       for (const t of op.tramos) {
@@ -733,13 +737,13 @@
 
     const fecha = { titulo: "Fecha", valor: (a) => `<span class="punto" style="background:${colorDe.get(a.id)}"></span>${fechaLarga(a.fecha)}` };
     const plantilla = { titulo: "Plantilla", valor: (a) => escapar(a.plantilla ?? "—") +
-      (a.ajuste_plantilla && a.ajuste_plantilla !== "exacta" ? ` <small class="texto-sec">(${a.ajuste_plantilla})</small>` : "") };
+      (a.ajuste_plantilla && a.ajuste_plantilla !== "exacta" ? ` <span class="marca-chica">${a.ajuste_plantilla}</span>` : "") };
     const columnas = conEtapa
       ? [
         fecha, plantilla,
         { titulo: "Km", num: true, valor: (a) => (enEtapa(a).dist ? numero(enEtapa(a).dist / 1000, 2) : "—") },
         { titulo: "Tiempo", num: true, valor: (a) => (enEtapa(a).dur ? duracion(enEtapa(a).dur) : "—") },
-        { titulo: "Ritmo", num: true, valor: (a) => ritmo(enEtapa(a).ritmo) },
+        { titulo: "Ritmo", num: true, fuerte: true, valor: (a) => ritmo(enEtapa(a).ritmo) },
         { titulo: "FC media", num: true, valor: (a) => numero(enEtapa(a).fc) },
         { titulo: "Potencia", num: true, valor: (a) => (enEtapa(a).pot != null ? `${numero(enEtapa(a).pot)} W` : "—") },
         { titulo: "Carga (sesión)", num: true, valor: (a) => a.carga ?? "—" },
@@ -748,8 +752,7 @@
         fecha, plantilla,
         { titulo: "Km", num: true, valor: (a) => numero(a.distancia_m / 1000, 2) },
         { titulo: "Tiempo", num: true, valor: (a) => duracion(a.duracion_s) },
-        { titulo: "Ritmo prom.", num: true, valor: (a) => ritmo(a.ritmo_s_km) },
-        { titulo: "Ritmo entren.", num: true, valor: (a) => (a.entrenamiento?.ritmo_s_km ? ritmo(a.entrenamiento.ritmo_s_km) : "—") },
+        { titulo: "Ritmo entren.", num: true, fuerte: true, valor: (a) => (a.entrenamiento?.ritmo_s_km ? ritmo(a.entrenamiento.ritmo_s_km) : "—") },
         { titulo: "FC media / máx", num: true, valor: (a) => `${a.fc_media ?? "—"} / ${a.fc_max ?? "—"}` },
         { titulo: "Potencia", num: true, valor: (a) => (a.potencia_w != null ? `${numero(a.potencia_w)} W` : "—") },
         { titulo: "Carga", num: true, valor: (a) => a.carga ?? "—" },

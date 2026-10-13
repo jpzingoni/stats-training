@@ -167,7 +167,7 @@
       });
       ctx.globalAlpha = 1;
       ctx.fillStyle = Chart.defaults.color;
-      ctx.font = `10px ${Chart.defaults.font.family}`;
+      ctx.font = Tablero.graficos.tipografia().etiqueta.canvas;   // "Z1"…"Z7" en --t-etiqueta
       ctx.textAlign = "right"; ctx.textBaseline = "middle";
       inferior = y.min;
       op.limites.forEach((sup, z) => {

@@ -5,6 +5,37 @@ Una entrada por etapa, de la más reciente a la más antigua.
 
 ---
 
+## Tablero v1.3: Montserrat y sistema tipográfico único (13/10/2026)
+
+### Qué hice
+- Cambié la tipografía a **Montserrat** (400, 500, 600 y 700, incluidas en
+  `app/vendor/fuentes/`, licencia OFL) y saqué Barlow. Una sola familia para todo: títulos,
+  texto, números, ejes y tooltips.
+- Definí en `DESIGN.md` **un token por rol** (`--t-hero`, `--t-kpi`, `--t-pagina`,
+  `--t-titulo`, `--t-base`, `--t-control`, `--t-chico`, `--t-eje`, `--t-etiqueta`), cada uno con
+  peso, tamaño e interlineado juntos, y reglas para respetarlos (sin tamaños sueltos, cifras
+  tabulares en los números, máximo 3 roles por tarjeta, mayúsculas solo en etiquetas, 700
+  solo en página y protagonista).
+- Migré **todas las vistas**: el CSS ya no tiene ningún `font-size` suelto (pasó de 19 tamaños
+  distintos a 9 roles) y los gráficos leen la tipografía de los tokens
+  (`Tablero.graficos.tipografia()`), incluidos los textos dibujados en Carrera, Pádel y Este mes.
+- De paso: radios llevados a los dos tokens en todas las vistas y el selector "Etapa" con el
+  mismo estilo que los demás controles.
+
+### Decisiones
+- **Escala 1px más chica que la anterior**: Montserrat es ancha y de letra alta; con los
+  tamaños de antes no entraban la portada ni la tabla de Carrera en una pantalla.
+- **Sin fuente aparte para los números**: Montserrat trae cifras de ancho fijo
+  (`tabular-nums`); verificado que "1111" y "0000" miden lo mismo.
+- **Tabla de Carrera con 8 columnas** (la guía pone ese máximo): "Ritmo prom." pasó al detalle
+  de la sesión; el ritmo de entrenamiento va en 600 y "aproximada" es una marca chica.
+
+### Pendiente
+- En el Calendario, la columna "Semana" parte "13 h 38 min" en dos líneas (Montserrat es más
+  ancha).
+
+---
+
 ## Tablero v1.2: rediseño de "Este mes" según DESIGN.md (12/10/2026)
 
 ### Qué hice

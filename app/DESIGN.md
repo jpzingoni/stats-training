@@ -23,45 +23,51 @@ Hay tres ideas que ordenan todo:
 
 ## 1. Tipografía
 
-| Rol | Fuente | Pesos |
-|---|---|---|
-| Interfaz (`--fuente`) | **Barlow** | 400, 500, 600 |
-| Números (`--fuente-num`) | **Barlow Semi Condensed** | 500, 600 |
+**Una sola familia para todo: Montserrat** (`--fuente`). Títulos de página, de tarjetas y de
+gráficos, texto, números, ejes y tooltips usan la misma letra. No hay una fuente aparte para
+los números: Montserrat trae cifras de ancho fijo y se activan con `tabular-nums`.
 
-- Las fuentes se **incluyen dentro de `app/vendor/fuentes/`** (woff2 + `@font-face`), no se
-  cargan desde Google Fonts. Así funcionan con `file://`, sin conexión y en Cloudflare.
+- Pesos incluidos: **400** (texto), **500** (controles y ejes), **600** (títulos, etiquetas y
+  valores) y **700** (solo título de página y dato protagonista).
+- Las fuentes se **incluyen dentro de `app/vendor/fuentes/`** (woff2 + `@font-face`, licencia
+  OFL), no se cargan desde Google Fonts. Así funcionan con `file://`, sin conexión y en Cloudflare.
 - Respaldo: `system-ui, sans-serif`.
-- `.num` y todo valor numérico (KPI, celdas numéricas de tabla, ejes de gráficos) llevan
-  `font-family: var(--fuente-num)` y `font-variant-numeric: tabular-nums`.
-- En Chart.js: `Chart.defaults.font.family` = `--fuente-num` (los ejes son casi todo números).
+- Montserrat es ancha y de letra alta: por eso la escala es más chica que la de otras familias.
 
-### Escala (no se usan otros tamaños)
+### La variable: un token por rol
 
-| Token | Tamaño / interlineado | Peso | Uso |
-|---|---|---|---|
-| `--tx-etiqueta` | 11px / 16px, MAYÚSCULAS, `letter-spacing: .06em` | 600 | etiqueta de KPI, encabezado de tabla, grupo de navegación, nombre de bloque en gráficos |
-| `--tx-chico` | 13px / 18px | 400 | subtextos, contexto de KPI, ejes, leyendas, tooltips |
-| `--tx-base` | 15px / 22px | 400 | cuerpo, filas de tabla, navegación, controles |
-| `--tx-titulo` | 17px / 24px | 600 | título de tarjeta |
-| `--tx-pagina` | 24px / 30px | 600 | título de vista ("Carrera", "Octubre 2026") |
-| `--tx-kpi` | 30px / 34px | 600 · num | valor de KPI |
-| `--tx-hero` | 44px / 48px | 600 · num | **un** dato protagonista por vista |
+Cada rol tiene **un único token** con peso, tamaño e interlineado juntos, y se aplica siempre
+con `font: var(--t-…)`. Así no se puede mezclar el tamaño de un rol con el peso de otro.
 
-Equivalencias para migrar `estilos.css` (hoy tiene 17 tamaños distintos):
+| Token | `font` (peso tamaño/interlineado) | Espaciado | Mayúsculas | Se usa en |
+|---|---|---|---|---|
+| `--t-hero` | 700 40px/44px | −0,02em | no | **un** dato protagonista por vista |
+| `--t-kpi` | 600 28px/32px | −0,01em | no | valor de cada tarjeta |
+| `--t-pagina` | 700 22px/28px | −0,01em | no | título de vista y del mes ("Octubre 2026") |
+| `--t-titulo` | 600 16px/22px | 0 | no | título de tarjeta **y de gráfico** |
+| `--t-base` | 400 14px/20px | 0 | no | texto, filas de tabla, navegación, unidades |
+| `--t-control` | 500 13px/20px | 0 | no | botones, selectores, segmentados |
+| `--t-chico` | 400 12px/16px | 0 | no | contexto de tarjetas, subtextos, leyendas, tooltips |
+| `--t-eje` | 500 11px/14px | 0 | no | marcas de los ejes de los gráficos |
+| `--t-etiqueta` | 600 10px/14px | +0,06em | **sí** | etiqueta de tarjeta, encabezado de tabla, grupo de navegación, nombre de bloque en gráficos |
 
-| Hoy | Pasa a |
-|---|---|
-| 0.7 · 0.72 · 0.74 · 0.75rem | `--tx-etiqueta` si es etiqueta; si no, `--tx-chico` |
-| 0.76 · 0.78 · 0.8 · 0.82 · 0.85rem | `--tx-chico` |
-| 0.9 · 1rem · 15px | `--tx-base` |
-| 1.05 · 1.15 · 1.2rem | `--tx-titulo` |
-| 1.35rem | `--tx-pagina` |
-| 1.4 · 1.7rem | `--tx-kpi` |
-| 10px · 11px en canvas (carrera.js, padel.js) | `--tx-etiqueta` o `--tx-chico`, leído del CSS |
+### Reglas (se respetan siempre)
+
+1. **Ningún `font-size` ni `font-family` suelto.** Todo texto usa uno de los 9 tokens, también
+   el que se dibuja en los gráficos: Chart.js y los plugins leen los tokens del CSS
+   (`Tablero.graficos.tipografia()`), nada de `11px` escrito en JS.
+2. **Números con cifras de ancho fijo** (`font-variant-numeric: tabular-nums`, clase `.num`):
+   valores de tarjetas, celdas numéricas, ejes y tooltips.
+3. **Máximo 3 roles por tarjeta** (por ejemplo, título + valor + chico).
+4. **Mayúsculas solo en `--t-etiqueta`.**
+5. **Peso 700 solo en `--t-pagina` y `--t-hero`.** El único énfasis permitido fuera del token
+   es `font-weight: 600` sobre `--t-base` o `--t-chico` (por ejemplo, la columna protagonista
+   de una tabla o el nombre de un deporte en una lista).
+6. `/revisar-diseno` marca como error cualquier tamaño, peso o familia fuera de estos tokens.
 
 ### Formato de números (ya resuelto en `formato.js`, mantenerlo)
 Miles con punto (130.588), decimales con coma (6,69), ritmo m:ss (6:38). La unidad va
-pegada al número, en `--tx-base` y `--texto-sec` (en tablas, la unidad va en el encabezado,
+pegada al número, en `--t-base` y `--texto-sec` (en tablas, la unidad va en el encabezado,
 no en cada celda).
 
 ---
@@ -115,7 +121,7 @@ codifica nada y repite los colores de los deportes. Se reemplaza por **orden tem
   FC en reposo +4,4 → `--mal`. Pasos +1.530 → `--bien`. Ritmo 6:38 → 6:30 → `--bien`.
 - Cada métrica declara su sentido en un solo lugar (`formato.js`): `mejorSi: "sube" | "baja" | null`.
   Con `null` (por ejemplo, la distancia de una sesión) la variación va en `--texto-sec`.
-- Formato: `▲ 1.530 vs. sep` / `▼ 28 min vs. sep`, en `--tx-chico`.
+- Formato: `▲ 1.530 vs. sep` / `▼ 28 min vs. sep`, en `--t-chico`.
 - `.aviso-error` usa `--mal` (hoy tiene `#d03b3b` escrito a mano).
 
 ---
@@ -143,41 +149,43 @@ codifica nada y repite los colores de los deportes. Se reemplaza por **orden tem
 Selects, desplegables (`.desplegable`), segmentados (`.segmentado`, `.filtro`), botones de
 calendario y botón de tema comparten:
 
-- Alto 32px, `--radio-chico`, `1px solid var(--borde)`, fondo `--superficie`, `--tx-base`.
+- Alto 32px, `--radio-chico`, `1px solid var(--borde)`, fondo `--superficie`, `--t-control`.
 - Activo (`aria-pressed="true"`): fondo `--tinta`, texto `--fondo`.
 - **No hay `<select>` nativo sin estilo.** "Etapa" en Carrera pasa a `.desplegable` o se
   le aplica `appearance: none` con la misma flecha `▾`.
 - El segmentado es un grupo unido (botones pegados, un solo borde exterior), no píldoras sueltas.
 
 ### Encabezado de vista
-`--tx-pagina` para el título. Debajo, en `--tx-chico` `--texto-sec`, el contexto que hoy se
+`--t-pagina` para el título. Debajo, en `--t-chico` `--texto-sec`, el contexto que hoy se
 repite en cada KPI ("8 sesiones · toda la sesión · 26 ago – 29 sep").
 
 ### KPI
 ```
-ETIQUETA                       (--tx-etiqueta, --texto-sec)
-8:24 /km                       (--tx-kpi num) (unidad --tx-base --texto-sec)
-▲ 0:12 vs. anteriores · última 7:13   (--tx-chico; flecha en --bien/--mal)
+ETIQUETA                       (--t-etiqueta, --texto-sec)
+8:24 /km                       (--t-kpi, cifras tabulares) (unidad --t-base --texto-sec)
+▲ 0:12 vs. anteriores · última 7:13   (--t-chico; flecha en --bien/--mal)
 ```
 - Como máximo una línea de contexto. Lo que es igual para todos los KPI va en el encabezado
   de la vista.
-- En "Este mes", el primer KPI puede ir en `--tx-hero` como dato protagonista.
+- En "Este mes", el primer KPI puede ir en `--t-hero` como dato protagonista.
 - **En celular** (KPI en 2 × 2), el valor no se parte: si no entra, la unidad baja a la línea
   siguiente. Las duraciones largas se escriben compactas (`7:16` con unidad `h`, no
   `7 h 16 min`).
 
 ### Tabla
-- Encabezados en `--tx-etiqueta`, con la unidad en el encabezado ("RITMO /km", "FC lpm").
-- Celdas numéricas en `--fuente-num`, alineadas a la derecha.
+- Encabezados en `--t-etiqueta`, con la unidad en el encabezado ("RITMO /km", "FC lpm").
+- Celdas numéricas con cifras de ancho fijo (`.num`), alineadas a la derecha.
 - Filas de 40px, separador `--grilla`, hover `--seleccion`.
 - Máximo 8 columnas visibles en escritorio. Lo demás va al diálogo de detalle. Prioridad
   en Carrera: fecha · plantilla · km · tiempo · ritmo entrenamiento · FC media · carga.
 - La columna "protagonista" (ritmo de entrenamiento) va en peso 600.
-- "(aproximada)" como marca chica `--tx-etiqueta` `--texto-muted`, no como texto entre paréntesis.
+- "(aproximada)" como marca chica `--t-etiqueta` `--texto-muted`, no como texto entre paréntesis.
 
 ### Gráficos (Chart.js)
 - Leyenda: no hay leyenda si hay una sola serie. Si hay varias, mejor etiqueta directa al
-  final de la línea. Si no entra, va la leyenda arriba a la izquierda, en `--tx-chico`.
+  final de la línea. Si no entra, va la leyenda arriba a la izquierda, en `--t-chico`.
+- Ejes en `--t-eje`; tooltips en `--t-chico`; nombres de bloque dibujados en el gráfico en
+  `--t-etiqueta`.
 - Cuadrícula: solo horizontal, `--grilla`, máximo 4 o 5 líneas. Eje X sin cuadrícula.
 - Unidades: van en el título del eje o en el título del gráfico, no en cada marca
   (marcas "6:40", no "6:40 /km").
@@ -185,7 +193,7 @@ ETIQUETA                       (--tx-etiqueta, --texto-sec)
 - Promedios y referencias: línea punteada `--texto-muted` 1px con etiqueta directa
   ("prom. 11.872").
 - **Bloques de plantilla**: bandas de fondo alternadas (`--superficie` / `--superficie-2`)
-  en lugar de líneas punteadas, con el nombre arriba en `--tx-etiqueta`. El bloque de
+  en lugar de líneas punteadas, con el nombre arriba en `--t-etiqueta`. El bloque de
   Entrenamiento puede llevar un fondo apenas más marcado.
 - Barras: máximo 36px de ancho y radio superior de 2px. El valor de "hoy" o del período
   actual va en el color pleno y el resto al 60%.
@@ -210,9 +218,10 @@ ETIQUETA                       (--tx-etiqueta, --texto-sec)
   no un texto.
 
 ### Navegación lateral
-- Grupos ("ENTRENAMIENTOS") en `--tx-etiqueta` `--texto-muted`.
+- Grupos ("ENTRENAMIENTOS") en `--t-etiqueta` `--texto-muted`.
 - Íconos SVG de trazo 1,75px y 18px, siempre `currentColor`. No se usan emojis.
-- Marca del sitio: título en `--tx-titulo`; "actualizado…" en `--tx-chico` `--texto-muted`.
+- Marca del sitio: título en `--t-titulo`; "actualizado…" en `--t-chico` `--texto-muted`.
+- Ítems de navegación en `--t-base`.
 
 ---
 
@@ -228,15 +237,22 @@ ETIQUETA                       (--tx-etiqueta, --texto-sec)
 
 ---
 
-## 6. Tokens nuevos (se agregan a los existentes de `estilos.css`)
+## 6. Tokens (además de los colores de `estilos.css`)
 
 ```css
 :root {
-  --fuente: "Barlow", system-ui, sans-serif;
-  --fuente-num: "Barlow Semi Condensed", "Barlow", system-ui, sans-serif;
+  --fuente: "Montserrat", system-ui, sans-serif;
 
-  --tx-etiqueta: 11px; --tx-chico: 13px; --tx-base: 15px; --tx-titulo: 17px;
-  --tx-pagina: 24px;   --tx-kpi: 30px;   --tx-hero: 44px;
+  /* Tipografía: un token por rol (font: peso tamaño/interlineado familia) */
+  --t-hero:     700 40px/44px var(--fuente);
+  --t-kpi:      600 28px/32px var(--fuente);
+  --t-pagina:   700 22px/28px var(--fuente);
+  --t-titulo:   600 16px/22px var(--fuente);
+  --t-base:     400 14px/20px var(--fuente);
+  --t-control:  500 13px/20px var(--fuente);
+  --t-chico:    400 12px/16px var(--fuente);
+  --t-eje:      500 11px/14px var(--fuente);
+  --t-etiqueta: 600 10px/14px var(--fuente);   /* + uppercase, letter-spacing .06em */
 
   --e1: 4px; --e2: 8px; --e3: 12px; --e4: 16px; --e5: 24px; --e6: 32px;
   --radio: 10px; --radio-chico: 6px;

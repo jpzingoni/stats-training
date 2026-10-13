@@ -23,15 +23,30 @@
     };
   }
 
-  /** Tipografía de los gráficos leída de los tokens (nada de tamaños fijos en JS). */
+  /**
+   * Tipografía de los gráficos leída de los tokens --t-* del CSS (DESIGN.md §1): nada de
+   * tamaños ni fuentes escritos en JS. Cada rol devuelve
+   *   { family, size, weight, lineHeight }  → para Chart.js (font: {...})
+   *   canvas                                → "600 10px Montserrat, …" para ctx.font
+   * Uso: tipografia().eje, tipografia().chico, tipografia().etiqueta…
+   */
+  const ROLES = ["hero", "kpi", "pagina", "titulo", "base", "control", "chico", "eje", "etiqueta"];
   function tipografia() {
     const s = getComputedStyle(document.documentElement);
-    const v = (n) => s.getPropertyValue(n).trim();
-    return {
-      familia: v("--fuente-num"), familiaTexto: v("--fuente"),
-      chico: parseFloat(v("--tx-chico")), etiqueta: parseFloat(v("--tx-etiqueta")),
-    };
+    const roles = {};
+    for (const rol of ROLES) {
+      // El token es "peso tamaño/interlineado familia" (con la familia ya resuelta)
+      const m = /^(\d+)\s+([\d.]+)px\/([\d.]+)px\s+(.+)$/.exec(s.getPropertyValue(`--t-${rol}`).trim());
+      if (!m) continue;
+      const [, weight, size, lineHeight, family] = m;
+      roles[rol] = {
+        family, size: Number(size), weight, lineHeight: Number(lineHeight) / Number(size),
+        canvas: `${weight} ${size}px ${family}`,
+      };
+    }
+    return roles;
   }
+  const fuenteChart = ({ family, size, weight, lineHeight }) => ({ family, size, weight, lineHeight });
 
   /** "#2a78d6" + 0.6 → "rgba(42, 120, 214, 0.6)" (para atenuar barras sin inventar colores). */
   function conAlfa(color, alfa) {
@@ -44,9 +59,8 @@
   function aplicarEstiloGlobal() {
     const c = colores();
     const t = tipografia();
-    // Los ejes son casi todo números: fuente condensada; tamaño --tx-chico (DESIGN.md)
-    Chart.defaults.font.family = t.familia;
-    Chart.defaults.font.size = t.chico;
+    // Por defecto, todo texto de Chart.js es de eje (--t-eje); leyendas y tooltips, --t-chico
+    Chart.defaults.font = fuenteChart(t.eje);
     Chart.defaults.color = c.muted;
     Chart.defaults.borderColor = c.grilla;
     Chart.defaults.maintainAspectRatio = false;
@@ -54,7 +68,7 @@
     // cuadros posteriores y ahí fallaba en algunos navegadores)
     Chart.defaults.animation = false;
     Chart.defaults.plugins.legend.labels.boxWidth = 10;
-    Chart.defaults.plugins.legend.labels.font = { family: t.familiaTexto, size: t.chico };
+    Chart.defaults.plugins.legend.labels.font = fuenteChart(t.chico);
     Chart.defaults.plugins.legend.labels.boxHeight = 10;
     Chart.defaults.plugins.legend.labels.color = c.textoSec;
     Chart.defaults.plugins.legend.align = "start";
@@ -62,7 +76,7 @@
     Object.assign(Chart.defaults.plugins.tooltip, {
       backgroundColor: c.superficie, titleColor: c.texto, bodyColor: c.textoSec,
       borderColor: c.eje, borderWidth: 1, padding: 8, boxPadding: 4, usePointStyle: true, cornerRadius: 6,
-      titleFont: { family: t.familiaTexto, size: t.chico, weight: "600" }, bodyFont: { family: t.familia, size: t.chico },
+      titleFont: { ...fuenteChart(t.chico), weight: "600" }, bodyFont: fuenteChart(t.chico),
     });
     Chart.defaults.elements.line.borderWidth = 2;
     Chart.defaults.elements.point.radius = 3;
