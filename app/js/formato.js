@@ -71,8 +71,32 @@
   /** "2026-10" → "Octubre 2026" */
   const nombreMes = (mes) => `${MESES_LARGOS[Number(mes.slice(5, 7)) - 1]} ${mes.slice(0, 4)}`;
 
+  // ─── Variaciones ─────────────────────────────────────────────────────────
+  /**
+   * Si a la persona le conviene que la métrica suba o baje (DESIGN.md §2 "Variaciones").
+   * null: neutra (la variación no se pinta de bueno ni de malo).
+   */
+  const MEJOR_SI = {
+    pasos: "sube", sueno: "sube", fc_reposo: "baja", ritmo: "baja", eficiencia: "sube",
+    potencia: "sube", distancia: null, actividades: null,
+  };
+
+  /**
+   * Variación entre dos valores: { flecha: "▲"|"▼"|"=", texto, tono: "bien"|"mal"|null }.
+   * formato da el texto del valor absoluto de la diferencia.
+   */
+  function variacion(actual, anterior, metrica, formato = (x) => numero(x)) {
+    if (actual == null || anterior == null) return null;
+    const d = actual - anterior;
+    if (Math.abs(d) < 1e-9) return { flecha: "=", texto: "igual", tono: null };
+    const sube = d > 0;
+    const sentido = MEJOR_SI[metrica] ?? null;
+    const tono = sentido == null ? null : (sentido === "sube") === sube ? "bien" : "mal";
+    return { flecha: sube ? "▲" : "▼", texto: formato(Math.abs(d)), tono };
+  }
+
   Tablero.formato = {
     numero, ritmo, duracion, ts, iso, sumarDias, lunesDe, fechaCorta, fechaLarga, mesCorto, km, suma, promedio,
-    MESES_LARGOS, hoyLocal, sumarMes, ultimoDiaMes, nombreMes,
+    MESES_LARGOS, hoyLocal, sumarMes, ultimoDiaMes, nombreMes, MEJOR_SI, variacion,
   };
 })();

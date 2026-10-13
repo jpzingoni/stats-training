@@ -4,9 +4,9 @@
   const Tablero = (window.Tablero ??= { secciones: {} });
 
   const { kpis, escapar } = Tablero.componentes;
-  const { GRUPOS, VAR_GRUPO, grupoDe, grafico, sinDatos, colores, ejeY, estiloBarra } = Tablero.graficos;
+  const { GRUPOS, VAR_GRUPO, grupoDe, grafico, sinDatos, colores, ejeY, estiloBarra, tipografia, conAlfa } = Tablero.graficos;
   const { numero, duracion, suma, promedio, sumarDias, lunesDe, fechaLarga,
-    MESES_LARGOS, hoyLocal, sumarMes, ultimoDiaMes, nombreMes } = Tablero.formato;
+    MESES_LARGOS, hoyLocal, sumarMes, ultimoDiaMes, nombreMes, variacion } = Tablero.formato;
 
   const estado = { mes: null, ctx: null, enlazado: false, metrica: null };
   const DIAS = ["L", "M", "X", "J", "V", "S", "D"];
@@ -74,27 +74,34 @@
     document.getElementById("inicio-anterior").disabled = mes <= limites.min;
     document.getElementById("inicio-siguiente").disabled = mes >= limites.max;
 
-    // Comparación con el mes anterior y cuántos días del mes tienen dato (hay días sin reloj)
-    const pie = (dias, actual, anterior, formato) => {
-      const cobertura = `${dias} de ${m.transcurridos} días con dato`;
-      if (actual == null || anterior == null) return cobertura;
-      const d = actual - anterior;
-      const signo = d > 0 ? "+" : d < 0 ? "−" : "±";
-      return `${cobertura} · ${signo}${formato(Math.abs(d))} vs. ${nombreAnt}`;
+    // Variación contra el mes anterior (flecha en verde o rojo según convenga) y cuántos
+    // días del mes tienen dato, porque hay días sin reloj
+    const mesAntCorto = nombreAnt.slice(0, 3);
+    const contra = (actual, anterior, metrica, formato) => {
+      const v = variacion(actual, anterior, metrica, formato);
+      return v && { ...v, texto: `${v.texto} vs. ${mesAntCorto}` };
     };
+    const cobertura = (dias) => `${dias}/${m.transcurridos} días`;
     kpis("inicio-kpis", [
-      { etiqueta: "Pasos del mes", valor: numero(m.pasosTotal), delta: `${m.pasosDias} de ${m.transcurridos} días con dato` },
-      { etiqueta: "Pasos por día", valor: numero(m.pasosProm), unidad: "promedio",
-        delta: pie(m.pasosDias, m.pasosProm, p?.pasosProm, (x) => numero(x)) },
-      { etiqueta: "Sueño", valor: m.suenoProm != null ? horasMin(m.suenoProm) : "—", unidad: "promedio",
-        delta: pie(m.suenoDias, m.suenoProm, p?.suenoProm, (x) => `${numero(x * 60)} min`) },
-      { etiqueta: "FC en reposo", valor: numero(m.fcProm), unidad: "ppm promedio",
-        delta: pie(m.fcDias, m.fcProm, p?.fcProm, (x) => `${numero(x, 1)} ppm`) },
+      { etiqueta: "Pasos del mes", valor: numero(m.pasosTotal), protagonista: true,
+        delta: `${m.pasosDias}/${m.transcurridos} días con dato` },
+      { etiqueta: "Pasos por día", valor: numero(m.pasosProm),
+        variacion: contra(m.pasosProm, p?.pasosProm, "pasos"), delta: cobertura(m.pasosDias) },
+      { etiqueta: "Sueño promedio", valor: m.suenoProm != null ? horasCompacto(m.suenoProm) : "—", unidad: "h",
+        variacion: contra(m.suenoProm, p?.suenoProm, "sueno", (x) => `${numero(x * 60)} min`), delta: cobertura(m.suenoDias) },
+      { etiqueta: "FC en reposo promedio", valor: numero(m.fcProm), unidad: "ppm",
+        variacion: contra(m.fcProm, p?.fcProm, "fc_reposo", (x) => numero(x, 1)), delta: cobertura(m.fcDias) },
     ]);
 
     renderActividades(m, p, nombreAnt);
-    renderMiniCalendario(m);
+    renderMiniCalendario(ctx, m);
     renderDiario(ctx, m);
+  }
+
+  /** 7.27 → "7:16" (horas y minutos, compacto para la tarjeta) */
+  function horasCompacto(h) {
+    const min = Math.round(h * 60);
+    return `${Math.floor(min / 60)}:${String(min % 60).padStart(2, "0")}`;
   }
 
   /** 7.47 → "7 h 28 min" */
@@ -126,7 +133,12 @@
         </li>`).join("")}</ul>` : '<p class="texto-sec">Todavía no hay actividades este mes.</p>'}`;
   }
 
-  function renderMiniCalendario(m) {
+  /** Nivel de carga del día (mismos cortes que el calendario del Resumen): 0 = sin carga, 1…5. */
+  const CORTES_CARGA = [1, 30, 60, 90, 120];
+  const nivelCarga = (carga) => CORTES_CARGA.filter((u) => (carga ?? 0) >= u).length;
+
+  function renderMiniCalendario(ctx, m) {
+    const cargaPorDia = new Map(ctx.todo.bienestar.map((d) => [d.fecha, d.carga_dia]));
     const actPorDia = new Map();
     for (const a of m.actividades) {
       if (!actPorDia.has(a.fecha)) actPorDia.set(a.fecha, []);
@@ -138,7 +150,9 @@
       if (f < m.desde) { celdas.push('<span class="mini-dia fuera"></span>'); continue; }
       const acts = actPorDia.get(f) ?? [];
       const futuro = f > m.hasta;
-      const clases = ["mini-dia", acts.length && "activo", futuro && "futuro", f === hoy && "hoy"].filter(Boolean).join(" ");
+      // Días con actividad: fondo según la carga (al menos el nivel 1, aunque la carga sea ~0)
+      const nivel = futuro ? 0 : Math.max(nivelCarga(cargaPorDia.get(f)), acts.length ? 1 : 0);
+      const clases = ["mini-dia", nivel && `nivel-${nivel}`, futuro && "futuro", f === hoy && "hoy"].filter(Boolean).join(" ");
       const detalle = acts.map((a) => `${a.categoria}${a.subtipo ? ` · ${a.subtipo}` : ""} (${duracion(a.duracion_s)})`).join(", ");
       const titulo = `${fechaLarga(f)}: ${futuro ? "sin datos todavía" : detalle || "sin actividad"}`;
       // Un punto por tipo de actividad del día, con su color
@@ -146,6 +160,10 @@
       celdas.push(`<span class="${clases}" title="${escapar(titulo)}" aria-label="${escapar(titulo)}">
         <b>${Number(f.slice(8, 10))}</b>${puntos ? `<span class="mini-puntos">${puntos}</span>` : ""}</span>`);
     }
+    // Leyenda: los deportes que aparecen en el mes, con su color
+    const deportes = GRUPOS.filter((g) => m.actividades.some((a) => grupoDe(a) === g));
+    document.getElementById("inicio-mini-leyenda").innerHTML = deportes
+      .map((g) => `<span><i style="background:${VAR_GRUPO[g]}"></i>${escapar(g)}</span>`).join("");
     const cal = document.getElementById("inicio-mini-cal");
     cal.innerHTML = celdas.join("");
     // La fila de nombres + una fila por semana, repartiéndose el alto de la tarjeta
@@ -159,11 +177,13 @@
       titulo: "Pasos por día", etiqueta: "Pasos", clave: "pasos", promedio: (m) => m.pasosProm,
       eje: (v) => (v >= 1000 ? `${numero(v / 1000)} mil` : v),
       valor: (v) => `${numero(v)} pasos`,
+      prom: (v) => numero(v),
     },
     sueno: {
       titulo: "Horas de sueño por día", etiqueta: "Sueño", clave: "sueno_horas", promedio: (m) => m.suenoProm,
-      eje: (v) => `${v} h`,
+      eje: (v) => v,                      // la unidad ya está en el título ("Horas de sueño…")
       valor: (v) => horasMin(v),
+      prom: (v) => horasCompacto(v),
     },
   };
 
@@ -187,17 +207,21 @@
       return sinDatos("g-inicio-pasos", `Sin datos de ${met.etiqueta.toLowerCase()} este mes`);
     }
     const c = colores();
+    // El último día con dato va en color pleno; el resto, al 60 % (DESIGN.md §4 Barras)
+    const ultimo = valores.reduce((u, v, i) => (v != null ? i : u), -1);
+    const colorBarras = valores.map((_, i) => (i === ultimo ? c.serie[0] : conAlfa(c.serie[0], 0.6)));
     grafico("g-inicio-pasos", {
       type: "bar",
       data: {
         labels: dias.map((f) => Number(f.slice(8, 10))),
         datasets: [
-          { type: "bar", label: met.etiqueta, data: valores, ...estiloBarra(c.serie[0]), order: 1 },
-          // Promedio de los días con dato, como referencia
+          { type: "bar", label: met.etiqueta, data: valores, ...estiloBarra(colorBarras), order: 1 },
+          // Promedio de los días con dato: referencia punteada con etiqueta directa
           { type: "line", label: "Promedio", data: dias.map((f) => (f <= m.hasta ? met.promedio(m) : null)),
-            borderColor: c.textoSec, borderWidth: 1.5, borderDash: [5, 4], pointRadius: 0, order: 0 },
+            borderColor: c.muted, borderWidth: 1, borderDash: [4, 4], pointRadius: 0, pointHitRadius: 0, order: 0 },
         ],
       },
+      plugins: [ETIQUETA_PROMEDIO],
       options: {
         interaction: { mode: "index", intersect: false },
         scales: {
@@ -205,9 +229,10 @@
           y: ejeY({ beginAtZero: true, ticks: { maxTicksLimit: 4, callback: met.eje } }),
         },
         plugins: {
-          legend: { position: "top" },
+          legend: { display: false },
+          etiquetaPromedio: { texto: `prom. ${met.prom(met.promedio(m))}`, color: c.muted },
           tooltip: {
-            filter: (i) => i.parsed.y != null,
+            filter: (i) => i.parsed.y != null && i.datasetIndex === 0,
             callbacks: {
               title: (i) => fechaLarga(dias[i[0].dataIndex]),
               label: (i) => ` ${i.dataset.label}: ${met.valor(i.parsed.y)}`,
@@ -217,6 +242,28 @@
       },
     });
   }
+
+  /** Plugin: etiqueta directa al final de la línea de promedio ("prom. 11.872"). */
+  const ETIQUETA_PROMEDIO = {
+    id: "etiquetaPromedio",
+    afterDatasetsDraw(chart) {
+      const op = chart.options.plugins.etiquetaPromedio;
+      const meta = chart.getDatasetMeta(1);
+      if (!op || !meta?.data.length) return;
+      const pts = meta.data.filter((p, i) => chart.data.datasets[1].data[i] != null);
+      const fin = pts.at(-1);
+      if (!fin) return;
+      const t = tipografia();
+      const { ctx } = chart;
+      ctx.save();
+      ctx.font = `${t.chico}px ${t.familia}`;
+      ctx.fillStyle = op.color;
+      ctx.textAlign = "left";
+      ctx.textBaseline = "bottom";
+      ctx.fillText(op.texto, Math.min(fin.x + 6, chart.chartArea.right - ctx.measureText(op.texto).width), fin.y - 3);
+      ctx.restore();
+    },
+  };
 
   Tablero.secciones.inicio = { render };
 })();
