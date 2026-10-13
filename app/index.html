@@ -131,10 +131,19 @@
     <!-- ── Carrera ─────────────────────────────────────────────── -->
     <section id="panel-carrera" class="seccion" hidden>
       <div class="selectores" role="group" aria-label="Sesiones a comparar">
-        <label class="selector">
-          <span>Plantilla</span>
-          <select id="carrera-plantilla"></select>
-        </label>
+        <div class="selector">
+          <span id="carrera-plantillas-etiqueta">Plantillas</span>
+          <details class="desplegable" id="carrera-plantillas">
+            <summary aria-labelledby="carrera-plantillas-etiqueta"><span id="carrera-plantillas-resumen"></span></summary>
+            <div class="desplegable-menu">
+              <div class="desplegable-acciones">
+                <button type="button" data-accion="todas">Todas</button>
+                <button type="button" data-accion="ninguna">Ninguna</button>
+              </div>
+              <div id="carrera-plantillas-lista"></div>
+            </div>
+          </details>
+        </div>
         <div class="selector">
           <span id="carrera-sesiones-etiqueta">Sesiones</span>
           <details class="desplegable" id="carrera-sesiones">
@@ -154,7 +163,7 @@
         </label>
       </div>
       <!-- Primera pantalla: la tabla de sesiones y, a la derecha, las cuatro tarjetas -->
-      <div class="carrera-arriba">
+      <div class="vista-arriba">
         <figure class="tarjeta tarjeta-tabla">
           <figcaption><h2>Sesiones</h2><p id="carrera-tabla-nota"></p></figcaption>
           <div class="tabla-contenedor"><table class="tabla" id="tabla-carreras"></table></div>
@@ -221,7 +230,14 @@
 
     <!-- ── Pádel ───────────────────────────────────────────────── -->
     <section id="panel-padel" class="seccion" hidden>
-      <div class="kpis" id="padel-kpis"></div>
+      <!-- Primera pantalla: la tabla y, a la derecha, las cuatro tarjetas -->
+      <div class="vista-arriba sin-filtros">
+        <figure class="tarjeta tarjeta-tabla">
+          <figcaption><h2>Sesiones</h2><p>Tocá una fila para ver el detalle</p></figcaption>
+          <div class="tabla-contenedor"><table class="tabla" id="tabla-padel"></table></div>
+        </figure>
+        <div class="kpis kpis-columna" id="padel-kpis"></div>
+      </div>
       <div class="grilla">
         <figure class="tarjeta ancha">
           <div class="tarjeta-cab">
@@ -243,16 +259,19 @@
           <figcaption><h2>Tiempo en cada zona</h2><p>Minutos acumulados en el período</p></figcaption>
           <div class="lienzo"><canvas id="g-padel-zonas"></canvas></div>
         </figure>
-        <figure class="tarjeta ancha">
-          <figcaption><h2>Sesiones</h2><p>Tocá una fila para ver el detalle</p></figcaption>
-          <div class="tabla-contenedor"><table class="tabla" id="tabla-padel"></table></div>
-        </figure>
       </div>
     </section>
 
     <!-- ── Ciclismo ────────────────────────────────────────────── -->
     <section id="panel-ciclismo" class="seccion" hidden>
-      <div class="kpis" id="bici-kpis"></div>
+      <!-- Primera pantalla: la tabla y, a la derecha, las cuatro tarjetas -->
+      <div class="vista-arriba sin-filtros">
+        <figure class="tarjeta tarjeta-tabla">
+          <figcaption><h2>Salidas</h2><p>Tocá una fila para ver el detalle y sus vueltas</p></figcaption>
+          <div class="tabla-contenedor"><table class="tabla" id="tabla-bici"></table></div>
+        </figure>
+        <div class="kpis kpis-columna" id="bici-kpis"></div>
+      </div>
       <div class="grilla">
         <figure class="tarjeta">
           <figcaption><h2>Kilómetros por semana</h2></figcaption>
@@ -270,16 +289,19 @@
           <figcaption><h2>FC media por salida</h2><p>ppm</p></figcaption>
           <div class="lienzo"><canvas id="g-bici-fc"></canvas></div>
         </figure>
-        <figure class="tarjeta ancha">
-          <figcaption><h2>Salidas</h2><p>Tocá una fila para ver el detalle y sus vueltas</p></figcaption>
-          <div class="tabla-contenedor"><table class="tabla" id="tabla-bici"></table></div>
-        </figure>
       </div>
     </section>
 
     <!-- ── Otras actividades ───────────────────────────────────── -->
     <section id="panel-otras" class="seccion" hidden>
-      <div class="kpis" id="otras-kpis"></div>
+      <!-- Primera pantalla: la tabla y, a la derecha, las cuatro tarjetas -->
+      <div class="vista-arriba sin-filtros">
+        <figure class="tarjeta tarjeta-tabla">
+          <figcaption><h2>Sesiones</h2><p>Tocá una fila para ver el detalle</p></figcaption>
+          <div class="tabla-contenedor"><table class="tabla" id="tabla-otras"></table></div>
+        </figure>
+        <div class="kpis kpis-columna" id="otras-kpis"></div>
+      </div>
       <div class="grilla">
         <figure class="tarjeta">
           <figcaption><h2>Horas por semana</h2><p>Caminata y cualquier actividad que no tenga pestaña propia</p></figcaption>
@@ -288,10 +310,6 @@
         <figure class="tarjeta">
           <figcaption><h2>Kilómetros por semana</h2><p>Por tipo de actividad</p></figcaption>
           <div class="lienzo"><canvas id="g-otras-km"></canvas></div>
-        </figure>
-        <figure class="tarjeta ancha">
-          <figcaption><h2>Sesiones</h2><p>Tocá una fila para ver el detalle</p></figcaption>
-          <div class="tabla-contenedor"><table class="tabla" id="tabla-otras"></table></div>
         </figure>
       </div>
     </section>

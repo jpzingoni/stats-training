@@ -26,7 +26,12 @@ Una entrada por etapa, de la más reciente a la más antigua.
 - **Carrera, primera pantalla**: debajo de los filtros van la tabla de sesiones (con scroll
   propio y títulos fijos) y, a su derecha, las cuatro tarjetas en columna. La tabla sigue
   los filtros como el resto: solo las sesiones elegidas de la plantilla, con el color de su
-  línea, y con una etapa elegida muestra el ritmo y la FC de esa etapa. Los gráficos quedan más abajo. En celular, tarjetas en 2 × 2 y la tabla debajo.
+  línea, y con una etapa elegida muestra el ritmo y la FC de esa etapa. **Pádel, Ciclismo y
+  Otras actividades** abren con la misma primera pantalla (tabla + tarjetas en columna).
+- **El filtro de plantillas pasó a ser de selección múltiple.** Con una sola plantilla, el
+  gráfico se alinea a sus bloques. Con varias no hay bloques comunes, así que el eje es el
+  tiempo real; las etapas son las fases de las plantillas elegidas (las sesiones libres no
+  tienen) y la deriva se muestra en las sesiones con un bloque de entrenamiento continuo. Los gráficos quedan más abajo. En celular, tarjetas en 2 × 2 y la tabla debajo.
 - **Pádel**: FC minuto a minuto de cada partido, con las zonas de FC como bandas de fondo y
   los minutos en zona 3 o más.
 - **Detalle de cada sesión** (tablas y calendario): gráficos chicos de FC y ritmo por minuto

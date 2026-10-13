@@ -42,7 +42,7 @@
   // ─── Comparar sesiones de una misma plantilla ──────────────────────────────
 
   const MAX_SESIONES = 8;   // la paleta tiene 8 colores distinguibles; más líneas no se leen
-  const comp = { plantilla: null, elegidas: null, metrica: "ritmo", etapa: "todas", ef: "m", enlazado: false, corridas: [], minutos: {} };
+  const comp = { plantillas: null, elegidas: null, metrica: "ritmo", etapa: "todas", ef: "m", enlazado: false, corridas: [], minutos: {} };
   // Cada métrica: su columna en minutos.js, su valor por bloque (si no hay minutos) y su formato
   const METRICAS_COMP = {
     ritmo: { nombre: "Ritmo", clave: "ritmo", valor: (b) => b.ritmo_s_km, formato: (v) => `${ritmo(v)} /km`, invertir: true },
@@ -54,7 +54,7 @@
 
   function guardarComp() {
     try {
-      localStorage.setItem("carrera-comparar", JSON.stringify({ plantilla: comp.plantilla, metrica: comp.metrica, etapa: comp.etapa, ef: comp.ef }));
+      localStorage.setItem("carrera-comparar", JSON.stringify({ plantillas: [...comp.plantillas], metrica: comp.metrica, etapa: comp.etapa, ef: comp.ef }));
     } catch { /* solo esta visita */ }
   }
 
@@ -62,17 +62,24 @@
     comp.enlazado = true;
     try {
       const g = JSON.parse(localStorage.getItem("carrera-comparar") ?? "null");
-      if (g?.plantilla) comp.plantilla = g.plantilla;
+      if (Array.isArray(g?.plantillas)) comp.plantillas = new Set(g.plantillas);
+      else if (g?.plantilla) comp.plantillas = new Set([g.plantilla]);   // formato anterior (una sola)
       if (METRICAS_COMP[g?.metrica]) comp.metrica = g.metrica;
       if (g?.ef === "m" || g?.ef === "w") comp.ef = g.ef;
       if (g?.etapa) comp.etapa = g.etapa;
     } catch { /* valores por defecto */ }
 
-    document.getElementById("carrera-plantilla").addEventListener("change", (e) => {
-      comp.plantilla = e.target.value;
-      comp.elegidas = null;   // al cambiar de plantilla se eligen de nuevo sus sesiones
-      guardarComp();
-      renderComparacion(comp.corridas);
+    // Al cambiar las plantillas se eligen de nuevo las sesiones (las más recientes)
+    const alCambiarPlantillas = () => { comp.elegidas = null; guardarComp(); renderComparacion(comp.corridas); };
+    document.getElementById("carrera-plantillas-lista").addEventListener("change", (e) => {
+      if (e.target.checked) comp.plantillas.add(e.target.value); else comp.plantillas.delete(e.target.value);
+      alCambiarPlantillas();
+    });
+    document.querySelector("#carrera-plantillas .desplegable-acciones").addEventListener("click", (e) => {
+      const accion = e.target.dataset.accion;
+      if (!accion) return;
+      comp.plantillas = new Set(accion === "todas" ? [...document.querySelectorAll("#carrera-plantillas-lista input")].map((i) => i.value) : []);
+      alCambiarPlantillas();
     });
     const lista = document.getElementById("carrera-sesiones-lista");
     lista.addEventListener("change", (e) => {
@@ -105,14 +112,22 @@
       guardarComp();
       renderComparacion(comp.corridas);
     });
-    // El desplegable se cierra al tocar afuera
+    // Los desplegables se cierran al tocar afuera
     document.addEventListener("click", (e) => {
-      const d = document.getElementById("carrera-sesiones");
-      if (d.open && !d.contains(e.target)) d.open = false;
+      for (const id of ["carrera-sesiones", "carrera-plantillas"]) {
+        const d = document.getElementById(id);
+        if (d.open && !d.contains(e.target)) d.open = false;
+      }
     });
   }
 
-  const sesionesDePlantilla = () => comp.corridas.filter((a) => (a.plantilla ?? "Libre") === comp.plantilla);
+  const sesionesDePlantilla = () => comp.corridas.filter((a) => comp.plantillas.has(a.plantilla ?? "Libre"));
+  const ORDEN_FASES = ["Calentamiento", "Entrenamiento", "Relajado", "Restaurar"];
+  /** Nombres de las plantillas elegidas, para los textos ("25 MIN CO", "25 MIN CO y 28 MIN CO", "3 plantillas"). */
+  const nombrePlantillas = () => {
+    const n = [...comp.plantillas];
+    return n.length <= 2 ? n.join(" y ") : `${n.length} plantillas`;
+  };
 
   function renderComparacion(corridas, meta = comp.meta, minutos = comp.minutos) {
     comp.corridas = corridas;
@@ -126,9 +141,15 @@
     for (const a of corridas) cuenta.set(a.plantilla ?? "Libre", (cuenta.get(a.plantilla ?? "Libre") ?? 0) + 1);
     const plantillas = [...cuenta.keys()].sort((x, y) =>
       (x === "Libre") - (y === "Libre") || cuenta.get(y) - cuenta.get(x) || x.localeCompare(y));
-    if (!plantillas.includes(comp.plantilla)) { comp.plantilla = plantillas[0]; comp.elegidas = null; }
-    document.getElementById("carrera-plantilla").innerHTML = plantillas.map((n) =>
-      `<option value="${escapar(n)}"${n === comp.plantilla ? " selected" : ""}>${escapar(n)} (${cuenta.get(n)})</option>`).join("");
+    // Por defecto, la más usada; se descartan las que ya no existen
+    if (!comp.plantillas) comp.plantillas = new Set([plantillas[0]]);
+    for (const n of [...comp.plantillas]) if (!plantillas.includes(n)) comp.plantillas.delete(n);
+    document.getElementById("carrera-plantillas-lista").innerHTML = plantillas.map((n) => `
+      <label class="check"><input type="checkbox" value="${escapar(n)}"${comp.plantillas.has(n) ? " checked" : ""}>
+        <span>${escapar(n)} (${cuenta.get(n)})</span></label>`).join("");
+    document.getElementById("carrera-plantillas-resumen").textContent =
+      comp.plantillas.size === 0 ? "Ninguna" : comp.plantillas.size === 1 ? [...comp.plantillas][0]
+        : comp.plantillas.size === plantillas.length ? "Todas" : `${comp.plantillas.size} plantillas`;
 
     // Sesiones de esa plantilla (por defecto, las más recientes hasta el máximo)
     const sesiones = sesionesDePlantilla();
@@ -155,8 +176,9 @@
       b.setAttribute("aria-pressed", String(b.dataset.metrica === comp.metrica));
     }
     // Etapas: las fases que tiene la plantilla, en orden ("Libre" no tiene fases)
-    const pasosPlantilla = comp.meta?.plantillas?.[comp.plantilla];
-    const fases = pasosPlantilla ? [...new Set(pasosPlantilla.map((p) => p.fase))] : [];
+    // Fases de las plantillas elegidas ("Libre" no tiene), en el orden natural de una sesión
+    const fasesElegidas = new Set([...comp.plantillas].flatMap((n) => (comp.meta?.plantillas?.[n] ?? []).map((p) => p.fase)));
+    const fases = ORDEN_FASES.filter((f) => fasesElegidas.has(f));
     if (comp.etapa !== "todas" && !fases.includes(comp.etapa)) comp.etapa = "todas";
     const selEtapa = document.getElementById("carrera-etapa");
     selEtapa.disabled = !fases.length;
@@ -168,7 +190,8 @@
     // Con plantilla, el eje X sigue los bloques de la plantilla: todas las sesiones comparten
     // los mismos tramos y lo que cambia es la altura de cada escalón. Sin plantilla ("Libre"),
     // el eje es el tiempo real desde el inicio de cada sesión.
-    const pasos = comp.meta?.plantillas?.[comp.plantilla];
+    // La alineación por bloques solo es posible con una única plantilla elegida
+    const pasos = comp.plantillas.size === 1 ? comp.meta?.plantillas?.[[...comp.plantillas][0]] : null;
     const eje = pasos ? ejePlantilla(pasos, sesiones) : null;
     const hayDistancia = pasos?.some((p) => p.tipo === "distancia");
     document.getElementById("carrera-comp-nota").textContent =
@@ -177,7 +200,8 @@
       (eje
         ? "El eje sigue los bloques de la plantilla: cada bloque se estira o se comprime a su tramo, así todas las sesiones quedan alineadas." +
           (hayDistancia ? " Los bloques por distancia toman su duración promedio." : "")
-        : "El eje es el tiempo desde el inicio de la sesión.") +
+        : "El eje es el tiempo desde el inicio de la sesión" +
+          (comp.plantillas.size > 1 ? " (con varias plantillas no hay bloques comunes para alinear)." : ".")) +
       (comp.metrica === "ritmo" ? " Más arriba = más rápido; los minutos con pausas quedan contra el borde." : "") +
       (sesiones.length > MAX_SESIONES ? ` Se pueden comparar hasta ${MAX_SESIONES} sesiones a la vez.` : "");
     renderDeriva(elegidas, colorDe, pasos);
@@ -204,7 +228,7 @@
         layout: { padding: { top: eje ? 16 : 0 } },
         scales: {
           x: { type: "linear", min: 0, max: eje ? eje.total / 60 : undefined, grid: { display: false }, border: { color: c.eje },
-               title: { display: true, text: eje ? `minutos según la plantilla ${comp.plantilla}` : "minutos desde el inicio" },
+               title: { display: true, text: eje ? `minutos según la plantilla ${nombrePlantillas()}` : "minutos desde el inicio" },
                ticks: { callback: (v) => (Number.isInteger(v) ? `${v}′` : "") } },   // sin el último valor con decimales
           // Rango del 3 % al 97 % de los valores: un minuto con pausa no aplasta toda la curva
           y: ejeY({ reverse: met.invertir, min: rango?.min, max: rango?.max,
@@ -314,12 +338,13 @@
     const titulo = document.getElementById("carrera-deriva-titulo");
     const nota = document.getElementById("carrera-deriva-nota");
     const bloquesEntrenamiento = pasos ? pasos.filter((p) => p.fase === "Entrenamiento").length : 0;
-    if (!pasos) {
+    const soloLibre = [...comp.plantillas].every((n) => !comp.meta?.plantillas?.[n]);
+    if (soloLibre) {
       titulo.textContent = "Deriva cardíaca";
       nota.textContent = "Se calcula sobre el bloque de entrenamiento de una plantilla; las sesiones libres no lo tienen.";
       return sinDatos("g-carrera-deriva", "Elegí una plantilla");
     }
-    if (bloquesEntrenamiento > 1) {
+    if (pasos && bloquesEntrenamiento > 1) {
       // Plantillas por ciclos (CACO, Aumento de ritmo): FC de cada bloque de entrenamiento
       titulo.textContent = "FC en cada bloque de entrenamiento";
       nota.textContent = "En las plantillas por ciclos, la deriva se ve en cómo sube la FC de un ciclo al siguiente.";
@@ -342,7 +367,8 @@
     }
     titulo.textContent = "Deriva cardíaca";
     nota.textContent = "Cuánto cae la eficiencia (velocidad ÷ FC) de la primera a la segunda mitad del bloque de entrenamiento. " +
-      "Por debajo de 5 %, ritmo y FC se mantuvieron acoplados (referencia que usan Intervals y TrainingPeaks).";
+      "Por debajo de 5 %, ritmo y FC se mantuvieron acoplados (referencia que usan Intervals y TrainingPeaks)." +
+      (pasos ? "" : " Con varias plantillas, se muestran las sesiones con un bloque de entrenamiento continuo.");
     const filas = elegidas.map((a) => ({ a, d: deriva(a) })).filter((x) => x.d);
     if (!filas.length) return sinDatos("g-carrera-deriva", "Sin minutos suficientes para calcularla");
     grafico("g-carrera-deriva", {
@@ -700,7 +726,7 @@
       return { ritmo: dist ? (dur / dist) * 1000 : null, fc: ponderado(bl, "fc_media") };
     };
     document.getElementById("carrera-tabla-nota").textContent =
-      `${elegidas.length} ${elegidas.length === 1 ? "sesión" : "sesiones"} de ${comp.plantilla}` +
+      `${elegidas.length} ${elegidas.length === 1 ? "sesión" : "sesiones"} de ${nombrePlantillas() || "ninguna plantilla"}` +
       (conEtapa ? ` · ritmo y FC de ${comp.etapa.toLowerCase()}` : "") + ". Tocá una fila para ver el detalle y sus bloques.";
     Tablero.sesiones.tabla("tabla-carreras", elegidas, [
       { titulo: "Fecha", valor: (a) => `<span class="punto" style="background:${colorDe.get(a.id)}"></span>${fechaLarga(a.fecha)}` },
