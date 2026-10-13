@@ -720,28 +720,41 @@
    */
   function renderTabla(elegidas, colorDe) {
     const conEtapa = comp.etapa !== "todas";
+    // Totales de la etapa elegida en una sesión (con "Toda la sesión", de todos sus bloques)
     const enEtapa = (a) => {
       const bl = bloquesDeEtapa(a);
       const dur = suma(bl, (b) => b.duracion_s), dist = suma(bl, (b) => b.distancia_m);
-      return { ritmo: dist ? (dur / dist) * 1000 : null, fc: ponderado(bl, "fc_media") };
+      return { dur, dist, ritmo: dist ? (dur / dist) * 1000 : null, fc: ponderado(bl, "fc_media"), pot: ponderado(bl, "potencia_w") };
     };
+    const etapa = comp.etapa.toLowerCase();
     document.getElementById("carrera-tabla-nota").textContent =
       `${elegidas.length} ${elegidas.length === 1 ? "sesión" : "sesiones"} de ${nombrePlantillas() || "ninguna plantilla"}` +
-      (conEtapa ? ` · ritmo y FC de ${comp.etapa.toLowerCase()}` : "") + ". Tocá una fila para ver el detalle y sus bloques.";
-    Tablero.sesiones.tabla("tabla-carreras", elegidas, [
-      { titulo: "Fecha", valor: (a) => `<span class="punto" style="background:${colorDe.get(a.id)}"></span>${fechaLarga(a.fecha)}` },
-      { titulo: "Plantilla", valor: (a) => escapar(a.plantilla ?? "—") + (a.ajuste_plantilla && a.ajuste_plantilla !== "exacta" ? ` <small class="texto-sec">(${a.ajuste_plantilla})</small>` : "") },
-      { titulo: "Km", num: true, valor: (a) => numero(a.distancia_m / 1000, 2) },
-      { titulo: "Tiempo", num: true, valor: (a) => duracion(a.duracion_s) },
-      { titulo: "Ritmo prom.", num: true, valor: (a) => ritmo(a.ritmo_s_km) },
-      conEtapa
-        ? { titulo: `Ritmo ${comp.etapa.toLowerCase()}`, num: true, valor: (a) => ritmo(enEtapa(a).ritmo) }
-        : { titulo: "Ritmo entren.", num: true, valor: (a) => (a.entrenamiento?.ritmo_s_km ? ritmo(a.entrenamiento.ritmo_s_km) : "—") },
-      conEtapa
-        ? { titulo: `FC ${comp.etapa.toLowerCase()}`, num: true, valor: (a) => numero(enEtapa(a).fc) }
-        : { titulo: "FC media / máx", num: true, valor: (a) => `${a.fc_media ?? "—"} / ${a.fc_max ?? "—"}` },
-      { titulo: "Carga", num: true, valor: (a) => a.carga ?? "—" },
-    ], { vacio: "Elegí al menos una sesión" });
+      (conEtapa ? ` · solo ${etapa} (la carga es de la sesión completa)` : "") + ". Tocá una fila para ver el detalle y sus bloques.";
+
+    const fecha = { titulo: "Fecha", valor: (a) => `<span class="punto" style="background:${colorDe.get(a.id)}"></span>${fechaLarga(a.fecha)}` };
+    const plantilla = { titulo: "Plantilla", valor: (a) => escapar(a.plantilla ?? "—") +
+      (a.ajuste_plantilla && a.ajuste_plantilla !== "exacta" ? ` <small class="texto-sec">(${a.ajuste_plantilla})</small>` : "") };
+    const columnas = conEtapa
+      ? [
+        fecha, plantilla,
+        { titulo: "Km", num: true, valor: (a) => (enEtapa(a).dist ? numero(enEtapa(a).dist / 1000, 2) : "—") },
+        { titulo: "Tiempo", num: true, valor: (a) => (enEtapa(a).dur ? duracion(enEtapa(a).dur) : "—") },
+        { titulo: "Ritmo", num: true, valor: (a) => ritmo(enEtapa(a).ritmo) },
+        { titulo: "FC media", num: true, valor: (a) => numero(enEtapa(a).fc) },
+        { titulo: "Potencia", num: true, valor: (a) => (enEtapa(a).pot != null ? `${numero(enEtapa(a).pot)} W` : "—") },
+        { titulo: "Carga (sesión)", num: true, valor: (a) => a.carga ?? "—" },
+      ]
+      : [
+        fecha, plantilla,
+        { titulo: "Km", num: true, valor: (a) => numero(a.distancia_m / 1000, 2) },
+        { titulo: "Tiempo", num: true, valor: (a) => duracion(a.duracion_s) },
+        { titulo: "Ritmo prom.", num: true, valor: (a) => ritmo(a.ritmo_s_km) },
+        { titulo: "Ritmo entren.", num: true, valor: (a) => (a.entrenamiento?.ritmo_s_km ? ritmo(a.entrenamiento.ritmo_s_km) : "—") },
+        { titulo: "FC media / máx", num: true, valor: (a) => `${a.fc_media ?? "—"} / ${a.fc_max ?? "—"}` },
+        { titulo: "Potencia", num: true, valor: (a) => (a.potencia_w != null ? `${numero(a.potencia_w)} W` : "—") },
+        { titulo: "Carga", num: true, valor: (a) => a.carga ?? "—" },
+      ];
+    Tablero.sesiones.tabla("tabla-carreras", elegidas, columnas, { vacio: "Elegí al menos una sesión" });
   }
 
   Tablero.secciones.carrera = { render };

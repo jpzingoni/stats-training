@@ -26,7 +26,8 @@ Una entrada por etapa, de la más reciente a la más antigua.
 - **Carrera, primera pantalla**: debajo de los filtros van la tabla de sesiones (con scroll
   propio y títulos fijos) y, a su derecha, las cuatro tarjetas en columna. La tabla sigue
   los filtros como el resto: solo las sesiones elegidas de la plantilla, con el color de su
-  línea, y con una etapa elegida muestra el ritmo y la FC de esa etapa. **Pádel, Ciclismo y
+  línea. Con una etapa elegida, km, tiempo, ritmo, FC y potencia son de esa etapa (la carga
+  sigue siendo de la sesión: Intervals no la calcula por bloque). **Pádel, Ciclismo y
   Otras actividades** abren con la misma primera pantalla (tabla + tarjetas en columna) y,
   como Carrera, sin selector de período: muestran todo el historial. El período queda solo
   en Resumen y Recuperación.
