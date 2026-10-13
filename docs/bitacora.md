@@ -5,6 +5,43 @@ Una entrada por etapa, de la más reciente a la más antigua.
 
 ---
 
+## Tablero v1.2: rediseño de "Este mes" según DESIGN.md (12/10/2026)
+
+### Qué hice
+- Guardé el tablero anterior como **v1.1** (`versiones/v1.1/`, fuera de `app/`, con la
+  etiqueta de Git `v1.1`) para poder compararlo. Lee los mismos datos de `app/data/`.
+- Revisé la portada contra `app/DESIGN.md` (inventario con `grep` y capturas con Playwright en
+  escritorio y celular, claro y oscuro) y apliqué los cambios aprobados:
+  - **Tokens nuevos** (escala tipográfica `--tx-*`, espaciado, radios, `--tinta`, `--bien` /
+    `--mal`, `--sombra-flotante`, `--velo`) y **fuentes Barlow / Barlow Semi Condensed**
+    incluidas en `app/vendor/fuentes/` (licencia OFL), para que anden con `file://`.
+  - **Interfaz neutra**: el azul dejó de ser color de interfaz (navegación, foco, casillas);
+    el ítem activo lleva una barra de tinta. El azul queda para Carrera y la rampa.
+  - **Calendario chico**: el fondo de cada día indica la carga (mismos cortes que el
+    Resumen) y los puntos, el deporte; hoy tiene un anillo de tinta. Antes, el borde azul
+    de "activo" hacía que los días de caminata parecieran carreras.
+  - **Tarjetas**: "Pasos del mes" como dato protagonista; variaciones con flecha en verde o
+    rojo según convenga (la FC en reposo que sube es mala) y una sola línea de contexto.
+  - **Gráfico diario**: sin leyenda, promedio con etiqueta directa ("prom. 11.872"), el último
+    día en color pleno y el resto al 60 %, sin la unidad repetida en el eje.
+  - **Controles**: un solo estilo de 32px; el segmentado es un grupo unido.
+- La versión (v1.2) se ve abajo en la barra lateral.
+
+### Decisiones
+- Cambios a `DESIGN.md`: legibilidad del calendario sobre la rampa (número según el nivel y
+  puntos con anillo), token `--velo`, padding `--e4` en "Este mes" (tiene que entrar en una
+  pantalla de ~620px) y KPI en celular sin partir el valor (`7:16 h`).
+- Las variaciones se calculan en `formato.js` (`MEJOR_SI` + `variacion()`): cada métrica dice
+  en un solo lugar si le conviene subir o bajar.
+
+### Pendiente
+- Migrar el resto de las vistas a la escala tipográfica y los radios (hoy solo "Este mes",
+  la barra lateral y los controles compartidos). Quedan textos de canvas con tamaño fijo en
+  `carrera.js` y `padel.js`.
+- `DESIGN.md` no dice de qué color van las métricas diarias (pasos, sueño): siguen en azul.
+
+---
+
 ## Etapa 2 (tablero): curvas minuto a minuto, potencia y análisis nuevos (11/10/2026)
 
 ### Qué hice
