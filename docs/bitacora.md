@@ -27,7 +27,9 @@ Una entrada por etapa, de la más reciente a la más antigua.
   propio y títulos fijos) y, a su derecha, las cuatro tarjetas en columna. La tabla sigue
   los filtros como el resto: solo las sesiones elegidas de la plantilla, con el color de su
   línea, y con una etapa elegida muestra el ritmo y la FC de esa etapa. **Pádel, Ciclismo y
-  Otras actividades** abren con la misma primera pantalla (tabla + tarjetas en columna).
+  Otras actividades** abren con la misma primera pantalla (tabla + tarjetas en columna) y,
+  como Carrera, sin selector de período: muestran todo el historial. El período queda solo
+  en Resumen y Recuperación.
 - **El filtro de plantillas pasó a ser de selección múltiple.** Con una sola plantilla, el
   gráfico se alinea a sus bloques. Con varias no hay bloques comunes, así que el eje es el
   tiempo real; las etapas son las fases de las plantillas elegidas (las sesiones libres no

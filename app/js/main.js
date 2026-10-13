@@ -17,9 +17,9 @@
     inicio: "Este mes", calendario: "Calendario", resumen: "Resumen", carrera: "Carrera", padel: "Pádel",
     ciclismo: "Ciclismo", otras: "Otras actividades", recuperacion: "Recuperación", datos: "Datos",
   };
-  // Vistas sin selector de período: las que navegan por mes, los datos crudos y Carrera
-  // (que se compara por plantilla y sesiones, sobre todo el historial)
-  const SIN_PERIODO = ["inicio", "calendario", "datos", "carrera"];
+  // Vistas sin selector de período: las que navegan por mes, los datos crudos y las de cada
+  // deporte (que muestran todo el historial; Carrera además se filtra por plantilla y sesiones)
+  const SIN_PERIODO = ["inicio", "calendario", "datos", "carrera", "padel", "ciclismo", "otras"];
   const PERIODOS = { 4: "4 semanas", 12: "12 semanas", todo: "todo el historial" };
 
   const estado = {
