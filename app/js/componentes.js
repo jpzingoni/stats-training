@@ -6,15 +6,24 @@
 
   /**
    * Tarjetas de indicadores.
-   * items: [{ etiqueta, valor, unidad?, delta? }]
+   * items: [{ etiqueta, valor, unidad?, delta?, variacion?, protagonista? }]
+   *   delta       texto de contexto (una línea)
+   *   variacion   { flecha, texto, tono } de Tablero.formato.variacion: va antes del contexto,
+   *               con la flecha en --bien / --mal según convenga
    */
   function kpis(id, items) {
-    document.getElementById(id).innerHTML = items.map((k) => `
-      <div class="kpi">
+    document.getElementById(id).innerHTML = items.map((k) => {
+      const v = k.variacion;
+      const variacionHtml = v
+        ? `<span class="${v.tono ?? ""}">${escapar(v.flecha)} ${escapar(v.texto)}</span>${k.delta ? " · " : ""}`
+        : "";
+      return `
+      <div class="kpi${k.protagonista ? " protagonista" : ""}">
         <div class="kpi-etiqueta">${escapar(k.etiqueta)}</div>
-        <div class="kpi-valor">${escapar(k.valor)}${k.unidad ? `<span class="kpi-unidad">${escapar(k.unidad)}</span>` : ""}</div>
-        ${k.delta ? `<div class="kpi-delta">${escapar(k.delta)}</div>` : ""}
-      </div>`).join("");
+        <div class="kpi-valor"><span>${escapar(k.valor)}</span>${k.unidad ? `<span class="kpi-unidad">${escapar(k.unidad)}</span>` : ""}</div>
+        ${v || k.delta ? `<div class="kpi-delta">${variacionHtml}${escapar(k.delta ?? "")}</div>` : ""}
+      </div>`;
+    }).join("");
   }
 
   /** "+3 vs. 4 semanas anteriores" (o nada si no hay período anterior). */

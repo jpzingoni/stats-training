@@ -19,13 +19,34 @@
       serie: [1, 2, 3, 4, 5, 6, 7, 8].map((i) => v(`--serie-${i}`)),
       rampa: [1, 2, 3, 4, 5, 6, 7].map((i) => v(`--rampa-${i}`)),
       rampaVacio: v("--rampa-vacio"),
+      tinta: v("--tinta"), bien: v("--bien"), mal: v("--mal"),
     };
+  }
+
+  /** Tipografía de los gráficos leída de los tokens (nada de tamaños fijos en JS). */
+  function tipografia() {
+    const s = getComputedStyle(document.documentElement);
+    const v = (n) => s.getPropertyValue(n).trim();
+    return {
+      familia: v("--fuente-num"), familiaTexto: v("--fuente"),
+      chico: parseFloat(v("--tx-chico")), etiqueta: parseFloat(v("--tx-etiqueta")),
+    };
+  }
+
+  /** "#2a78d6" + 0.6 → "rgba(42, 120, 214, 0.6)" (para atenuar barras sin inventar colores). */
+  function conAlfa(color, alfa) {
+    const m = /^#([0-9a-f]{6})$/i.exec(color.trim());
+    if (!m) return color;
+    const n = parseInt(m[1], 16);
+    return `rgba(${(n >> 16) & 255}, ${(n >> 8) & 255}, ${n & 255}, ${alfa})`;
   }
 
   function aplicarEstiloGlobal() {
     const c = colores();
-    Chart.defaults.font.family = getComputedStyle(document.body).fontFamily;
-    Chart.defaults.font.size = 12;
+    const t = tipografia();
+    // Los ejes son casi todo números: fuente condensada; tamaño --tx-chico (DESIGN.md)
+    Chart.defaults.font.family = t.familia;
+    Chart.defaults.font.size = t.chico;
     Chart.defaults.color = c.muted;
     Chart.defaults.borderColor = c.grilla;
     Chart.defaults.maintainAspectRatio = false;
@@ -33,13 +54,15 @@
     // cuadros posteriores y ahí fallaba en algunos navegadores)
     Chart.defaults.animation = false;
     Chart.defaults.plugins.legend.labels.boxWidth = 10;
+    Chart.defaults.plugins.legend.labels.font = { family: t.familiaTexto, size: t.chico };
     Chart.defaults.plugins.legend.labels.boxHeight = 10;
     Chart.defaults.plugins.legend.labels.color = c.textoSec;
     Chart.defaults.plugins.legend.align = "start";
     Chart.defaults.plugins.legend.labels.sort = (a, b) => a.datasetIndex - b.datasetIndex;
     Object.assign(Chart.defaults.plugins.tooltip, {
       backgroundColor: c.superficie, titleColor: c.texto, bodyColor: c.textoSec,
-      borderColor: c.eje, borderWidth: 1, padding: 8, boxPadding: 4, usePointStyle: true,
+      borderColor: c.eje, borderWidth: 1, padding: 8, boxPadding: 4, usePointStyle: true, cornerRadius: 6,
+      titleFont: { family: t.familiaTexto, size: t.chico, weight: "600" }, bodyFont: { family: t.familia, size: t.chico },
     });
     Chart.defaults.elements.line.borderWidth = 2;
     Chart.defaults.elements.point.radius = 3;
@@ -118,7 +141,7 @@
       backgroundColor: color,
       borderColor: colores().superficie,
       borderWidth: apilada ? { top: 2 } : 0,
-      borderRadius: apilada ? 2 : { topLeft: 4, topRight: 4 },
+      borderRadius: apilada ? 0 : { topLeft: 2, topRight: 2 },   // radio superior de 2px (DESIGN.md)
       borderSkipped: "bottom",
       maxBarThickness: 36,
     };
@@ -132,5 +155,5 @@
   };
   const grupoDe = (a) => (GRUPOS.includes(a.categoria) ? a.categoria : "Otras");
 
-  Tablero.graficos = { colores, aplicarEstiloGlobal, grafico, sinDatos, destruirTodos, ejeFechas, tituloFecha, ejeY, estiloBarra, GRUPOS, VAR_GRUPO, grupoDe };
+  Tablero.graficos = { colores, aplicarEstiloGlobal, grafico, sinDatos, destruirTodos, ejeFechas, tituloFecha, ejeY, estiloBarra, GRUPOS, VAR_GRUPO, grupoDe, tipografia, conAlfa };
 })();
