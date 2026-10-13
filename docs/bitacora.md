@@ -23,9 +23,10 @@ Una entrada por etapa, de la más reciente a la más antigua.
     ciclos muestra la FC de cada bloque de entrenamiento.
   - **Eficiencia por sesión**: m/latido o W/latido de cada sesión elegida, en la etapa elegida.
   - **Ritmo contra FC, minuto a minuto**: dispersión de hasta 3 sesiones.
-- **Carrera, primera pantalla**: debajo de los filtros van la tabla de sesiones (todas las
-  corridas, con scroll propio y títulos fijos) y, a su derecha, las cuatro tarjetas en
-  columna. Los gráficos quedan más abajo. En celular, tarjetas en 2 × 2 y la tabla debajo.
+- **Carrera, primera pantalla**: debajo de los filtros van la tabla de sesiones (con scroll
+  propio y títulos fijos) y, a su derecha, las cuatro tarjetas en columna. La tabla sigue
+  los filtros como el resto: solo las sesiones elegidas de la plantilla, con el color de su
+  línea, y con una etapa elegida muestra el ritmo y la FC de esa etapa. Los gráficos quedan más abajo. En celular, tarjetas en 2 × 2 y la tabla debajo.
 - **Pádel**: FC minuto a minuto de cada partido, con las zonas de FC como bandas de fondo y
   los minutos en zona 3 o más.
 - **Detalle de cada sesión** (tablas y calendario): gráficos chicos de FC y ritmo por minuto

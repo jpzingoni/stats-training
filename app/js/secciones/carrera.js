@@ -16,7 +16,6 @@
     renderKm(ctx);
     renderZonas(ctx);
     renderDinamica(ctx, corridas);
-    renderTabla(corridas);
   }
 
   function lineaTiempo(id, ctx, puntos, { color, etiqueta, formato, invertir = false, minimo = 2 }) {
@@ -164,6 +163,7 @@
     selEtapa.innerHTML = `<option value="todas">${fases.length ? "Toda la sesión" : "Toda la sesión (sin etapas)"}</option>` +
       fases.map((f) => `<option value="${escapar(f)}"${f === comp.etapa ? " selected" : ""}>${escapar(f)}</option>`).join("");
     renderKpisComparacion(elegidas);
+    renderTabla(elegidas, colorDe);
 
     // Con plantilla, el eje X sigue los bloques de la plantilla: todas las sesiones comparten
     // los mismos tramos y lo que cambia es la altura de cada escalón. Sin plantilla ("Libre"),
@@ -688,17 +688,34 @@
     }
   }
 
-  function renderTabla(corridas) {
-    Tablero.sesiones.tabla("tabla-carreras", corridas, [
-      { titulo: "Fecha", valor: (a) => fechaLarga(a.fecha) },
+  /**
+   * Tabla de las sesiones elegidas (plantilla + sesiones). Con una etapa elegida, el ritmo y la
+   * FC de la etapa reemplazan a los de la parte de entrenamiento.
+   */
+  function renderTabla(elegidas, colorDe) {
+    const conEtapa = comp.etapa !== "todas";
+    const enEtapa = (a) => {
+      const bl = bloquesDeEtapa(a);
+      const dur = suma(bl, (b) => b.duracion_s), dist = suma(bl, (b) => b.distancia_m);
+      return { ritmo: dist ? (dur / dist) * 1000 : null, fc: ponderado(bl, "fc_media") };
+    };
+    document.getElementById("carrera-tabla-nota").textContent =
+      `${elegidas.length} ${elegidas.length === 1 ? "sesión" : "sesiones"} de ${comp.plantilla}` +
+      (conEtapa ? ` · ritmo y FC de ${comp.etapa.toLowerCase()}` : "") + ". Tocá una fila para ver el detalle y sus bloques.";
+    Tablero.sesiones.tabla("tabla-carreras", elegidas, [
+      { titulo: "Fecha", valor: (a) => `<span class="punto" style="background:${colorDe.get(a.id)}"></span>${fechaLarga(a.fecha)}` },
       { titulo: "Plantilla", valor: (a) => escapar(a.plantilla ?? "—") + (a.ajuste_plantilla && a.ajuste_plantilla !== "exacta" ? ` <small class="texto-sec">(${a.ajuste_plantilla})</small>` : "") },
       { titulo: "Km", num: true, valor: (a) => numero(a.distancia_m / 1000, 2) },
       { titulo: "Tiempo", num: true, valor: (a) => duracion(a.duracion_s) },
       { titulo: "Ritmo prom.", num: true, valor: (a) => ritmo(a.ritmo_s_km) },
-      { titulo: "Ritmo entren.", num: true, valor: (a) => (a.entrenamiento?.ritmo_s_km ? ritmo(a.entrenamiento.ritmo_s_km) : "—") },
-      { titulo: "FC media / máx", num: true, valor: (a) => `${a.fc_media ?? "—"} / ${a.fc_max ?? "—"}` },
+      conEtapa
+        ? { titulo: `Ritmo ${comp.etapa.toLowerCase()}`, num: true, valor: (a) => ritmo(enEtapa(a).ritmo) }
+        : { titulo: "Ritmo entren.", num: true, valor: (a) => (a.entrenamiento?.ritmo_s_km ? ritmo(a.entrenamiento.ritmo_s_km) : "—") },
+      conEtapa
+        ? { titulo: `FC ${comp.etapa.toLowerCase()}`, num: true, valor: (a) => numero(enEtapa(a).fc) }
+        : { titulo: "FC media / máx", num: true, valor: (a) => `${a.fc_media ?? "—"} / ${a.fc_max ?? "—"}` },
       { titulo: "Carga", num: true, valor: (a) => a.carga ?? "—" },
-    ], { vacio: "Sin corridas en este período" });
+    ], { vacio: "Elegí al menos una sesión" });
   }
 
   Tablero.secciones.carrera = { render };
