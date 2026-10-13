@@ -153,7 +153,14 @@
           <select id="carrera-etapa"></select>
         </label>
       </div>
-      <div class="kpis" id="carrera-kpis"></div>
+      <!-- Primera pantalla: la tabla de sesiones y, a la derecha, las cuatro tarjetas -->
+      <div class="carrera-arriba">
+        <figure class="tarjeta tarjeta-tabla">
+          <figcaption><h2>Sesiones</h2><p>Todas las corridas. Tocá una fila para ver el detalle y sus bloques</p></figcaption>
+          <div class="tabla-contenedor"><table class="tabla" id="tabla-carreras"></table></div>
+        </figure>
+        <div class="kpis kpis-columna" id="carrera-kpis"></div>
+      </div>
       <div class="grilla">
         <figure class="tarjeta ancha">
           <div class="tarjeta-cab">
@@ -208,10 +215,6 @@
             <div><h3>Contacto con el suelo (ms)</h3><div class="lienzo chico"><canvas id="g-contacto"></canvas></div></div>
             <div><h3>Oscilación vertical (cm)</h3><div class="lienzo chico"><canvas id="g-oscilacion"></canvas></div></div>
           </div>
-        </figure>
-        <figure class="tarjeta ancha">
-          <figcaption><h2>Sesiones</h2><p>Tocá una fila para ver el detalle y sus bloques</p></figcaption>
-          <div class="tabla-contenedor"><table class="tabla" id="tabla-carreras"></table></div>
         </figure>
       </div>
     </section>
