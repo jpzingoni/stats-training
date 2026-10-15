@@ -2,11 +2,11 @@
 window.DATOS_TABLERO = {
  "meta": {
   "version_esquema": 1,
-  "generado": "2026-10-14 13:03:20",
+  "generado": "2026-10-15 12:51:30",
   "desde": "2026-07-18",
-  "hasta": "2026-10-13",
+  "hasta": "2026-10-14",
   "actividades_por_categoria": {
-   "Caminata": 14,
+   "Caminata": 15,
    "Carrera": 21,
    "Ciclismo": 1,
    "Pádel": 6
@@ -5582,6 +5582,166 @@ window.DATOS_TABLERO = {
    "plantilla": null,
    "ajuste_plantilla": null,
    "entrenamiento": null
+  },
+  {
+   "id": "i197391003",
+   "fecha": "2026-10-14",
+   "hora": "17:06",
+   "categoria": "Caminata",
+   "subtipo": null,
+   "nombre": "Afternoon Caminar",
+   "duracion_s": 5978,
+   "distancia_m": 9032,
+   "ritmo_s_km": 667,
+   "fc_media": 100,
+   "fc_max": 134,
+   "potencia_w": null,
+   "carga": 30,
+   "desnivel_m": 100,
+   "tiempo_total_s": 7557,
+   "calorias": 573,
+   "trimp": 47.8,
+   "intensidad_pct": 42.3,
+   "recuperacion_fc": null,
+   "zonas_s": [
+    5931,
+    0,
+    0,
+    0,
+    0,
+    0,
+    0
+   ],
+   "dinamica": {
+    "cadencia": 118,
+    "zancada": 0.77,
+    "contacto": null,
+    "oscilacion": null
+   },
+   "eficiencia": 0.907,
+   "bloques": [
+    {
+     "nro": 1,
+     "tipo": "WORK",
+     "inicio_s": 0,
+     "duracion_s": 700,
+     "distancia_m": 1002,
+     "ritmo_s_km": 699,
+     "fc_media": 82,
+     "fc_max": 103,
+     "cadencia": 114,
+     "desnivel_m": 1,
+     "potencia_w": null
+    },
+    {
+     "nro": 2,
+     "tipo": "WORK",
+     "inicio_s": 700,
+     "duracion_s": 659,
+     "distancia_m": 998,
+     "ritmo_s_km": 660,
+     "fc_media": 83,
+     "fc_max": 91,
+     "cadencia": 116,
+     "desnivel_m": 10,
+     "potencia_w": null
+    },
+    {
+     "nro": 3,
+     "tipo": "WORK",
+     "inicio_s": 1359,
+     "duracion_s": 634,
+     "distancia_m": 1000,
+     "ritmo_s_km": 634,
+     "fc_media": 85,
+     "fc_max": 94,
+     "cadencia": 121,
+     "desnivel_m": 5,
+     "potencia_w": null
+    },
+    {
+     "nro": 4,
+     "tipo": "WORK",
+     "inicio_s": 1993,
+     "duracion_s": 845,
+     "distancia_m": 125,
+     "ritmo_s_km": 6740,
+     "fc_media": 82,
+     "fc_max": 99,
+     "cadencia": 116,
+     "desnivel_m": 0,
+     "potencia_w": null
+    },
+    {
+     "nro": 5,
+     "tipo": "WORK",
+     "inicio_s": 2838,
+     "duracion_s": 618,
+     "distancia_m": 903,
+     "ritmo_s_km": 684,
+     "fc_media": 88,
+     "fc_max": 99,
+     "cadencia": 117,
+     "desnivel_m": 1,
+     "potencia_w": null
+    },
+    {
+     "nro": 6,
+     "tipo": "WORK",
+     "inicio_s": 3456,
+     "duracion_s": 1283,
+     "distancia_m": 607,
+     "ritmo_s_km": 2114,
+     "fc_media": 98,
+     "fc_max": 111,
+     "cadencia": 115,
+     "desnivel_m": 0,
+     "potencia_w": null
+    },
+    {
+     "nro": 7,
+     "tipo": "WORK",
+     "inicio_s": 4739,
+     "duracion_s": 628,
+     "distancia_m": 971,
+     "ritmo_s_km": 647,
+     "fc_media": 117,
+     "fc_max": 126,
+     "cadencia": 118,
+     "desnivel_m": 23,
+     "potencia_w": null
+    },
+    {
+     "nro": 8,
+     "tipo": "WORK",
+     "inicio_s": 5367,
+     "duracion_s": 632,
+     "distancia_m": 1016,
+     "ritmo_s_km": 622,
+     "fc_media": 119,
+     "fc_max": 131,
+     "cadencia": 123,
+     "desnivel_m": 2,
+     "potencia_w": null
+    },
+    {
+     "nro": 9,
+     "tipo": "WORK",
+     "inicio_s": 5999,
+     "duracion_s": 1559,
+     "distancia_m": 2410,
+     "ritmo_s_km": 647,
+     "fc_media": 113,
+     "fc_max": 134,
+     "cadencia": 120,
+     "desnivel_m": 30,
+     "potencia_w": null
+    }
+   ],
+   "bloque_principal": null,
+   "plantilla": null,
+   "ajuste_plantilla": null,
+   "entrenamiento": null
   }
  ],
  "semanas": [
@@ -6160,11 +6320,27 @@ window.DATOS_TABLERO = {
    "semana": "2026-W42",
    "inicio": "2026-10-12",
    "total": {
-    "sesiones": 0,
-    "duracion_s": 0,
-    "carga": 0
+    "sesiones": 1,
+    "duracion_s": 5978,
+    "carga": 30
    },
-   "por_categoria": {}
+   "por_categoria": {
+    "Caminata": {
+     "sesiones": 1,
+     "duracion_s": 5978,
+     "distancia_m": 9032,
+     "carga": 30,
+     "zonas_s": [
+      5931,
+      0,
+      0,
+      0,
+      0,
+      0,
+      0
+     ]
+    }
+   }
   }
  ],
  "bienestar": [
@@ -7311,6 +7487,19 @@ window.DATOS_TABLERO = {
    "sueno_horas_m7": 7.9,
    "sueno_puntaje": 73,
    "pasos": 1741
+  },
+  {
+   "fecha": "2026-10-14",
+   "ctl": 15.2,
+   "atl": 12.8,
+   "forma": 2.5,
+   "carga_dia": 30,
+   "fc_reposo": 52,
+   "fc_reposo_m7": 52.0,
+   "sueno_horas": 8.03,
+   "sueno_horas_m7": 7.9,
+   "sueno_puntaje": 85,
+   "pasos": 13237
   }
  ],
  "crudos": {
@@ -9314,6 +9503,47 @@ window.DATOS_TABLERO = {
      "ZEPP Amazfit Active 2 (Round)",
      "run.10092807.huami.com 1791100540",
      "2026-10-09 14:37:22"
+    ],
+    [
+     "i197391003",
+     "2026-10-14",
+     "17:06",
+     "Walk",
+     "Caminata",
+     "",
+     "Afternoon Caminar",
+     "5978",
+     "7557",
+     "9032",
+     "11:07",
+     "1.499",
+     "100",
+     "134",
+     "30",
+     "47.8",
+     "42.3",
+     "573",
+     "100",
+     "118",
+     "0.77",
+     "",
+     "",
+     "",
+     "5931",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "0",
+     "",
+     "9",
+     "4x 10m53s 85bpm | 1x 14m5s 82bpm | 1x 21m23s 98bpm | 2x 10m30s 118bpm | 1x 25m59s 113bpm",
+     "15.2",
+     "12.8",
+     "ZEPP Amazfit Active 2 (Round)",
+     "run.10092807.huami.com 1792008379",
+     "2026-10-15 12:51:30"
     ]
    ]
   },
@@ -13240,6 +13470,141 @@ window.DATOS_TABLERO = {
      "98",
      "0",
      ""
+    ],
+    [
+     "i197391003",
+     "2026-10-14",
+     "1",
+     "WORK",
+     "0",
+     "700",
+     "1002",
+     "11:39",
+     "82",
+     "103",
+     "114",
+     "1",
+     ""
+    ],
+    [
+     "i197391003",
+     "2026-10-14",
+     "2",
+     "WORK",
+     "700",
+     "659",
+     "998",
+     "11:00",
+     "83",
+     "91",
+     "116",
+     "10",
+     ""
+    ],
+    [
+     "i197391003",
+     "2026-10-14",
+     "3",
+     "WORK",
+     "1359",
+     "634",
+     "1000",
+     "10:34",
+     "85",
+     "94",
+     "121",
+     "5",
+     ""
+    ],
+    [
+     "i197391003",
+     "2026-10-14",
+     "4",
+     "WORK",
+     "1993",
+     "845",
+     "125",
+     "112:20",
+     "82",
+     "99",
+     "116",
+     "0",
+     ""
+    ],
+    [
+     "i197391003",
+     "2026-10-14",
+     "5",
+     "WORK",
+     "2838",
+     "618",
+     "903",
+     "11:24",
+     "88",
+     "99",
+     "117",
+     "1",
+     ""
+    ],
+    [
+     "i197391003",
+     "2026-10-14",
+     "6",
+     "WORK",
+     "3456",
+     "1283",
+     "607",
+     "35:14",
+     "98",
+     "111",
+     "115",
+     "0",
+     ""
+    ],
+    [
+     "i197391003",
+     "2026-10-14",
+     "7",
+     "WORK",
+     "4739",
+     "628",
+     "971",
+     "10:47",
+     "117",
+     "126",
+     "118",
+     "23",
+     ""
+    ],
+    [
+     "i197391003",
+     "2026-10-14",
+     "8",
+     "WORK",
+     "5367",
+     "632",
+     "1016",
+     "10:22",
+     "119",
+     "131",
+     "123",
+     "2",
+     ""
+    ],
+    [
+     "i197391003",
+     "2026-10-14",
+     "9",
+     "WORK",
+     "5999",
+     "1559",
+     "2410",
+     "10:47",
+     "113",
+     "134",
+     "120",
+     "30",
+     ""
     ]
    ]
   },
@@ -14910,6 +15275,24 @@ window.DATOS_TABLERO = {
      "",
      "",
      "2026-10-14 13:03:20"
+    ],
+    [
+     "2026-10-14",
+     "15.2",
+     "12.8",
+     "2.5",
+     "-1.9",
+     "30.0",
+     "52",
+     "28920",
+     "8.03",
+     "85.0",
+     "2",
+     "13237",
+     "",
+     "",
+     "",
+     "2026-10-15 12:51:30"
     ]
    ]
   }
