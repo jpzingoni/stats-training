@@ -2,12 +2,12 @@
 window.DATOS_TABLERO = {
  "meta": {
   "version_esquema": 1,
-  "generado": "2026-10-15 12:51:30",
+  "generado": "2026-10-16 12:40:00",
   "desde": "2026-07-18",
-  "hasta": "2026-10-14",
+  "hasta": "2026-10-15",
   "actividades_por_categoria": {
    "Caminata": 15,
-   "Carrera": 21,
+   "Carrera": 22,
    "Ciclismo": 1,
    "Pádel": 6
   },
@@ -5742,6 +5742,126 @@ window.DATOS_TABLERO = {
    "plantilla": null,
    "ajuste_plantilla": null,
    "entrenamiento": null
+  },
+  {
+   "id": "i197764729",
+   "fecha": "2026-10-15",
+   "hora": "18:32",
+   "categoria": "Carrera",
+   "subtipo": "Bloques",
+   "nombre": "Evening Correr",
+   "duracion_s": 3371,
+   "distancia_m": 6568,
+   "ritmo_s_km": 513,
+   "fc_media": 137,
+   "fc_max": 159,
+   "potencia_w": 189,
+   "carga": 51,
+   "desnivel_m": 56,
+   "tiempo_total_s": 3372,
+   "calorias": 568,
+   "trimp": 81.7,
+   "intensidad_pct": 73.8,
+   "recuperacion_fc": null,
+   "zonas_s": [
+    1645,
+    56,
+    1216,
+    456,
+    0,
+    0,
+    0
+   ],
+   "dinamica": {
+    "cadencia": 137,
+    "zancada": 0.85,
+    "contacto": 325,
+    "oscilacion": 6.9
+   },
+   "eficiencia": 0.853,
+   "bloques": [
+    {
+     "nro": 1,
+     "tipo": "WORK",
+     "inicio_s": 0,
+     "duracion_s": 301,
+     "distancia_m": 498,
+     "ritmo_s_km": 604,
+     "fc_media": 116,
+     "fc_max": 131,
+     "cadencia": 122,
+     "desnivel_m": 5,
+     "potencia_w": 128,
+     "fase": "Calentamiento"
+    },
+    {
+     "nro": 2,
+     "tipo": "WORK",
+     "inicio_s": 301,
+     "duracion_s": 1679,
+     "distancia_m": 4071,
+     "ritmo_s_km": 412,
+     "fc_media": 154,
+     "fc_max": 159,
+     "cadencia": 157,
+     "desnivel_m": 31,
+     "potencia_w": 272,
+     "fase": "Entrenamiento"
+    },
+    {
+     "nro": 3,
+     "tipo": "WORK",
+     "inicio_s": 1980,
+     "duracion_s": 1392,
+     "distancia_m": 2000,
+     "ritmo_s_km": 696,
+     "fc_media": 120,
+     "fc_max": 156,
+     "cadencia": 117,
+     "desnivel_m": 10,
+     "potencia_w": 102,
+     "fase": "Restaurar"
+    },
+    {
+     "nro": 4,
+     "tipo": "RECOVERY",
+     "inicio_s": 3372,
+     "duracion_s": 1,
+     "distancia_m": null,
+     "ritmo_s_km": 735,
+     "fc_media": 114,
+     "fc_max": 114,
+     "cadencia": 116,
+     "desnivel_m": 0,
+     "potencia_w": 90,
+     "fase": null
+    }
+   ],
+   "bloque_principal": {
+    "nro": 2,
+    "tipo": "WORK",
+    "inicio_s": 301,
+    "duracion_s": 1679,
+    "distancia_m": 4071,
+    "ritmo_s_km": 412,
+    "fc_media": 154,
+    "fc_max": 159,
+    "cadencia": 157,
+    "desnivel_m": 31,
+    "potencia_w": 272,
+    "fase": "Entrenamiento"
+   },
+   "plantilla": "28 MIN CO",
+   "ajuste_plantilla": "exacta",
+   "entrenamiento": {
+    "bloques": 1,
+    "duracion_s": 1679,
+    "distancia_m": 4071,
+    "ritmo_s_km": 412,
+    "fc_media": 154,
+    "potencia_w": 272,
+    "eficiencia": 0.945
+   }
   }
  ],
  "semanas": [
@@ -6320,9 +6440,9 @@ window.DATOS_TABLERO = {
    "semana": "2026-W42",
    "inicio": "2026-10-12",
    "total": {
-    "sesiones": 1,
-    "duracion_s": 5978,
-    "carga": 30
+    "sesiones": 2,
+    "duracion_s": 9349,
+    "carga": 81
    },
    "por_categoria": {
     "Caminata": {
@@ -6339,6 +6459,24 @@ window.DATOS_TABLERO = {
       0,
       0
      ]
+    },
+    "Carrera": {
+     "sesiones": 1,
+     "duracion_s": 3371,
+     "distancia_m": 6568,
+     "carga": 51,
+     "zonas_s": [
+      1645,
+      56,
+      1216,
+      456,
+      0,
+      0,
+      0
+     ],
+     "distancia_m_por_subtipo": {
+      "Bloques": 6568
+     }
     }
    }
   }
@@ -7500,6 +7638,19 @@ window.DATOS_TABLERO = {
    "sueno_horas_m7": 7.9,
    "sueno_puntaje": 85,
    "pasos": 13237
+  },
+  {
+   "fecha": "2026-10-15",
+   "ctl": 16.1,
+   "atl": 17.8,
+   "forma": -1.8,
+   "carga_dia": 51,
+   "fc_reposo": 53,
+   "fc_reposo_m7": 52.1,
+   "sueno_horas": 8.22,
+   "sueno_horas_m7": 8.0,
+   "sueno_puntaje": 77,
+   "pasos": 10290
   }
  ],
  "crudos": {
@@ -9544,6 +9695,47 @@ window.DATOS_TABLERO = {
      "ZEPP Amazfit Active 2 (Round)",
      "run.10092807.huami.com 1792008379",
      "2026-10-15 12:51:30"
+    ],
+    [
+     "i197764729",
+     "2026-10-15",
+     "18:32",
+     "Run",
+     "Carrera",
+     "Bloques",
+     "Evening Correr",
+     "3371",
+     "3372",
+     "6568",
+     "8:33",
+     "1.948",
+     "137",
+     "159",
+     "51",
+     "81.7",
+     "73.8",
+     "568",
+     "56",
+     "137",
+     "0.85",
+     "325",
+     "6.9",
+     "189",
+     "1645",
+     "56",
+     "1216",
+     "456",
+     "0",
+     "0",
+     "0",
+     "",
+     "3",
+     "1x 5m1s 116bpm | 1x 27m59s 154bpm | 1x 23m12s 120bpm",
+     "16.1",
+     "17.8",
+     "ZEPP Amazfit Active 2 (Round)",
+     "run.10092807.huami.com 1792099931",
+     "2026-10-16 12:39:59"
     ]
    ]
   },
@@ -13605,6 +13797,66 @@ window.DATOS_TABLERO = {
      "120",
      "30",
      ""
+    ],
+    [
+     "i197764729",
+     "2026-10-15",
+     "1",
+     "WORK",
+     "0",
+     "301",
+     "498",
+     "10:04",
+     "116",
+     "131",
+     "122",
+     "5",
+     "128"
+    ],
+    [
+     "i197764729",
+     "2026-10-15",
+     "2",
+     "WORK",
+     "301",
+     "1679",
+     "4071",
+     "6:52",
+     "154",
+     "159",
+     "157",
+     "31",
+     "272"
+    ],
+    [
+     "i197764729",
+     "2026-10-15",
+     "3",
+     "WORK",
+     "1980",
+     "1392",
+     "2000",
+     "11:36",
+     "120",
+     "156",
+     "117",
+     "10",
+     "102"
+    ],
+    [
+     "i197764729",
+     "2026-10-15",
+     "4",
+     "RECOVERY",
+     "3372",
+     "1",
+     "",
+     "12:15",
+     "114",
+     "114",
+     "116",
+     "0",
+     "90"
     ]
    ]
   },
@@ -15293,6 +15545,24 @@ window.DATOS_TABLERO = {
      "",
      "",
      "2026-10-15 12:51:30"
+    ],
+    [
+     "2026-10-15",
+     "16.1",
+     "17.8",
+     "-1.8",
+     "-0.7",
+     "51.0",
+     "53",
+     "29580",
+     "8.22",
+     "77.0",
+     "3",
+     "10290",
+     "",
+     "",
+     "",
+     "2026-10-16 12:40:00"
     ]
    ]
   }
