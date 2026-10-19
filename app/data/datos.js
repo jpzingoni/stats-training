@@ -2,12 +2,12 @@
 window.DATOS_TABLERO = {
  "meta": {
   "version_esquema": 1,
-  "generado": "2026-10-18 11:58:26",
+  "generado": "2026-10-19 14:50:58",
   "desde": "2026-07-18",
-  "hasta": "2026-10-17",
+  "hasta": "2026-10-18",
   "actividades_por_categoria": {
    "Caminata": 15,
-   "Carrera": 22,
+   "Carrera": 23,
    "Ciclismo": 1,
    "Pádel": 6
   },
@@ -5862,6 +5862,112 @@ window.DATOS_TABLERO = {
     "potencia_w": 272,
     "eficiencia": 0.945
    }
+  },
+  {
+   "id": "i198816001",
+   "fecha": "2026-10-18",
+   "hora": "19:08",
+   "categoria": "Carrera",
+   "subtipo": "Bloques",
+   "nombre": "Evening Correr",
+   "duracion_s": 2894,
+   "distancia_m": 6191,
+   "ritmo_s_km": 468,
+   "fc_media": 148,
+   "fc_max": 167,
+   "potencia_w": 246,
+   "carga": 56,
+   "desnivel_m": 42,
+   "tiempo_total_s": 2898,
+   "calorias": 552,
+   "trimp": 91.6,
+   "intensidad_pct": 83.4,
+   "recuperacion_fc": null,
+   "zonas_s": [
+    451,
+    418,
+    716,
+    1238,
+    72,
+    0,
+    0
+   ],
+   "dinamica": {
+    "cadencia": 149,
+    "zancada": 0.86,
+    "contacto": 296,
+    "oscilacion": 8
+   },
+   "eficiencia": 0.867,
+   "bloques": [
+    {
+     "nro": 1,
+     "tipo": "WORK",
+     "inicio_s": 0,
+     "duracion_s": 302,
+     "distancia_m": 455,
+     "ritmo_s_km": 664,
+     "fc_media": 108,
+     "fc_max": 114,
+     "cadencia": 117,
+     "desnivel_m": 3,
+     "potencia_w": 112,
+     "fase": "Calentamiento"
+    },
+    {
+     "nro": 2,
+     "tipo": "WORK",
+     "inicio_s": 302,
+     "duracion_s": 1680,
+     "distancia_m": 3738,
+     "ritmo_s_km": 449,
+     "fc_media": 148,
+     "fc_max": 165,
+     "cadencia": 153,
+     "desnivel_m": 19,
+     "potencia_w": 259,
+     "fase": "Entrenamiento"
+    },
+    {
+     "nro": 3,
+     "tipo": "WORK",
+     "inicio_s": 1982,
+     "duracion_s": 917,
+     "distancia_m": 1997,
+     "ritmo_s_km": 459,
+     "fc_media": 159,
+     "fc_max": 167,
+     "cadencia": 153,
+     "desnivel_m": 11,
+     "potencia_w": 264,
+     "fase": "Restaurar"
+    }
+   ],
+   "bloque_principal": {
+    "nro": 2,
+    "tipo": "WORK",
+    "inicio_s": 302,
+    "duracion_s": 1680,
+    "distancia_m": 3738,
+    "ritmo_s_km": 449,
+    "fc_media": 148,
+    "fc_max": 165,
+    "cadencia": 153,
+    "desnivel_m": 19,
+    "potencia_w": 259,
+    "fase": "Entrenamiento"
+   },
+   "plantilla": "28 MIN CO",
+   "ajuste_plantilla": "exacta",
+   "entrenamiento": {
+    "bloques": 1,
+    "duracion_s": 1680,
+    "distancia_m": 3738,
+    "ritmo_s_km": 449,
+    "fc_media": 148,
+    "potencia_w": 259,
+    "eficiencia": 0.902
+   }
   }
  ],
  "semanas": [
@@ -6440,9 +6546,9 @@ window.DATOS_TABLERO = {
    "semana": "2026-W42",
    "inicio": "2026-10-12",
    "total": {
-    "sesiones": 2,
-    "duracion_s": 9349,
-    "carga": 81
+    "sesiones": 3,
+    "duracion_s": 12243,
+    "carga": 137
    },
    "por_categoria": {
     "Caminata": {
@@ -6461,21 +6567,21 @@ window.DATOS_TABLERO = {
      ]
     },
     "Carrera": {
-     "sesiones": 1,
-     "duracion_s": 3371,
-     "distancia_m": 6568,
-     "carga": 51,
+     "sesiones": 2,
+     "duracion_s": 6265,
+     "distancia_m": 12759,
+     "carga": 107,
      "zonas_s": [
-      1645,
-      56,
-      1216,
-      456,
-      0,
+      2096,
+      474,
+      1932,
+      1694,
+      72,
       0,
       0
      ],
      "distancia_m_por_subtipo": {
-      "Bloques": 6568
+      "Bloques": 12759
      }
     }
    }
@@ -7676,7 +7782,20 @@ window.DATOS_TABLERO = {
    "sueno_horas": 6.92,
    "sueno_horas_m7": 7.7,
    "sueno_puntaje": 71,
-   "pasos": 8916
+   "pasos": 8928
+  },
+  {
+   "fecha": "2026-10-18",
+   "ctl": 16.3,
+   "atl": 19.1,
+   "forma": -2.8,
+   "carga_dia": 56,
+   "fc_reposo": 56,
+   "fc_reposo_m7": 54.3,
+   "sueno_horas": 7.7,
+   "sueno_horas_m7": 7.9,
+   "sueno_puntaje": 74,
+   "pasos": 11261
   }
  ],
  "crudos": {
@@ -9762,6 +9881,47 @@ window.DATOS_TABLERO = {
      "ZEPP Amazfit Active 2 (Round)",
      "run.10092807.huami.com 1792099931",
      "2026-10-16 12:39:59"
+    ],
+    [
+     "i198816001",
+     "2026-10-18",
+     "19:08",
+     "Run",
+     "Carrera",
+     "Bloques",
+     "Evening Correr",
+     "2894",
+     "2898",
+     "6191",
+     "7:48",
+     "2.137",
+     "148",
+     "167",
+     "56",
+     "91.6",
+     "83.4",
+     "552",
+     "42",
+     "149",
+     "0.86",
+     "296",
+     "8.0",
+     "246",
+     "451",
+     "418",
+     "716",
+     "1238",
+     "72",
+     "0",
+     "0",
+     "",
+     "3",
+     "1x 5m2s 108bpm | 1x 28m 148bpm | 1x 15m17s 159bpm",
+     "16.3",
+     "19.1",
+     "ZEPP Amazfit Active 2 (Round)",
+     "run.10092807.huami.com 1792361290",
+     "2026-10-19 14:50:57"
     ]
    ]
   },
@@ -13883,6 +14043,51 @@ window.DATOS_TABLERO = {
      "116",
      "0",
      "90"
+    ],
+    [
+     "i198816001",
+     "2026-10-18",
+     "1",
+     "WORK",
+     "0",
+     "302",
+     "455",
+     "11:04",
+     "108",
+     "114",
+     "117",
+     "3",
+     "112"
+    ],
+    [
+     "i198816001",
+     "2026-10-18",
+     "2",
+     "WORK",
+     "302",
+     "1680",
+     "3738",
+     "7:29",
+     "148",
+     "165",
+     "153",
+     "19",
+     "259"
+    ],
+    [
+     "i198816001",
+     "2026-10-18",
+     "3",
+     "WORK",
+     "1982",
+     "917",
+     "1997",
+     "7:39",
+     "159",
+     "167",
+     "153",
+     "11",
+     "264"
     ]
    ]
   },
@@ -15620,11 +15825,29 @@ window.DATOS_TABLERO = {
      "6.92",
      "71.0",
      "3",
-     "8916",
+     "8928",
      "",
      "",
      "",
-     "2026-10-18 11:58:26"
+     "2026-10-19 14:50:58"
+    ],
+    [
+     "2026-10-18",
+     "16.3",
+     "19.1",
+     "-2.8",
+     "0.7",
+     "56.0",
+     "56",
+     "27720",
+     "7.7",
+     "74.0",
+     "3",
+     "11261",
+     "",
+     "",
+     "",
+     "2026-10-19 14:50:58"
     ]
    ]
   }
