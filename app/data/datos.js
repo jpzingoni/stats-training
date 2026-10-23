@@ -2,9 +2,9 @@
 window.DATOS_TABLERO = {
  "meta": {
   "version_esquema": 1,
-  "generado": "2026-10-22 13:10:19",
+  "generado": "2026-10-23 13:00:00",
   "desde": "2026-07-18",
-  "hasta": "2026-10-21",
+  "hasta": "2026-10-22",
   "actividades_por_categoria": {
    "Caminata": 15,
    "Carrera": 23,
@@ -8164,6 +8164,19 @@ window.DATOS_TABLERO = {
    "sueno_horas_m7": 7.7,
    "sueno_puntaje": 78,
    "pasos": 11683
+  },
+  {
+   "fecha": "2026-10-22",
+   "ctl": 15.7,
+   "atl": 14.2,
+   "forma": 1.4,
+   "carga_dia": 0,
+   "fc_reposo": 55,
+   "fc_reposo_m7": 57.0,
+   "sueno_horas": 8.77,
+   "sueno_horas_m7": 7.8,
+   "sueno_puntaje": 82,
+   "pasos": 2435
   }
  ],
  "crudos": {
@@ -16611,6 +16624,24 @@ window.DATOS_TABLERO = {
      "",
      "",
      "2026-10-22 13:10:19"
+    ],
+    [
+     "2026-10-22",
+     "15.7",
+     "14.2",
+     "1.4",
+     "-0.4",
+     "0",
+     "55",
+     "31560",
+     "8.77",
+     "82.0",
+     "2",
+     "2435",
+     "",
+     "",
+     "",
+     "2026-10-23 13:00:00"
     ]
    ]
   }
