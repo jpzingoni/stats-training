@@ -2,14 +2,14 @@
 window.DATOS_TABLERO = {
  "meta": {
   "version_esquema": 1,
-  "generado": "2026-10-26 14:45:01",
+  "generado": "2026-10-27 13:56:04",
   "desde": "2026-07-18",
-  "hasta": "2026-10-25",
+  "hasta": "2026-10-26",
   "actividades_por_categoria": {
    "Caminata": 15,
    "Carrera": 23,
    "Ciclismo": 2,
-   "Pádel": 6
+   "Pádel": 7
   },
   "zonas_fc_carrera": [
    139,
@@ -6271,6 +6271,62 @@ window.DATOS_TABLERO = {
    "plantilla": null,
    "ajuste_plantilla": null,
    "entrenamiento": null
+  },
+  {
+   "id": "i202078729",
+   "fecha": "2026-10-25",
+   "hora": "18:37",
+   "categoria": "Pádel",
+   "subtipo": null,
+   "nombre": "Evening Padel",
+   "duracion_s": 4891,
+   "distancia_m": null,
+   "ritmo_s_km": null,
+   "fc_media": 147,
+   "fc_max": 181,
+   "potencia_w": null,
+   "carga": 93,
+   "desnivel_m": null,
+   "tiempo_total_s": 4891,
+   "calorias": 923,
+   "trimp": 148.6,
+   "intensidad_pct": 82.7,
+   "recuperacion_fc": 29,
+   "zonas_s": [
+    1219,
+    855,
+    997,
+    1098,
+    469,
+    187,
+    67
+   ],
+   "dinamica": {
+    "cadencia": null,
+    "zancada": null,
+    "contacto": null,
+    "oscilacion": null
+   },
+   "eficiencia": null,
+   "bloques": [
+    {
+     "nro": 1,
+     "tipo": "WORK",
+     "inicio_s": 0,
+     "duracion_s": 4892,
+     "distancia_m": null,
+     "ritmo_s_km": null,
+     "fc_media": 146,
+     "fc_max": 181,
+     "cadencia": null,
+     "desnivel_m": null,
+     "potencia_w": null
+    }
+   ],
+   "bloque_principal": null,
+   "plantilla": null,
+   "ajuste_plantilla": null,
+   "entrenamiento": null
   }
  ],
  "semanas": [
@@ -6893,9 +6949,9 @@ window.DATOS_TABLERO = {
    "semana": "2026-W43",
    "inicio": "2026-10-19",
    "total": {
-    "sesiones": 1,
-    "duracion_s": 5476,
-    "carga": 40
+    "sesiones": 2,
+    "duracion_s": 10367,
+    "carga": 133
    },
    "por_categoria": {
     "Ciclismo": {
@@ -6912,8 +6968,33 @@ window.DATOS_TABLERO = {
       0,
       0
      ]
+    },
+    "Pádel": {
+     "sesiones": 1,
+     "duracion_s": 4891,
+     "distancia_m": 0,
+     "carga": 93,
+     "zonas_s": [
+      1219,
+      855,
+      997,
+      1098,
+      469,
+      187,
+      67
+     ]
     }
    }
+  },
+  {
+   "semana": "2026-W44",
+   "inicio": "2026-10-26",
+   "total": {
+    "sesiones": 0,
+    "duracion_s": 0,
+    "carga": 0
+   },
+   "por_categoria": {}
   }
  ],
  "bienestar": [
@@ -8206,16 +8287,29 @@ window.DATOS_TABLERO = {
   },
   {
    "fecha": "2026-10-25",
-   "ctl": 14.6,
-   "atl": 9.3,
-   "forma": 5.3,
+   "ctl": 16.8,
+   "atl": 21.7,
+   "forma": -4.9,
+   "carga_dia": 93,
+   "fc_reposo": 58,
+   "fc_reposo_m7": 57.0,
+   "sueno_horas": 7.72,
+   "sueno_horas_m7": 7.1,
+   "sueno_puntaje": 70,
+   "pasos": 5057
+  },
+  {
+   "fecha": "2026-10-26",
+   "ctl": 16.4,
+   "atl": 18.8,
+   "forma": -2.4,
    "carga_dia": 0,
-   "fc_reposo": null,
-   "fc_reposo_m7": 56.8,
-   "sueno_horas": null,
-   "sueno_horas_m7": 7.0,
-   "sueno_puntaje": null,
-   "pasos": 122
+   "fc_reposo": 57,
+   "fc_reposo_m7": 56.9,
+   "sueno_horas": 7.65,
+   "sueno_horas_m7": 7.2,
+   "sueno_puntaje": 80,
+   "pasos": 1806
   }
  ],
  "crudos": {
@@ -10383,6 +10477,47 @@ window.DATOS_TABLERO = {
      "ZEPP Amazfit Active 2 (Round)",
      "run.10092807.huami.com 1792437241",
      "2026-10-20 12:54:54"
+    ],
+    [
+     "i202078729",
+     "2026-10-25",
+     "18:37",
+     "Padel",
+     "Pádel",
+     "",
+     "Evening Padel",
+     "4891",
+     "4891",
+     "",
+     "",
+     "",
+     "147",
+     "181",
+     "93",
+     "148.6",
+     "82.7",
+     "923",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "1219",
+     "855",
+     "997",
+     "1098",
+     "469",
+     "187",
+     "67",
+     "29",
+     "1",
+     "1x 1h21m 146bpm",
+     "16.8",
+     "21.7",
+     "ZEPP Amazfit Active 2 (Round)",
+     "run.10092807.huami.com 1792964267",
+     "2026-10-27 13:56:03"
     ]
    ]
   },
@@ -14849,6 +14984,21 @@ window.DATOS_TABLERO = {
      "",
      "0",
      ""
+    ],
+    [
+     "i202078729",
+     "2026-10-25",
+     "1",
+     "WORK",
+     "0",
+     "4892",
+     "",
+     "",
+     "146",
+     "181",
+     "",
+     "",
+     ""
     ]
    ]
   },
@@ -16720,21 +16870,39 @@ window.DATOS_TABLERO = {
     ],
     [
      "2026-10-25",
-     "14.6",
-     "9.3",
-     "5.3",
-     "-1.7",
+     "16.8",
+     "21.7",
+     "-4.9",
+     "0.5",
+     "93.0",
+     "58",
+     "27780",
+     "7.72",
+     "70.0",
+     "3",
+     "5057",
+     "",
+     "",
+     "",
+     "2026-10-27 13:56:04"
+    ],
+    [
+     "2026-10-26",
+     "16.4",
+     "18.8",
+     "-2.4",
+     "-0.4",
      "0",
+     "57",
+     "27540",
+     "7.65",
+     "80.0",
+     "2",
+     "1806",
      "",
      "",
      "",
-     "",
-     "",
-     "122",
-     "",
-     "",
-     "",
-     "2026-10-26 14:45:01"
+     "2026-10-27 13:56:04"
     ]
    ]
   }
