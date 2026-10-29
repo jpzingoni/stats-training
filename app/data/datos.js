@@ -2,12 +2,12 @@
 window.DATOS_TABLERO = {
  "meta": {
   "version_esquema": 1,
-  "generado": "2026-10-28 14:30:09",
+  "generado": "2026-10-29 14:40:58",
   "desde": "2026-07-18",
-  "hasta": "2026-10-27",
+  "hasta": "2026-10-28",
   "actividades_por_categoria": {
    "Caminata": 15,
-   "Carrera": 23,
+   "Carrera": 24,
    "Ciclismo": 2,
    "Pádel": 7
   },
@@ -6327,6 +6327,75 @@ window.DATOS_TABLERO = {
    "plantilla": null,
    "ajuste_plantilla": null,
    "entrenamiento": null
+  },
+  {
+   "id": "i202960052",
+   "fecha": "2026-10-28",
+   "hora": "18:24",
+   "categoria": "Carrera",
+   "subtipo": "Libre",
+   "nombre": "Evening Correr",
+   "duracion_s": 2523,
+   "distancia_m": 5456,
+   "ritmo_s_km": 464,
+   "fc_media": 152,
+   "fc_max": 175,
+   "potencia_w": 220,
+   "carga": 53,
+   "desnivel_m": 49,
+   "tiempo_total_s": 2530,
+   "calorias": 499,
+   "trimp": 90.1,
+   "intensidad_pct": 86.9,
+   "recuperacion_fc": 17,
+   "zonas_s": [
+    304,
+    148,
+    692,
+    1206,
+    129,
+    38,
+    7
+   ],
+   "dinamica": {
+    "cadencia": 145,
+    "zancada": 0.89,
+    "contacto": 314,
+    "oscilacion": 7.2
+   },
+   "eficiencia": 0.854,
+   "bloques": [
+    {
+     "nro": 1,
+     "tipo": "WORK",
+     "inicio_s": 0,
+     "duracion_s": 301,
+     "distancia_m": 458,
+     "ritmo_s_km": 657,
+     "fc_media": 114,
+     "fc_max": 131,
+     "cadencia": 116,
+     "desnivel_m": 4,
+     "potencia_w": 109
+    },
+    {
+     "nro": 2,
+     "tipo": "WORK",
+     "inicio_s": 301,
+     "duracion_s": 2230,
+     "distancia_m": 4999,
+     "ritmo_s_km": 446,
+     "fc_media": 157,
+     "fc_max": 175,
+     "cadencia": 149,
+     "desnivel_m": 40,
+     "potencia_w": 234
+    }
+   ],
+   "bloque_principal": null,
+   "plantilla": "Libre",
+   "ajuste_plantilla": null,
+   "entrenamiento": null
   }
  ],
  "semanas": [
@@ -6990,11 +7059,30 @@ window.DATOS_TABLERO = {
    "semana": "2026-W44",
    "inicio": "2026-10-26",
    "total": {
-    "sesiones": 0,
-    "duracion_s": 0,
-    "carga": 0
+    "sesiones": 1,
+    "duracion_s": 2523,
+    "carga": 53
    },
-   "por_categoria": {}
+   "por_categoria": {
+    "Carrera": {
+     "sesiones": 1,
+     "duracion_s": 2523,
+     "distancia_m": 5456,
+     "carga": 53,
+     "zonas_s": [
+      304,
+      148,
+      692,
+      1206,
+      129,
+      38,
+      7
+     ],
+     "distancia_m_por_subtipo": {
+      "Libre": 5456
+     }
+    }
+   }
   }
  ],
  "bienestar": [
@@ -8322,7 +8410,20 @@ window.DATOS_TABLERO = {
    "sueno_horas": 8.35,
    "sueno_horas_m7": 7.3,
    "sueno_puntaje": 80,
-   "pasos": 5885
+   "pasos": 6692
+  },
+  {
+   "fecha": "2026-10-28",
+   "ctl": 16.9,
+   "atl": 21.2,
+   "forma": -4.3,
+   "carga_dia": 53,
+   "fc_reposo": 53,
+   "fc_reposo_m7": 56.1,
+   "sueno_horas": 8.07,
+   "sueno_horas_m7": 7.3,
+   "sueno_puntaje": 83,
+   "pasos": 9821
   }
  ],
  "crudos": {
@@ -10531,6 +10632,47 @@ window.DATOS_TABLERO = {
      "ZEPP Amazfit Active 2 (Round)",
      "run.10092807.huami.com 1792964267",
      "2026-10-27 13:56:03"
+    ],
+    [
+     "i202960052",
+     "2026-10-28",
+     "18:24",
+     "Run",
+     "Carrera",
+     "Libre",
+     "Evening Correr",
+     "2523",
+     "2530",
+     "5456",
+     "7:44",
+     "2.157",
+     "152",
+     "175",
+     "53",
+     "90.1",
+     "86.9",
+     "499",
+     "49",
+     "145",
+     "0.89",
+     "314",
+     "7.2",
+     "220",
+     "304",
+     "148",
+     "692",
+     "1206",
+     "129",
+     "38",
+     "7",
+     "17",
+     "2",
+     "1x 5m1s 114bpm | 1x 37m10s 157bpm",
+     "16.9",
+     "21.2",
+     "ZEPP Amazfit Active 2 (Round)",
+     "run.10092807.huami.com 1793222647",
+     "2026-10-29 14:40:57"
     ]
    ]
   },
@@ -15012,6 +15154,36 @@ window.DATOS_TABLERO = {
      "",
      "",
      ""
+    ],
+    [
+     "i202960052",
+     "2026-10-28",
+     "1",
+     "WORK",
+     "0",
+     "301",
+     "458",
+     "10:57",
+     "114",
+     "131",
+     "116",
+     "4",
+     "109"
+    ],
+    [
+     "i202960052",
+     "2026-10-28",
+     "2",
+     "WORK",
+     "301",
+     "2230",
+     "4999",
+     "7:26",
+     "157",
+     "175",
+     "149",
+     "40",
+     "234"
     ]
    ]
   },
@@ -16929,11 +17101,29 @@ window.DATOS_TABLERO = {
      "8.35",
      "80.0",
      "2",
-     "5885",
+     "6692",
      "",
      "",
      "",
-     "2026-10-28 14:30:09"
+     "2026-10-29 14:40:58"
+    ],
+    [
+     "2026-10-28",
+     "16.9",
+     "21.2",
+     "-4.3",
+     "0.8",
+     "53.0",
+     "53",
+     "29040",
+     "8.07",
+     "83.0",
+     "2",
+     "9821",
+     "",
+     "",
+     "",
+     "2026-10-29 14:40:58"
     ]
    ]
   }
