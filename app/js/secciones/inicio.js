@@ -134,12 +134,7 @@
         </li>`).join("")}</ul>` : '<p class="texto-sec">Todavía no hay actividades este mes.</p>'}`;
   }
 
-  /** Nivel de carga del día (mismos cortes que el calendario del Resumen): 0 = sin carga, 1…5. */
-  const CORTES_CARGA = [1, 30, 60, 90, 120];
-  const nivelCarga = (carga) => CORTES_CARGA.filter((u) => (carga ?? 0) >= u).length;
-
   function renderMiniCalendario(ctx, m) {
-    const cargaPorDia = new Map(ctx.todo.bienestar.map((d) => [d.fecha, d.carga_dia]));
     const actPorDia = new Map();
     for (const a of m.actividades) {
       if (!actPorDia.has(a.fecha)) actPorDia.set(a.fecha, []);
@@ -151,9 +146,9 @@
       if (f < m.desde) { celdas.push('<span class="mini-dia fuera"></span>'); continue; }
       const acts = actPorDia.get(f) ?? [];
       const futuro = f > m.hasta;
-      // Días con actividad: fondo según la carga (al menos el nivel 1, aunque la carga sea ~0)
-      const nivel = futuro ? 0 : Math.max(nivelCarga(cargaPorDia.get(f)), acts.length ? 1 : 0);
-      const clases = ["mini-dia", nivel && `nivel-${nivel}`, futuro && "futuro", f === hoy && "hoy"].filter(Boolean).join(" ");
+      // Días con actividad: un solo color, sin importar la carga
+      const activo = !futuro && acts.length > 0;
+      const clases = ["mini-dia", activo && "activo", futuro && "futuro", f === hoy && "hoy"].filter(Boolean).join(" ");
       const detalle = acts.map((a) => `${a.categoria}${a.subtipo ? ` · ${a.subtipo}` : ""} (${duracion(a.duracion_s)})`).join(", ");
       const titulo = `${fechaLarga(f)}: ${futuro ? "sin datos todavía" : detalle || "sin actividad"}`;
       // Un punto por tipo de actividad del día, con su color

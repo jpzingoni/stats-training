@@ -78,7 +78,6 @@
   --lateral-texto: #080808;
   /* Prueba: color de las métricas diarias (barras de Pasos / Sueño en Este mes) */
   --serie-diaria: #f9652f;
-  --cal-texto-alto: var(--texto);   /* número sobre naranja fuerte */
 }
 
 /* ── Tokens: modo oscuro (sistema, salvo que el usuario elija claro) ─────── */
@@ -121,7 +120,6 @@
     --lateral-fondo: var(--superficie);
     --lateral-texto: var(--texto);
     --serie-diaria: #f9652f;
-    --cal-texto-alto: var(--fondo);
   }
 }
 :root[data-theme="dark"] {
@@ -162,7 +160,6 @@
   --lateral-fondo: var(--superficie);
   --lateral-texto: var(--texto);
   --serie-diaria: #f9652f;
-  --cal-texto-alto: var(--fondo);
 }
 
 /* ── Base ────────────────────────────────────────────────────────────────── */
@@ -487,7 +484,7 @@ main { padding: var(--hueco) var(--hueco) var(--e5); max-width: 1400px; }
 .act-lista-det { color: var(--texto-sec); font: var(--t-chico); font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
 .mini-cal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
 .mini-nombre { text-align: center; font: var(--t-etiqueta); text-transform: uppercase; letter-spacing: 0.06em; color: var(--texto-muted); }
-/* Calendario chico: fondo según la carga del día; puntos con el color del deporte */
+/* Calendario chico: fondo de color en los días con actividad; puntos con el color del deporte */
 .mini-dia {
   position: relative; min-height: 0; border-radius: var(--radio-chico); background: var(--rampa-vacio);
   display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
@@ -495,17 +492,9 @@ main { padding: var(--hueco) var(--hueco) var(--e5); max-width: 1400px; }
 }
 .mini-dia.fuera { background: none; }
 .mini-dia.futuro { background: none; color: var(--texto-muted); }
-/* Prueba de paleta: días con actividad en el naranja de las métricas diarias; la intensidad
-   indica la carga del día (nivel 1 = liviana … nivel 5 = pesada) */
-.mini-dia.nivel-1 { background: color-mix(in srgb, var(--serie-diaria) 30%, var(--superficie)); }
-.mini-dia.nivel-2 { background: color-mix(in srgb, var(--serie-diaria) 45%, var(--superficie)); }
-.mini-dia.nivel-3 { background: color-mix(in srgb, var(--serie-diaria) 60%, var(--superficie)); }
-.mini-dia.nivel-4 { background: color-mix(in srgb, var(--serie-diaria) 80%, var(--superficie)); }
-.mini-dia.nivel-5 { background: var(--serie-diaria); }
-/* Número legible sobre el naranja */
-.mini-dia.nivel-1, .mini-dia.nivel-2, .mini-dia.nivel-3 { color: var(--texto); }
-.mini-dia.nivel-4, .mini-dia.nivel-5 { color: var(--cal-texto-alto); }
-.mini-dia.nivel-1 b, .mini-dia.nivel-2 b, .mini-dia.nivel-3 b, .mini-dia.nivel-4 b, .mini-dia.nivel-5 b { font-weight: 600; }
+/* Días con actividad: un solo tono del naranja de las métricas diarias (no indica la carga) */
+.mini-dia.activo { background: color-mix(in srgb, var(--serie-diaria) 45%, var(--superficie)); color: var(--texto); }
+.mini-dia.activo b { font-weight: 600; }
 .mini-dia.hoy { outline: 2px solid var(--tinta); outline-offset: 1px; }
 .mini-puntos { display: flex; gap: 3px; }
 .mini-puntos i { width: 6px; height: 6px; border-radius: 50%; outline: 1.5px solid var(--superficie); }
