@@ -20,3 +20,6 @@ test-grafico/
 
 # Capturas locales de revisión de diseño
 .capturas/
+
+#diseño
+diseno/referencias/*/

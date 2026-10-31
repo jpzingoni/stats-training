@@ -1,0 +1,36 @@
+{
+  "permissions": {
+    "defaultMode": "default",
+    "disableBypassPermissionsMode": "disable",
+    "allow": [
+      "WebSearch",
+      "WebFetch(domain:*)",
+      "Bash(python herramientas/mirar.py *)",
+      "Bash(py herramientas/mirar.py *)",
+      "Edit(./propuestas/**)",
+      "Edit(./evaluaciones/**)",
+      "Edit(./referencias/**)"
+    ],
+    "deny": [
+      "Read(~/Documents/programacion/entrenamiento/config.json)",
+      "Edit(~/Documents/programacion/entrenamiento/app/**)",
+      "Edit(~/Documents/programacion/entrenamiento/versiones/**)",
+      "Edit(~/Documents/programacion/entrenamiento/scripts/**)",
+      "Edit(~/Documents/programacion/entrenamiento/datos/**)",
+      "Edit(~/Documents/programacion/entrenamiento/coach/**)",
+      "Edit(~/Documents/programacion/entrenamiento/docs/**)",
+      "Edit(~/Documents/programacion/entrenamiento/.github/**)",
+      "Edit(~/Documents/programacion/entrenamiento/*.md)",
+      "Edit(~/Documents/programacion/entrenamiento/*.json)",
+      "Edit(./herramientas/**)",
+      "Edit(./.claude/**)",
+      "Bash(git commit *)",
+      "Bash(git push *)",
+      "Bash(git checkout *)",
+      "Bash(git reset *)",
+      "Bash(rm *)",
+      "Bash(del *)",
+      "Bash(mv *)"
+    ]
+  }
+}

@@ -10,6 +10,7 @@ Intervals.icu, se guardan en CSV mediante GitHub Actions y se muestran en un tab
 | `app/` | Tablero web (se publica en Cloudflare Pages) | abrir en `app/` |
 | `coach/` | Coach virtual: ficha del atleta, informes y planes | abrir en `coach/` |
 | `docs/` | Bitácora del proyecto para el portfolio | cualquiera |
+| diseno/ | Propuestas y evaluaciones visuales (solo lectura del resto) | abrir en diseno/ |
 
 ## Reglas generales
 

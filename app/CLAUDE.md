@@ -59,3 +59,7 @@ recuperación), pensado para ver mi progreso y para mostrar en mi portfolio.
 
 - Pestaña "Coach": mostrar el último informe (`../coach/informes/*.md`) y el plan vs. lo
   realizado (`../coach/planes/*.csv`). El generador los copiará a `app/data/`.
+
+   ## Diseño
+   Todo lo visual sigue `DESIGN.md`. Ningún color, tamaño de letra, radio ni sombra fuera de sus tokens.
+   Para auditar o rediseñar una vista: `/revisar-diseno <vista>`.

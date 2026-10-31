@@ -1,0 +1,757 @@
+<!doctype html>
+<html lang="es-AR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Maqueta v2 · Sistema</title>
+<meta name="color-scheme" content="light dark">
+<style>
+/* ── Fuentes del tablero ───────────────────────────────────────────────── */
+@font-face { font-family: "Barlow"; font-weight: 400; src: url("../../../app/vendor/fuentes/barlow-400.woff2") format("woff2"); }
+@font-face { font-family: "Barlow"; font-weight: 600; src: url("../../../app/vendor/fuentes/barlow-600.woff2") format("woff2"); }
+@font-face { font-family: "Barlow Semi Condensed"; font-weight: 500; src: url("../../../app/vendor/fuentes/barlow-semi-condensed-500.woff2") format("woff2"); }
+@font-face { font-family: "Barlow Semi Condensed"; font-weight: 600; src: url("../../../app/vendor/fuentes/barlow-semi-condensed-600.woff2") format("woff2"); }
+
+/* ── Tokens v2 (DESIGN.md §7) ──────────────────────────────────────────── */
+:root {
+  color-scheme: light;
+  --fuente: "Barlow", system-ui, sans-serif;
+  --fuente-num: "Barlow Semi Condensed", "Barlow", system-ui, sans-serif;
+  --tx-etiqueta: 11px; --tx-chico: 13px; --tx-base: 15px; --tx-titulo: 17px;
+  --tx-pagina: 24px; --tx-kpi: 30px; --tx-hero: 44px;
+  --e1: 4px; --e2: 8px; --e3: 12px; --e4: 16px; --e5: 24px; --e6: 32px;
+  --radio: 10px; --radio-chico: 6px; --radio-celda: 3px;
+  --alto-control: 32px;
+  --alto-principal: 320px; --alto-grafico: 240px; --alto-panel: 120px; --alto-sparkline: 24px;
+  --fondo: #f9f9f7; --superficie: #fcfcfb; --superficie-2: #f0efec;
+  --borde: rgba(11, 11, 11, 0.10);
+  --texto: #0b0b0b; --texto-sec: #52514e; --texto-muted: #6f6e69;
+  --grilla: #e1e0d9; --eje: #c3c2b7;
+  --tinta: #0b0b0b; --seleccion: rgba(11, 11, 11, 0.06);
+  --sombra-flotante: 0 6px 20px rgba(0, 0, 0, 0.15); --velo: rgba(0, 0, 0, 0.45);
+  --serie-1: #2a78d6; --serie-2: #eb6834; --serie-3: #1baf7a; --serie-4: #eda100; --serie-otras: #898781;
+  --bien: #1f8a4c; --mal: #d03b3b;
+  --rampa-vacio: #f0efec;
+  --rampa-1: #d4cef3; --rampa-2: #b9b0ec; --rampa-3: #9586df; --rampa-4: #7462cc;
+  --rampa-5: #5a45b5; --rampa-6: #46329a; --rampa-7: #2e2070;
+}
+:root[data-theme="dark"] {
+  color-scheme: dark;
+  --fondo: #0d0d0d; --superficie: #1a1a19; --superficie-2: #252524;
+  --borde: rgba(255, 255, 255, 0.10);
+  --texto: #ffffff; --texto-sec: #c3c2b7; --texto-muted: #9a9890;
+  --grilla: #2c2c2a; --eje: #383835;
+  --tinta: #ffffff; --seleccion: rgba(255, 255, 255, 0.08);
+  --sombra-flotante: 0 6px 20px rgba(0, 0, 0, 0.5); --velo: rgba(0, 0, 0, 0.6);
+  --serie-1: #3987e5; --serie-2: #d95926; --serie-3: #199e70; --serie-4: #c98500; --serie-otras: #6f6e69;
+  --bien: #3fb871; --mal: #e66767;
+  --rampa-vacio: #252524;
+  --rampa-1: #2e2470; --rampa-2: #3f3296; --rampa-3: #5646b8; --rampa-4: #8070d8;
+  --rampa-5: #9586df; --rampa-6: #b9b0ec; --rampa-7: #dcd8f5;
+}
+
+/* ── Base ──────────────────────────────────────────────────────────────── */
+* { box-sizing: border-box; }
+body { margin: 0; background: var(--fondo); color: var(--texto); font: 400 var(--tx-base)/22px var(--fuente); }
+h1, h2, h3, p { margin: 0; }
+button, select { font: inherit; color: inherit; }
+:focus-visible { outline: 2px solid var(--tinta); outline-offset: 2px; }
+.num { font-family: var(--fuente-num); font-variant-numeric: tabular-nums; font-weight: 500; }
+
+/* Barra de la maqueta (no es parte del tablero) */
+.maqueta-barra {
+  display: flex; flex-wrap: wrap; gap: var(--e2) var(--e4); align-items: center;
+  padding: var(--e2) var(--e4); background: var(--superficie-2); border-bottom: 1px solid var(--borde);
+  font-size: var(--tx-chico); color: var(--texto-sec); line-height: 18px;
+}
+.maqueta-barra strong { color: var(--texto); }
+.maqueta-barra .controles { display: flex; gap: var(--e2); margin-left: auto; }
+
+/* El marco es el "dispositivo": las reglas de celular usan container queries
+   para poder ver la versión de 390px dentro de una ventana de escritorio */
+.marco { container-type: inline-size; margin: 0 auto; background: var(--fondo); }
+.marco.celular { width: 390px; border-left: 1px solid var(--borde); border-right: 1px solid var(--borde); min-height: 100vh; }
+
+.app { display: grid; grid-template-columns: 240px minmax(0, 1fr); min-height: calc(100vh - 40px); }
+.lateral { background: var(--superficie); border-right: 1px solid var(--borde); padding: var(--e4) var(--e3); display: flex; flex-direction: column; gap: var(--e4); }
+.marca-sitio h1 { font-size: var(--tx-titulo); line-height: 24px; font-weight: 600; padding: 0 var(--e2); }
+.marca-sitio p { font-size: var(--tx-chico); line-height: 18px; color: var(--texto-muted); padding: 0 var(--e2); margin-top: var(--e1); }
+.nav { display: flex; flex-direction: column; gap: 2px; }
+.nav-grupo { margin: var(--e3) var(--e2) var(--e1); font-size: var(--tx-etiqueta); line-height: 16px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--texto-muted); }
+.nav button {
+  position: relative; display: flex; align-items: center; gap: var(--e3); width: 100%; text-align: left;
+  background: none; border: 0; border-radius: var(--radio-chico); padding: var(--e2); cursor: pointer; color: var(--texto-sec);
+}
+.nav button:hover { background: var(--seleccion); color: var(--texto); }
+.nav button[aria-current="page"] { background: var(--seleccion); color: var(--texto); font-weight: 600; }
+.nav button[aria-current="page"]::before { content: ""; position: absolute; left: 0; top: var(--e2); bottom: var(--e2); width: 2px; background: var(--tinta); }
+.nav svg { width: 18px; height: 18px; flex: none; }
+.nav button:disabled { cursor: default; opacity: .55; }
+
+/* ── Barra superior de la vista ────────────────────────────────────────── */
+.contenido { min-width: 0; }
+.barra {
+  position: sticky; top: 0; z-index: 5; display: flex; flex-wrap: wrap; align-items: center; gap: var(--e2) var(--e4);
+  padding: var(--e3) var(--e4); background: var(--fondo); border-bottom: 1px solid var(--borde);
+}
+.titulo-vista { font-size: var(--tx-titulo); line-height: 24px; font-weight: 600; }
+.barra-controles { display: flex; gap: var(--e2); align-items: center; flex-wrap: nowrap; }
+.barra-rango { margin-left: auto; font-size: var(--tx-chico); color: var(--texto-muted); }
+.boton-menu { display: none; }
+main { padding: var(--e4); max-width: 1400px; display: flex; flex-direction: column; gap: var(--e4); }
+.contexto { font-size: var(--tx-chico); line-height: 18px; color: var(--texto-sec); margin-bottom: calc(var(--e2) * -1); }
+
+/* ── Controles: un solo estilo ─────────────────────────────────────────── */
+.control, .segmentado button, select.control {
+  height: var(--alto-control); padding: 0 var(--e3); display: inline-flex; align-items: center; gap: var(--e2);
+  background: var(--superficie); border: 1px solid var(--borde); border-radius: var(--radio-chico);
+  font-size: var(--tx-base); color: var(--texto); cursor: pointer; white-space: nowrap;
+}
+select.control { appearance: none; padding-right: calc(var(--e3) + 14px);
+  background-image: linear-gradient(var(--texto-muted), var(--texto-muted)); background-size: 0 0; }
+.select { position: relative; display: inline-flex; }
+.select::after { content: "▾"; position: absolute; right: var(--e3); top: 50%; transform: translateY(-50%); color: var(--texto-muted); pointer-events: none; font-size: var(--tx-chico); }
+.segmentado { display: inline-flex; flex-wrap: nowrap; }
+.segmentado button { border-radius: 0; margin-left: -1px; }
+.segmentado button:first-child { border-radius: var(--radio-chico) 0 0 var(--radio-chico); margin-left: 0; }
+.segmentado button:last-child { border-radius: 0 var(--radio-chico) var(--radio-chico) 0; }
+.segmentado button[aria-pressed="true"], .control[aria-pressed="true"] { background: var(--tinta); color: var(--fondo); border-color: var(--tinta); position: relative; }
+.control:disabled { opacity: .4; cursor: default; }
+
+/* ── Tarjeta ───────────────────────────────────────────────────────────── */
+.grilla { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--e4); }
+.tarjeta { background: var(--superficie); border: 1px solid var(--borde); border-radius: var(--radio); padding: var(--e4); min-width: 0; display: flex; flex-direction: column; }
+.tarjeta-cab { display: flex; justify-content: space-between; align-items: flex-start; gap: var(--e3); margin-bottom: var(--e3); }
+.tarjeta h2 { font-size: var(--tx-titulo); line-height: 24px; font-weight: 600; }
+.sub { font-size: var(--tx-chico); line-height: 18px; color: var(--texto-sec); margin-top: 2px; }
+.lienzo { position: relative; height: var(--alto-grafico); }
+.lienzo.principal { height: var(--alto-principal); }
+.nota { margin-top: var(--e3); font-size: var(--tx-chico); line-height: 18px; color: var(--texto-sec); }
+.nota summary { cursor: pointer; list-style: none; }
+.nota summary::before { content: "▸ "; }
+.nota[open] summary::before { content: "▾ "; }
+.nota p { margin-top: var(--e2); max-width: 70ch; }
+
+/* ── KPI ───────────────────────────────────────────────────────────────── */
+.kpis { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); gap: var(--e4); }
+.kpi { background: var(--superficie); border: 1px solid var(--borde); border-radius: var(--radio); padding: var(--e3) var(--e4); min-width: 0; display: flex; flex-direction: column; justify-content: center; }
+.kpi-etiqueta { font-size: var(--tx-etiqueta); line-height: 16px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--texto-sec); }
+.kpi-valor { display: flex; flex-wrap: wrap; align-items: baseline; column-gap: var(--e1); margin-top: var(--e1);
+  font-family: var(--fuente-num); font-variant-numeric: tabular-nums; font-size: var(--tx-kpi); line-height: 34px; font-weight: 600; }
+.kpi.hero .kpi-valor { font-size: var(--tx-hero); line-height: 48px; }
+.kpi-unidad { font-family: var(--fuente); font-size: var(--tx-base); font-weight: 400; color: var(--texto-sec); }
+.kpi-ctx { font-size: var(--tx-chico); line-height: 18px; color: var(--texto-sec); margin-top: var(--e1); }
+.kpi-ctx.sin-base { color: var(--texto-muted); }
+.bien { color: var(--bien); } .mal { color: var(--mal); }
+.spark { display: flex; align-items: center; gap: var(--e2); margin-top: var(--e2); height: var(--alto-sparkline);
+  font-family: var(--fuente-num); font-variant-numeric: tabular-nums; font-weight: 500; font-size: var(--tx-chico); color: var(--texto-muted); }
+.spark svg { flex: 1; min-width: 0; height: 100%; overflow: visible; }
+
+/* ── Tabla ─────────────────────────────────────────────────────────────── */
+.tabla-cont { max-height: 420px; overflow: auto; }
+table { width: 100%; border-collapse: collapse; font-size: var(--tx-chico); line-height: 18px; }
+th { font-size: var(--tx-etiqueta); line-height: 16px; font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--texto-sec);
+  text-align: left; padding: var(--e2); border-bottom: 1px solid var(--grilla); position: sticky; top: 0; background: var(--superficie); white-space: nowrap; }
+td { padding: 0 var(--e2); height: 36px; border-bottom: 1px solid var(--grilla); white-space: nowrap; }
+th.n, td.n { text-align: right; }
+td.n { font-family: var(--fuente-num); font-variant-numeric: tabular-nums; font-weight: 500; }
+td.prota { font-weight: 600; }
+tbody tr:hover { background: var(--seleccion); }
+.punto { display: inline-block; width: 8px; height: 8px; border-radius: 50%; margin-right: var(--e2); vertical-align: 1px; }
+.marca { font-size: var(--tx-etiqueta); font-weight: 600; letter-spacing: .06em; text-transform: uppercase; color: var(--texto-muted); margin-left: var(--e1); }
+td:first-child, th:first-child { position: sticky; left: 0; background: var(--superficie); }
+th:first-child { z-index: 2; }
+
+/* ── Leyenda ───────────────────────────────────────────────────────────── */
+.leyenda { display: flex; flex-wrap: wrap; gap: var(--e1) var(--e3); font-size: var(--tx-chico); line-height: 18px; color: var(--texto-sec); margin-bottom: var(--e2); }
+.leyenda span { display: inline-flex; align-items: center; gap: var(--e1); }
+.leyenda i { width: 8px; height: 8px; border-radius: 50%; display: inline-block; }
+.leyenda i.cuadro { border-radius: 2px; }
+
+/* ── Este mes ──────────────────────────────────────────────────────────── */
+.mes-cab { display: flex; align-items: center; gap: var(--e2); flex-wrap: wrap; }
+.mes-cab h2 { font-size: var(--tx-pagina); line-height: 30px; font-weight: 600; min-width: 11rem; text-align: center; }
+.mes-cab .rango { font-size: var(--tx-chico); color: var(--texto-sec); margin-left: var(--e2); }
+.portada { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: auto minmax(0, 1fr) minmax(0, 1fr); gap: var(--e4); height: max(620px, calc(100vh - 72px)); }
+.portada > .mes-cab { grid-column: 1 / -1; }
+.kpis-cuadro { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--e4); min-height: 0; }
+.portada .tarjeta { min-height: 0; }
+.portada .lienzo { flex: 1; height: auto; min-height: 0; }
+.mini-cal { flex: 1; min-height: 0; display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); grid-auto-rows: minmax(0, 1fr); gap: var(--e1); }
+.mini-nombre { text-align: center; font-size: var(--tx-etiqueta); line-height: 16px; font-weight: 600; letter-spacing: .06em; color: var(--texto-muted); align-self: end; }
+.dia { border-radius: var(--radio-chico); background: var(--rampa-vacio); display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 3px;
+  font-family: var(--fuente-num); font-variant-numeric: tabular-nums; font-weight: 500; font-size: var(--tx-chico); color: var(--texto-sec); min-height: 0; }
+.dia.fuera { background: none; }
+.dia.futuro { background: none; color: var(--texto-muted); }
+.dia.n1 { background: var(--rampa-1); } .dia.n2 { background: var(--rampa-2); } .dia.n3 { background: var(--rampa-3); }
+.dia.n4 { background: var(--rampa-4); } .dia.n5 { background: var(--rampa-5); }
+.dia.n1, .dia.n2, .dia.n3 { color: var(--texto); font-weight: 600; }
+.dia.n4, .dia.n5 { color: var(--fondo); font-weight: 600; }
+.dia.hoy { outline: 2px solid var(--tinta); outline-offset: 1px; }
+.dia .puntos { display: flex; gap: 3px; }
+.dia .puntos i { width: 6px; height: 6px; border-radius: 50%; outline: 1.5px solid var(--superficie); }
+.leyenda-rampa { display: flex; align-items: center; gap: 3px; margin-left: auto; font-size: var(--tx-chico); color: var(--texto-muted); }
+.leyenda-rampa b { width: 12px; height: 12px; border-radius: var(--radio-celda); display: inline-block; }
+
+.oculto { display: none !important; }
+
+/* ── Celular (≤ 800px de ancho del marco) ──────────────────────────────── */
+@container (max-width: 800px) {
+  .app { grid-template-columns: minmax(0, 1fr); }
+  .lateral { display: none; }
+  .boton-menu { display: inline-flex; }
+  .barra { padding: var(--e2) var(--e4); }
+  .barra-controles { order: 3; width: 100%; overflow-x: auto; padding-bottom: 2px; }
+  .barra-rango { display: none; }
+  .grilla { grid-template-columns: minmax(0, 1fr); }
+  .kpis { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--e3); }
+  .lienzo { height: 200px; }
+  .lienzo.principal { height: 240px; }
+  .solo-escritorio { display: none; }
+  th, td { padding-left: var(--e1); padding-right: var(--e1); }
+  th { letter-spacing: .02em; }
+  .marca { display: none; }
+  .portada { display: flex; flex-direction: column; height: auto; }
+  .portada .lienzo { flex: none; height: 200px; }
+  .mini-cal { grid-auto-rows: 44px; }
+  .kpis-cuadro { gap: var(--e3); }
+  .mes-cab h2 { min-width: 0; }
+  .mes-cab .rango { width: 100%; margin-left: 0; }
+}
+</style>
+</head>
+<body>
+<div class="maqueta-barra">
+  <span><strong>Maqueta v2 · "Sistema"</strong> — datos reales de <code>app/data</code>. Es un boceto para decidir, no código para copiar.</span>
+  <div class="controles">
+    <div class="segmentado" role="group" aria-label="Pantalla">
+      <button type="button" data-pantalla="mes" aria-pressed="true">Este mes</button>
+      <button type="button" data-pantalla="carrera" aria-pressed="false">Carrera</button>
+    </div>
+    <div class="segmentado" role="group" aria-label="Ancho">
+      <button type="button" data-ancho="escritorio" aria-pressed="true">Escritorio</button>
+      <button type="button" data-ancho="celular" aria-pressed="false">Celular</button>
+    </div>
+    <button type="button" class="control" id="tema">Oscuro</button>
+  </div>
+</div>
+
+<div class="marco" id="marco">
+  <div class="app">
+    <aside class="lateral">
+      <div class="marca-sitio"><h1>Tablero de entrenamiento</h1><p id="actualizado"></p></div>
+      <nav class="nav" aria-label="Secciones">
+        <button type="button" data-pantalla="mes"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M3 10.5 12 3l9 7.5V20a1 1 0 0 1-1 1h-5v-6H9v6H4a1 1 0 0 1-1-1z"/></svg>Este mes</button>
+        <button type="button" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="4" width="18" height="17" rx="2"/><path d="M3 9h18M8 2v4M16 2v4"/></svg>Calendario</button>
+        <button type="button" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7" rx="1"/><rect x="14" y="3" width="7" height="7" rx="1"/><rect x="3" y="14" width="7" height="7" rx="1"/><rect x="14" y="14" width="7" height="7" rx="1"/></svg>Resumen</button>
+        <span class="nav-grupo">Entrenamientos</span>
+        <button type="button" data-pantalla="carrera"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="14" cy="4" r="2"/><path d="M8 21l3-6 3 2v4M6 12l3-3 4 1 2 3 3 1M11 15l-1-4"/></svg>Carrera</button>
+        <button type="button" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><ellipse cx="10" cy="9" rx="6" ry="7"/><path d="M14 14l6 6"/><circle cx="19" cy="5" r="1.5"/></svg>Pádel</button>
+        <button type="button" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><circle cx="6" cy="17" r="4"/><circle cx="18" cy="17" r="4"/><path d="M6 17l4-8h5l3 8M10 9l2 8M14 5h3"/></svg>Ciclismo</button>
+        <span class="nav-grupo">Salud y datos</span>
+        <button type="button" disabled><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round"><path d="M20.8 5.6a5.5 5.5 0 0 0-7.8 0L12 6.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 22l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"/></svg>Recuperación</button>
+      </nav>
+    </aside>
+
+    <div class="contenido">
+      <!-- ══ ESTE MES ══════════════════════════════════════════════════ -->
+      <section id="p-mes">
+        <header class="barra boton-menu-solo">
+          <button type="button" class="control boton-menu" aria-label="Menú">☰</button>
+          <span class="titulo-vista">Este mes</span>
+        </header>
+        <main>
+          <div class="portada">
+            <div class="mes-cab">
+              <button type="button" class="control" id="mes-ant" aria-label="Mes anterior">‹</button>
+              <h2 id="mes-nombre"></h2>
+              <button type="button" class="control" id="mes-sig" aria-label="Mes siguiente">›</button>
+              <span class="rango" id="mes-rango"></span>
+            </div>
+            <section class="tarjeta">
+              <div class="tarjeta-cab">
+                <div><h2>Días con actividad</h2><p class="sub">Fondo según la carga del día (HRSS) · puntos por deporte</p></div>
+              </div>
+              <div class="leyenda" id="mes-leyenda"></div>
+              <div class="mini-cal" id="mes-cal"></div>
+            </section>
+            <div class="kpis-cuadro" id="mes-kpis"></div>
+            <section class="tarjeta">
+              <div class="tarjeta-cab"><div><h2>Actividades del mes</h2><p class="sub" id="mes-act-sub"></p></div></div>
+              <div class="tabla-cont"><table id="mes-act"></table></div>
+            </section>
+            <section class="tarjeta">
+              <div class="tarjeta-cab">
+                <div><h2 id="mes-diario-titulo">Pasos por día</h2><p class="sub" id="mes-diario-sub"></p></div>
+                <div class="segmentado" id="mes-metrica" role="group" aria-label="Dato">
+                  <button type="button" data-m="pasos" aria-pressed="true">Pasos</button>
+                  <button type="button" data-m="sueno" aria-pressed="false">Sueño</button>
+                </div>
+              </div>
+              <div class="lienzo"><canvas id="g-mes"></canvas></div>
+            </section>
+          </div>
+        </main>
+      </section>
+
+      <!-- ══ CARRERA ═══════════════════════════════════════════════════ -->
+      <section id="p-carrera" class="oculto">
+        <header class="barra">
+          <button type="button" class="control boton-menu" aria-label="Menú">☰</button>
+          <span class="titulo-vista">Carrera</span>
+          <div class="barra-controles">
+            <span class="select"><select class="control" id="c-plantilla" aria-label="Plantilla"></select></span>
+            <span class="select"><select class="control" id="c-etapa" aria-label="Etapa">
+              <option value="principal">Bloque principal</option><option value="todo">Toda la sesión</option></select></span>
+          </div>
+          <span class="barra-rango" id="c-rango"></span>
+        </header>
+        <main>
+          <p class="contexto" id="c-contexto"></p>
+          <div class="kpis" id="c-kpis"></div>
+
+          <section class="tarjeta">
+            <div class="tarjeta-cab">
+              <div><h2 id="c-comp-titulo">Ritmo a lo largo de la sesión</h2><p class="sub" id="c-comp-sub"></p></div>
+              <div class="segmentado" id="c-metrica" role="group" aria-label="Dato">
+                <button type="button" data-m="ritmo" aria-pressed="true">Ritmo</button>
+                <button type="button" data-m="fc" aria-pressed="false">FC</button>
+              </div>
+            </div>
+            <div class="lienzo principal"><canvas id="g-comp"></canvas></div>
+            <details class="nota"><summary>Cómo se calcula</summary>
+              <p>Curva minuto a minuto de cada sesión, desde el inicio. Las bandas de fondo son los bloques de la sesión más reciente. Los minutos con pausas quedan fuera del rango del eje (se recorta del 3 % al 97 % de los valores).</p></details>
+          </section>
+
+          <section class="tarjeta">
+            <div class="tarjeta-cab"><div><h2>Sesiones</h2><p class="sub" id="c-tabla-sub">Tocá una fila para ver el detalle y sus bloques</p></div></div>
+            <div class="tabla-cont"><table id="c-tabla"></table></div>
+          </section>
+
+          <div class="grilla">
+            <section class="tarjeta">
+              <div class="tarjeta-cab"><div><h2>Eficiencia por sesión</h2><p class="sub">m/latido en el bloque principal · más alto = más metros con el mismo esfuerzo</p></div></div>
+              <div class="lienzo"><canvas id="g-ef"></canvas></div>
+            </section>
+            <section class="tarjeta">
+              <div class="tarjeta-cab"><div><h2>Zonas de FC por semana</h2><p class="sub">% del tiempo corriendo en cada zona</p></div></div>
+              <div class="leyenda" id="c-zonas-ley"></div>
+              <div class="lienzo"><canvas id="g-zonas"></canvas></div>
+            </section>
+          </div>
+
+          <section class="tarjeta">
+            <div class="tarjeta-cab"><div><h2>Eficiencia de todas las corridas</h2><p class="sub">m/latido de cada corrida completa, por tipo</p></div></div>
+            <div class="leyenda" id="c-ef-ley"></div>
+            <div class="lienzo"><canvas id="g-ef-todas"></canvas></div>
+            <details class="nota"><summary>Cómo se calcula</summary>
+              <p>Velocidad (m/min) dividida por la FC media de la corrida. Si sube con el tiempo, corrés más metros con el mismo esfuerzo cardíaco. Los tres tipos son tonos del color de Carrera y además cambian de forma.</p></details>
+          </section>
+        </main>
+      </section>
+    </div>
+  </div>
+</div>
+
+<script src="../../../app/vendor/chart.umd.min.js"></script>
+<script src="../../../app/data/datos.js"></script>
+<script src="../../../app/data/minutos.js"></script>
+<script>
+(() => {
+  const D = window.DATOS_TABLERO, MIN = window.MINUTOS_TABLERO || {};
+  const $ = (s) => document.querySelector(s);
+
+  // ── Formato (un solo lugar, como formato.js) ──────────────────────────
+  const nf = (d) => new Intl.NumberFormat("es-AR", { minimumFractionDigits: d, maximumFractionDigits: d });
+  const numero = (v, d = 0) => (v == null || isNaN(v) ? "—" : nf(d).format(v));
+  const ritmo = (s) => (s == null ? "—" : `${Math.floor(s / 60)}:${String(Math.round(s % 60)).padStart(2, "0")}`);
+  const durMin = (s) => { const m = Math.round(s / 60); return m >= 60 ? `${Math.floor(m / 60)} h ${String(m % 60).padStart(2, "0")} min` : `${m} min`; };
+  const horasCompactas = (h) => { const m = Math.round(h * 60); return `${Math.floor(m / 60)}:${String(m % 60).padStart(2, "0")}`; };
+  const DIAS = ["dom", "lun", "mar", "mié", "jue", "vie", "sáb"];
+  const MESES = ["ene", "feb", "mar", "abr", "may", "jun", "jul", "ago", "sep", "oct", "nov", "dic"];
+  const MESES_L = ["Enero", "Febrero", "Marzo", "Abril", "Mayo", "Junio", "Julio", "Agosto", "Septiembre", "Octubre", "Noviembre", "Diciembre"];
+  const fecha = (iso) => new Date(iso + "T12:00:00");
+  const fechaLarga = (iso) => { const f = fecha(iso); return `${DIAS[f.getDay()]} ${f.getDate()} ${MESES[f.getMonth()]}`; };
+  const fechaEje = (iso) => { const f = fecha(iso); return `${f.getDate()} ${MESES[f.getMonth()]}`; };
+  const mejorSi = { ritmo: "baja", fc: "baja", ef: "sube", pasos: "sube", sueno: "sube", fcr: "baja", dist: null };
+
+  /** Variación con flecha y color según convenga al atleta (DESIGN §2 Valoraciones). */
+  function variacion(actual, base, clave, fmt, contra) {
+    if (base == null || actual == null) return `<span class="kpi-ctx sin-base">sin base para comparar</span>`;
+    const dif = actual - base;
+    if (Math.abs(dif) < 1e-9) return `<span class="kpi-ctx">= ${contra}</span>`;
+    const sentido = mejorSi[clave];
+    const bueno = sentido == null ? null : (sentido === "sube") === dif > 0;
+    const cls = bueno == null ? "" : bueno ? "bien" : "mal";
+    return `<span class="kpi-ctx"><span class="${cls}">${dif > 0 ? "▲" : "▼"} ${fmt(Math.abs(dif))}</span> vs. ${contra}</span>`;
+  }
+
+  // ── Tokens leídos del CSS ─────────────────────────────────────────────
+  function tk() {
+    const s = getComputedStyle(document.documentElement), v = (n) => s.getPropertyValue(n).trim();
+    return {
+      texto: v("--texto"), sec: v("--texto-sec"), muted: v("--texto-muted"), grilla: v("--grilla"), eje: v("--eje"),
+      sup: v("--superficie"), sup2: v("--superficie-2"), tinta: v("--tinta"), bien: v("--bien"), mal: v("--mal"),
+      dep: { Carrera: v("--serie-1"), "Pádel": v("--serie-2"), Caminata: v("--serie-3"), Ciclismo: v("--serie-4"), Otras: v("--serie-otras") },
+      rampa: [1, 2, 3, 4, 5, 6, 7].map((i) => v(`--rampa-${i}`)),
+      fnum: v("--fuente-num"), ftxt: v("--fuente"), chico: parseFloat(v("--tx-chico")), etq: parseFloat(v("--tx-etiqueta")),
+    };
+  }
+  const alfa = (hex, a) => { const n = parseInt(hex.slice(1), 16); return `rgba(${n >> 16 & 255},${n >> 8 & 255},${n & 255},${a})`; };
+
+  // ── Gramática única de gráficos (DESIGN §5): las vistas solo pasan datos ──
+  const graficos = new Map();
+  function grafico(id, config) {
+    graficos.get(id)?.destroy();
+    const g = new Chart(document.getElementById(id), config);
+    graficos.set(id, g);
+    return g;
+  }
+  function base(t, { x = {}, y = {}, tooltip = {} } = {}) {
+    return {
+      maintainAspectRatio: false, animation: false,
+      interaction: { mode: "nearest", intersect: false },
+      layout: { padding: { top: 4, right: 4 } },
+      scales: {
+        x: { grid: { display: false }, border: { color: t.eje }, ticks: { color: t.muted, maxRotation: 0, autoSkipPadding: 12 }, ...x },
+        y: { grid: { color: t.grilla }, border: { display: false }, ticks: { color: t.muted, maxTicksLimit: 5 }, ...y },
+      },
+      plugins: {
+        legend: { display: false },
+        tooltip: { backgroundColor: t.sup, titleColor: t.texto, bodyColor: t.sec, borderColor: t.eje, borderWidth: 1,
+          padding: 8, cornerRadius: 6, displayColors: true, boxWidth: 8, boxHeight: 8, usePointStyle: true,
+          titleFont: { family: t.ftxt, size: t.chico, weight: "600" }, bodyFont: { family: t.fnum, size: t.chico }, ...tooltip },
+      },
+      elements: { line: { borderWidth: 2, tension: 0 }, point: { radius: 0, hoverRadius: 4, hitRadius: 8 } },
+    };
+  }
+  /** Con mínimo y máximo calculados, los extremos del eje no se rotulan (quedarían valores como 6:41). */
+  const sinExtremos = (fmt) => (v, i, marcas) => (i === 0 || i === marcas.length - 1 ? "" : fmt(v));
+  function aplicarDefaults() {
+    const t = tk();
+    Chart.defaults.font.family = t.fnum;
+    Chart.defaults.font.size = t.chico;
+    Chart.defaults.color = t.muted;
+  }
+
+  // Etiqueta directa al final de las series que tengan `etiqueta`
+  const ETIQUETA_DIRECTA = {
+    id: "etiquetaDirecta",
+    afterDatasetsDraw(chart) {
+      const t = tk(), { ctx } = chart;
+      chart.data.datasets.forEach((ds, i) => {
+        if (!ds.etiqueta || !chart.isDatasetVisible(i)) return;
+        const pts = chart.getDatasetMeta(i).data.filter((p, j) => ds.data[j]?.y != null && !p.skip);
+        const p = pts[pts.length - 1]; if (!p) return;
+        // A la derecha del último punto, en el margen que deja el gráfico
+        ctx.save(); ctx.font = `600 ${t.chico}px ${t.ftxt}`; ctx.fillStyle = ds.borderColor; ctx.textBaseline = "middle";
+        ctx.fillText(ds.etiqueta, p.x + 8, p.y);
+        ctx.restore();
+      });
+    },
+  };
+  // Bandas de fondo alternadas con nombre arriba (bloques de plantilla)
+  const BANDAS = {
+    id: "bandas",
+    beforeDatasetsDraw(chart, _a, opts) {
+      if (!opts?.tramos?.length) return;
+      const t = tk(), { ctx, chartArea: a, scales: { x } } = chart;
+      ctx.save();
+      opts.tramos.forEach((tr, i) => {
+        const x0 = Math.max(a.left, x.getPixelForValue(tr.desde)), x1 = Math.min(a.right, x.getPixelForValue(tr.hasta));
+        if (x1 <= x0) return;
+        // Alternadas superficie / superficie-2; el bloque principal, además, con un filete arriba
+        ctx.fillStyle = tr.principal || i % 2 ? t.sup2 : t.sup;
+        ctx.fillRect(x0, a.top, x1 - x0, a.bottom - a.top);
+        if (tr.principal) { ctx.fillStyle = t.eje; ctx.fillRect(x0, a.top, x1 - x0, 2); }
+        // El nombre va arriba del área de dibujo (en el margen superior), nunca sobre las líneas
+        ctx.font = `600 ${t.etq}px ${t.ftxt}`; ctx.fillStyle = tr.principal ? t.sec : t.muted; ctx.textBaseline = "bottom";
+        const txt = tr.nombre.toUpperCase();
+        if (ctx.measureText(txt).width < x1 - x0 - 4) ctx.fillText(txt, x0 + 4, a.top - 4);
+      });
+      ctx.restore();
+    },
+  };
+  // Línea de referencia punteada con etiqueta directa
+  const REFERENCIA = {
+    id: "referencia",
+    afterDatasetsDraw(chart, _a, opts) {
+      if (opts?.valor == null) return;
+      const t = tk(), { ctx, chartArea: a, scales: { y } } = chart, py = y.getPixelForValue(opts.valor);
+      ctx.save(); ctx.setLineDash([3, 3]); ctx.strokeStyle = t.muted; ctx.lineWidth = 1;
+      ctx.beginPath(); ctx.moveTo(a.left, py); ctx.lineTo(a.right, py); ctx.stroke();
+      ctx.setLineDash([]); ctx.font = `${t.chico}px ${t.fnum}`; ctx.fillStyle = t.sec; ctx.textBaseline = "bottom"; ctx.textAlign = "right";
+      ctx.fillText(opts.texto, a.right, py - 3); ctx.restore();
+    },
+  };
+
+  // ── Sparkline (KPI) ───────────────────────────────────────────────────
+  function sparkline(valores, fmt, invertir = false) {
+    const v = valores.filter((x) => x != null);
+    if (v.length < 2) return "";
+    const min = Math.min(...v), max = Math.max(...v), r = max - min || 1;
+    const pts = v.map((x, i) => `${(i / (v.length - 1)) * 100},${invertir ? ((x - min) / r) * 20 + 2 : 22 - ((x - min) / r) * 20}`).join(" ");
+    return `<div class="spark"><span>${fmt(v[0])}</span><svg viewBox="0 0 100 24" preserveAspectRatio="none" aria-hidden="true">
+      <polyline points="${pts}" fill="none" stroke="var(--texto-sec)" stroke-width="1.5" vector-effect="non-scaling-stroke"/></svg><span>${fmt(v[v.length - 1])}</span></div>`;
+  }
+  const kpi = ({ etiqueta, valor, unidad = "", ctx = "", spark = "", hero = false }) => `
+    <div class="kpi${hero ? " hero" : ""}"><div class="kpi-etiqueta">${etiqueta}</div>
+    <div class="kpi-valor">${valor}${unidad ? `<span class="kpi-unidad">${unidad}</span>` : ""}</div>${ctx}${spark}</div>`;
+
+  // ══ ESTE MES ══════════════════════════════════════════════════════════
+  const hoy = (() => { const f = fecha(D.meta.hasta); f.setDate(f.getDate() + 1); return f.toISOString().slice(0, 10); })();
+  const estadoMes = { mes: D.meta.hasta.slice(0, 7), metrica: "pasos" };
+  const mesMin = D.meta.desde.slice(0, 7), mesMax = D.meta.hasta.slice(0, 7);
+  const sumarMes = (m, n) => { const [a, b] = m.split("-").map(Number); const f = new Date(a, b - 1 + n, 1); return `${f.getFullYear()}-${String(f.getMonth() + 1).padStart(2, "0")}`; };
+  const diasDelMes = (m) => { const [a, b] = m.split("-").map(Number); return new Date(a, b, 0).getDate(); };
+  const nivel = (c) => (c >= 120 ? 5 : c >= 90 ? 4 : c >= 60 ? 3 : c >= 30 ? 2 : c >= 1 ? 1 : 0);
+  const prom = (arr) => (arr.length ? arr.reduce((s, x) => s + x, 0) / arr.length : null);
+
+  function resumen(mes) {
+    const dias = D.bienestar.filter((d) => d.fecha.startsWith(mes) && d.fecha <= D.meta.hasta);
+    const con = (k) => dias.filter((d) => d[k] != null).map((d) => d[k]);
+    const total = mes === mesMax ? dias.length : diasDelMes(mes);
+    return { dias, total, pasos: con("pasos"), sueno: con("sueno_horas"), fcr: con("fc_reposo"),
+      act: D.actividades.filter((a) => a.fecha.startsWith(mes)) };
+  }
+  // Una base sirve si tiene datos en al menos el 75 % de sus días (DESIGN §2)
+  const conBase = (r, k) => (r && r[k].length >= 0.75 * diasDelMes(r.mes) ? prom(r[k]) : null);
+
+  function dibujarMes() {
+    const t = tk(), m = estadoMes.mes, r = resumen(m);
+    const ant = m > mesMin ? { ...resumen(sumarMes(m, -1)), mes: sumarMes(m, -1) } : null;
+    const nomAnt = ant ? MESES[Number(ant.mes.slice(5)) - 1] : "";
+    $("#mes-nombre").textContent = `${MESES_L[Number(m.slice(5)) - 1]} ${m.slice(0, 4)}`;
+    const ultimo = r.dias.length ? r.dias[r.dias.length - 1].fecha : null;
+    $("#mes-rango").textContent = ultimo ? `Del ${fechaLarga(m + "-01")} al ${fechaLarga(ultimo)} · ${r.dias.length} días` : "Sin datos";
+    $("#mes-ant").disabled = m <= mesMin; $("#mes-sig").disabled = m >= mesMax;
+
+    // Calendario: rampa violeta por carga + puntos por deporte
+    const [a, b] = m.split("-").map(Number);
+    const primero = (new Date(a, b - 1, 1).getDay() + 6) % 7;
+    const carga = Object.fromEntries(D.bienestar.map((d) => [d.fecha, d.carga_dia]));
+    let html = ["L", "M", "X", "J", "V", "S", "D"].map((d) => `<div class="mini-nombre">${d}</div>`).join("");
+    html += Array.from({ length: primero }, () => `<div class="dia fuera"></div>`).join("");
+    const deportes = new Set();
+    for (let d = 1; d <= diasDelMes(m); d++) {
+      const iso = `${m}-${String(d).padStart(2, "0")}`;
+      const acts = D.actividades.filter((x) => x.fecha === iso);
+      acts.forEach((x) => deportes.add(x.categoria));
+      const c = carga[iso] ?? acts.reduce((s, x) => s + (x.carga || 0), 0);
+      const n = iso > D.meta.hasta ? "futuro" : `n${nivel(c)}`;
+      const puntos = [...new Set(acts.map((x) => x.categoria))].map((cat) => `<i style="background:${t.dep[cat] ?? t.dep.Otras}"></i>`).join("");
+      html += `<div class="dia ${n}${iso === hoy ? " hoy" : ""}" title="${fechaLarga(iso)}${c ? ` · ${Math.round(c)} HRSS` : ""}"><span>${d}</span>${puntos ? `<span class="puntos">${puntos}</span>` : ""}</div>`;
+    }
+    $("#mes-cal").innerHTML = html;
+    $("#mes-leyenda").innerHTML = [...deportes].map((d) => `<span><i style="background:${t.dep[d]}"></i>${d}</span>`).join("") +
+      `<span class="leyenda-rampa">carga <b style="background:var(--rampa-1)"></b><b style="background:var(--rampa-3)"></b><b style="background:var(--rampa-5)"></b></span>`;
+
+    // KPI: tasas, no totales parciales; sin flecha si la base está incompleta
+    const pasosDia = prom(r.pasos), suenoP = prom(r.sueno), fcrP = prom(r.fcr);
+    $("#mes-kpis").innerHTML = [
+      kpi({ etiqueta: "Pasos del mes", valor: numero(r.pasos.reduce((s, x) => s + x, 0)), hero: true,
+        ctx: `<span class="kpi-ctx">${r.pasos.length} de ${r.total} días con dato</span>` }),
+      kpi({ etiqueta: "Pasos por día", valor: numero(pasosDia), ctx: variacion(pasosDia, conBase(ant, "pasos"), "pasos", (v) => numero(v), nomAnt) }),
+      kpi({ etiqueta: "Sueño promedio", valor: suenoP ? horasCompactas(suenoP) : "—", unidad: "h",
+        ctx: variacion(suenoP, conBase(ant, "sueno"), "sueno", (v) => `${Math.round(v * 60)} min`, nomAnt) }),
+      kpi({ etiqueta: "FC en reposo", valor: numero(fcrP), unidad: "ppm", ctx: variacion(fcrP, conBase(ant, "fcr"), "fcr", (v) => numero(v, 1), nomAnt) }),
+    ].join("");
+
+    // Actividades: tabla del sistema (mismo componente que Carrera)
+    const porDep = {};
+    r.act.forEach((x) => { const p = (porDep[x.categoria] ??= { n: 0, s: 0, m: 0 }); p.n++; p.s += x.duracion_s; p.m += x.distancia_m || 0; });
+    const filas = Object.entries(porDep).sort((p, q) => q[1].s - p[1].s);
+    $("#mes-act-sub").textContent = r.act.length ? `${r.act.length} actividades · ${durMin(r.act.reduce((s, x) => s + x.duracion_s, 0))} en total` : "Sin actividades";
+    $("#mes-act").innerHTML = `<thead><tr><th>Deporte</th><th class="n">Sesiones</th><th class="n">Tiempo</th><th class="n">Km</th></tr></thead><tbody>` +
+      filas.map(([d, p]) => `<tr><td><span class="punto" style="background:${t.dep[d]}"></span>${d}</td><td class="n prota">${p.n}</td><td class="n">${durMin(p.s)}</td><td class="n">${p.m ? numero(p.m / 1000, 1) : "—"}</td></tr>`).join("") + "</tbody>";
+
+    // Diario: métrica general → tinta; día actual 100 %, el resto 25 %
+    const esPasos = estadoMes.metrica === "pasos";
+    const dias = Array.from({ length: diasDelMes(m) }, (_, i) => `${m}-${String(i + 1).padStart(2, "0")}`);
+    const bien = Object.fromEntries(D.bienestar.map((d) => [d.fecha, d]));
+    const vals = dias.map((d) => bien[d]?.[esPasos ? "pasos" : "sueno_horas"] ?? null);
+    const ultimoIdx = vals.reduce((u, v, i) => (v != null ? i : u), -1);
+    const pr = prom(vals.filter((v) => v != null));
+    $("#mes-diario-titulo").textContent = esPasos ? "Pasos por día" : "Sueño por noche";
+    $("#mes-diario-sub").textContent = esPasos ? "pasos · la barra fuerte es el último día con dato" : "horas · la barra fuerte es la última noche";
+    grafico("g-mes", {
+      type: "bar",
+      data: { labels: dias.map((d) => Number(d.slice(8))), datasets: [{ data: vals, maxBarThickness: 36, borderRadius: { topLeft: 2, topRight: 2 },
+        backgroundColor: vals.map((_, i) => (i === ultimoIdx ? t.tinta : alfa(t.tinta, 0.25))) }] },
+      options: base(t, {
+        x: { ticks: { color: t.muted, maxRotation: 0, autoSkip: false, callback: (v, i) => (i % 7 === 0 ? i + 1 : "") } },
+        y: { beginAtZero: true, ticks: { color: t.muted, maxTicksLimit: 4, callback: (v) => (esPasos ? numero(v) : numero(v)) } },
+        tooltip: { callbacks: { title: (i) => fechaLarga(dias[i[0].dataIndex]), label: (i) => ` ${esPasos ? numero(i.parsed.y) + " pasos" : horasCompactas(i.parsed.y) + " h"}` } },
+      }),
+      plugins: [REFERENCIA],
+    }).options.plugins.referencia = { valor: pr, texto: `prom. ${esPasos ? numero(pr) : horasCompactas(pr ?? 0)}` };
+    graficos.get("g-mes").update();
+  }
+
+  // ══ CARRERA ═══════════════════════════════════════════════════════════
+  const corridas = D.actividades.filter((a) => a.categoria === "Carrera").sort((a, b) => a.fecha.localeCompare(b.fecha));
+  const cuenta = {};
+  corridas.forEach((a) => (cuenta[a.plantilla ?? "Libre"] = (cuenta[a.plantilla ?? "Libre"] ?? 0) + 1));
+  const plantillas = Object.keys(cuenta).sort((x, y) => (x === "Libre") - (y === "Libre") || cuenta[y] - cuenta[x]);
+  const estC = { plantilla: plantillas[0], metrica: "ritmo", etapa: "principal" };
+  $("#c-plantilla").innerHTML = plantillas.map((p) => `<option value="${p}">${p} (${cuenta[p]})</option>`).join("");
+
+  /** Valores de la etapa elegida: bloque principal ("entrenamiento") o la sesión entera. */
+  const valores = (a) => {
+    const e = estC.etapa === "principal" && a.entrenamiento ? a.entrenamiento : a;
+    return { ritmo: e.ritmo_s_km, fc: e.fc_media, ef: e.eficiencia ?? a.eficiencia, dist: a.distancia_m / 1000 };
+  };
+  /** Colores por recencia (DESIGN §2 "Comparar cosas del mismo tipo"). */
+  const colorSesion = (t, i, n) => (i === n - 1 ? t.dep.Carrera : i === n - 2 ? t.muted : t.eje);
+  const anchoSesion = (i, n) => (i === n - 1 ? 2.5 : 1.5);
+
+  function dibujarCarrera() {
+    const t = tk();
+    const ses = corridas.filter((a) => (a.plantilla ?? "Libre") === estC.plantilla).slice(-8);
+    const n = ses.length, ult = ses[n - 1], ants = ses.slice(0, -1);
+    const etapaTxt = estC.etapa === "principal" ? "bloque principal" : "toda la sesión";
+    $("#c-rango").textContent = `${fechaLarga(ses[0].fecha)} – ${fechaLarga(ult.fecha)}`;
+    $("#c-contexto").textContent = `${n} ${n === 1 ? "sesión" : "sesiones"} de ${estC.plantilla} · ${etapaTxt} · ${fechaLarga(ses[0].fecha)} – ${fechaLarga(ult.fecha)}. Los KPI son la última sesión contra el promedio de las anteriores.`;
+
+    // KPI: última vs. promedio de anteriores; sin base con menos de 3 sesiones
+    const vU = valores(ult), vA = ants.map(valores);
+    const pA = (k) => (n >= 3 ? prom(vA.map((v) => v[k]).filter((x) => x != null)) : null);
+    const serie = (k) => ses.map((a) => valores(a)[k]);
+    $("#c-kpis").innerHTML = [
+      kpi({ etiqueta: "Ritmo", valor: ritmo(vU.ritmo), unidad: "/km", ctx: variacion(vU.ritmo, pA("ritmo"), "ritmo", ritmo, "anteriores"), spark: sparkline(serie("ritmo"), ritmo, true) }),
+      kpi({ etiqueta: "FC media", valor: numero(vU.fc), unidad: "ppm", ctx: variacion(vU.fc, pA("fc"), "fc", (v) => numero(v), "anteriores"), spark: sparkline(serie("fc"), (v) => numero(v), true) }),
+      kpi({ etiqueta: "Eficiencia", valor: numero(vU.ef, 2), unidad: "m/latido", ctx: variacion(vU.ef, pA("ef"), "ef", (v) => numero(v, 2), "anteriores"), spark: sparkline(serie("ef"), (v) => numero(v, 2)) }),
+      kpi({ etiqueta: "Distancia", valor: numero(vU.dist, 2), unidad: "km", ctx: variacion(vU.dist, pA("dist"), "dist", (v) => numero(v, 2), "anteriores"), spark: sparkline(serie("dist"), (v) => numero(v, 1)) }),
+    ].join("");
+
+    // Comparación: curvas superpuestas, última en el color de la vista y el resto en grises
+    const esRitmo = estC.metrica === "ritmo";
+    $("#c-comp-titulo").textContent = esRitmo ? "Ritmo a lo largo de la sesión" : "FC a lo largo de la sesión";
+    $("#c-comp-sub").textContent = esRitmo ? "min/km por minuto · más arriba = más rápido" : "ppm por minuto";
+    const datasets = ses.map((a, i) => {
+      const m = MIN[a.id];
+      const data = m ? m[esRitmo ? "ritmo" : "fc"].map((v, j) => ({ x: j + 1, y: m.seg[j] >= 40 ? v : null })) : [];
+      return { data, borderColor: colorSesion(t, i, n), borderWidth: anchoSesion(i, n), spanGaps: false,
+        order: n - i, etiqueta: i === n - 1 ? fechaLarga(a.fecha) : null, label: fechaLarga(a.fecha) };
+    });
+    const todos = datasets.flatMap((d) => d.data.map((p) => p.y)).filter((v) => v != null).sort((a, b) => a - b);
+    const q = (p) => todos[Math.floor(p * (todos.length - 1))];
+    // Bandas: bloques de la sesión más reciente
+    const mU = MIN[ult.id], tramos = [];
+    if (mU && ult.bloques?.length > 1) {
+      let ini = 0;
+      for (let j = 1; j <= mU.bloque.length; j++) {
+        if (j === mU.bloque.length || mU.bloque[j] !== mU.bloque[ini]) {
+          const b = ult.bloques.find((x) => x.nro === mU.bloque[ini]);
+          tramos.push({ desde: ini + 0.5, hasta: j + 0.5, nombre: b?.fase ?? "", principal: b?.nro === ult.bloque_principal?.nro });
+          ini = j;
+        }
+      }
+    }
+    const largo = Math.max(...datasets.map((d) => d.data.length));
+    grafico("g-comp", {
+      type: "line", data: { datasets },
+      options: (() => {
+        const o = base(t, {
+          x: { type: "linear", min: 0.5, max: largo + 0.5, ticks: { color: t.muted, stepSize: 10, callback: (v) => (Number.isInteger(v) && v % 10 === 0 ? `${v}′` : "") } },
+          y: { reverse: esRitmo, min: q(0.03), max: q(0.97), ticks: { color: t.muted, maxTicksLimit: 6, callback: sinExtremos((v) => (esRitmo ? ritmo(v) : numero(v))) } },
+          tooltip: { mode: "nearest", callbacks: { title: (i) => `${i[0].dataset.label} · minuto ${i[0].parsed.x}`, label: (i) => ` ${esRitmo ? ritmo(i.parsed.y) + " /km" : numero(i.parsed.y) + " ppm"}` } },
+        });
+        o.layout.padding = { top: tramos.length ? 20 : 4, right: 64 };   // margen para nombres de bloque y etiqueta directa
+        o.plugins.bandas = { tramos };
+        return o;
+      })(),
+      plugins: [BANDAS, ETIQUETA_DIRECTA],
+    });
+
+    // Tabla: protagonista = ritmo; en celular solo fecha · ritmo · FC · eficiencia
+    $("#c-tabla").innerHTML = `<thead><tr><th>Fecha</th><th class="n">Ritmo /km</th><th class="n">FC ppm</th><th class="n">Ef. m/lat</th>
+      <th class="n solo-escritorio">Km</th><th class="n solo-escritorio">Tiempo</th><th class="n solo-escritorio">Potencia W</th><th class="n solo-escritorio">Carga</th></tr></thead><tbody>` +
+      ses.map((a, i) => ({ a, i })).reverse().map(({ a, i }) => { const v = valores(a); return `<tr>
+        <td><span class="punto" style="background:${colorSesion(t, i, n)}"></span>${fechaLarga(a.fecha)}${a.ajuste_plantilla === "aproximada" ? '<span class="marca">aprox.</span>' : ""}</td>
+        <td class="n prota">${ritmo(v.ritmo)}</td><td class="n">${numero(v.fc)}</td><td class="n">${numero(v.ef, 2)}</td>
+        <td class="n solo-escritorio">${numero(a.distancia_m / 1000, 2)}</td><td class="n solo-escritorio">${durMin(a.duracion_s)}</td>
+        <td class="n solo-escritorio">${numero(a.potencia_w)}</td><td class="n solo-escritorio">${numero(a.carga)}</td></tr>`; }).join("") + "</tbody>";
+
+    // Eficiencia por sesión: puntos con el mismo código de recencia; eje ≥ ±10 % del promedio
+    const efs = ses.map((a) => valores(a).ef), pEf = prom(efs.filter((x) => x != null)) ?? 1;
+    const lo = Math.min(...efs.filter((x) => x != null), pEf * 0.9), hi = Math.max(...efs.filter((x) => x != null), pEf * 1.1);
+    grafico("g-ef", {
+      type: "line",
+      data: { labels: ses.map((a) => fechaEje(a.fecha)), datasets: [{ data: efs, borderColor: t.eje, borderWidth: 1.5,
+        pointRadius: 4, pointHoverRadius: 6, pointBackgroundColor: ses.map((_, i) => colorSesion(t, i, n)), pointBorderColor: ses.map((_, i) => colorSesion(t, i, n)) }] },
+      options: base(t, { y: { min: lo, max: hi, ticks: { color: t.muted, maxTicksLimit: 6, callback: sinExtremos((v) => numero(v, 2)) } },
+        tooltip: { callbacks: { title: (i) => fechaLarga(ses[i[0].dataIndex].fecha), label: (i) => ` ${numero(i.parsed.y, 3)} m/latido` } } }),
+    });
+
+    // Zonas por semana: rampa violeta (intensidad), 100 % apilado
+    const sem = D.semanas.filter((s) => s.por_categoria.Carrera?.zonas_s);
+    $("#c-zonas-ley").innerHTML = t.rampa.map((c, i) => `<span><i class="cuadro" style="background:${c}"></i>Z${i + 1}</span>`).join("");
+    grafico("g-zonas", {
+      type: "bar",
+      data: { labels: sem.map((s) => fechaEje(s.inicio)), datasets: t.rampa.map((c, z) => ({ label: `Z${z + 1}`, backgroundColor: c, maxBarThickness: 36,
+        data: sem.map((s) => { const zs = s.por_categoria.Carrera.zonas_s, tot = zs.reduce((p, x) => p + x, 0); return tot ? (zs[z] / tot) * 100 : 0; }) })) },
+      options: (() => { const o = base(t, { y: { stacked: true, max: 100, ticks: { color: t.muted, maxTicksLimit: 5, callback: (v) => `${v}` } },
+        tooltip: { mode: "index", callbacks: { label: (i) => ` ${i.dataset.label}: ${numero(i.parsed.y)} %` } } });
+        o.scales.x.stacked = true; return o; })(),
+    });
+
+    // Todas las corridas: subtipos = tonos de Carrera + forma de punto
+    // Relleno 100 / 55 / 15 % con contorno siempre pleno: se distinguen también en oscuro
+    const tonos = { Bloques: [1, "circle"], Series: [0.55, "triangle"], Libre: [0.15, "rect"] };
+    $("#c-ef-ley").innerHTML = Object.entries(tonos).map(([k, [al]]) => `<span><i style="background:${alfa(t.dep.Carrera, al)};box-shadow:inset 0 0 0 1.5px ${t.dep.Carrera}"></i>${k}</span>`).join("");
+    const ts = (iso) => fecha(iso).getTime();
+    grafico("g-ef-todas", {
+      type: "scatter",
+      data: { datasets: Object.entries(tonos).map(([k, [al, forma]]) => ({ label: k, pointStyle: forma, pointRadius: 5, pointHoverRadius: 7,
+        backgroundColor: alfa(t.dep.Carrera, al), borderColor: t.dep.Carrera, borderWidth: 1.5,
+        data: corridas.filter((a) => (a.subtipo ?? "Libre") === k && a.eficiencia).map((a) => ({ x: ts(a.fecha), y: a.eficiencia, f: a.fecha })) })) },
+      options: base(t, {
+        x: { type: "linear", ticks: { color: t.muted, maxTicksLimit: 7, callback: (v) => fechaEje(new Date(v).toISOString().slice(0, 10)) } },
+        y: { ticks: { color: t.muted, maxTicksLimit: 5, callback: (v) => numero(v, 2) } },
+        tooltip: { callbacks: { title: (i) => fechaLarga(i[0].raw.f), label: (i) => ` ${i.dataset.label}: ${numero(i.parsed.y, 3)} m/latido` } },
+      }),
+    });
+  }
+
+  // ── Navegación, tema y ancho ──────────────────────────────────────────
+  let pantalla = "mes";
+  function render() {
+    aplicarDefaults();
+    $("#p-mes").classList.toggle("oculto", pantalla !== "mes");
+    $("#p-carrera").classList.toggle("oculto", pantalla !== "carrera");
+    document.querySelectorAll(".nav button[data-pantalla]").forEach((b) => { if (b.dataset.pantalla === pantalla) b.setAttribute("aria-current", "page"); else b.removeAttribute("aria-current"); });
+    document.querySelectorAll(".maqueta-barra [data-pantalla]").forEach((b) => b.setAttribute("aria-pressed", String(b.dataset.pantalla === pantalla)));
+    if (pantalla === "mes") dibujarMes(); else dibujarCarrera();
+  }
+  document.addEventListener("click", (e) => {
+    const p = e.target.closest("[data-pantalla]");
+    if (p && !p.disabled) { pantalla = p.dataset.pantalla; render(); return; }
+    const w = e.target.closest("[data-ancho]");
+    if (w) {
+      $("#marco").classList.toggle("celular", w.dataset.ancho === "celular");
+      document.querySelectorAll("[data-ancho]").forEach((b) => b.setAttribute("aria-pressed", String(b === w)));
+      requestAnimationFrame(render);
+    }
+  });
+  $("#tema").onclick = () => {
+    const osc = document.documentElement.dataset.theme !== "dark";
+    document.documentElement.dataset.theme = osc ? "dark" : "light";
+    $("#tema").textContent = osc ? "Claro" : "Oscuro";
+    render();
+  };
+  $("#mes-ant").onclick = () => { estadoMes.mes = sumarMes(estadoMes.mes, -1); dibujarMes(); };
+  $("#mes-sig").onclick = () => { estadoMes.mes = sumarMes(estadoMes.mes, 1); dibujarMes(); };
+  $("#mes-metrica").onclick = (e) => { const b = e.target.closest("[data-m]"); if (!b) return; estadoMes.metrica = b.dataset.m;
+    document.querySelectorAll("#mes-metrica button").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); dibujarMes(); };
+  $("#c-metrica").onclick = (e) => { const b = e.target.closest("[data-m]"); if (!b) return; estC.metrica = b.dataset.m;
+    document.querySelectorAll("#c-metrica button").forEach((x) => x.setAttribute("aria-pressed", String(x === b))); dibujarCarrera(); };
+  $("#c-plantilla").onchange = (e) => { estC.plantilla = e.target.value; dibujarCarrera(); };
+  $("#c-etapa").onchange = (e) => { estC.etapa = e.target.value; dibujarCarrera(); };
+  if (matchMedia("(prefers-color-scheme: dark)").matches) { document.documentElement.dataset.theme = "dark"; $("#tema").textContent = "Claro"; }
+  $("#actualizado").textContent = `Datos del ${fechaLarga(D.meta.desde)} al ${fechaLarga(D.meta.hasta)}`;
+  render();
+})();
+</script>
+</body>
+</html>
