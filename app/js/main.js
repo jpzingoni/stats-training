@@ -185,16 +185,14 @@
     // data/datos.js se carga con <script> (no con fetch) para que el tablero también
     // funcione abriendo index.html directo, sin servidor
     if (!window.DATOS_TABLERO) {
-      document.getElementById("actualizado").textContent =
-        "No se encontraron los datos. Corré: python scripts/generar_datos_app.py";
+      const aviso = document.getElementById("actualizado");
+      aviso.textContent = "No se encontraron los datos. Corré: python scripts/generar_datos_app.py";
+      aviso.hidden = false;
       return;
     }
     estado.datos = window.DATOS_TABLERO;
     estado.datos.minutos = window.MINUTOS_TABLERO ?? {};   // data/minutos.js (puede faltar)
     const { meta } = estado.datos;
-    const [fecha, hora] = meta.generado.split(" ");
-    document.getElementById("actualizado").textContent =
-      `Datos del ${fechaLarga(meta.desde)} al ${fechaLarga(meta.hasta)} · actualizado ${fechaLarga(fecha)} ${hora.slice(0, 5)}`;
 
     // Con menos de 12 semanas de historial, "12 semanas" y "todo" son lo mismo: arrancar en 4
     const semanasHistorial = (ts(meta.hasta) - ts(meta.desde)) / (7 * 86400000);

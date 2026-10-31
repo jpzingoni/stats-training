@@ -238,7 +238,9 @@ ETIQUETA                       (--t-etiqueta, --texto-sec)
 ### Navegación lateral
 - Grupos ("ENTRENAMIENTOS") en `--t-etiqueta` `--texto-muted`.
 - Íconos SVG de trazo 1,75px y 18px, siempre `currentColor`. No se usan emojis.
-- Marca del sitio: título en `--t-titulo`; "actualizado…" en `--t-chico` `--texto-muted`.
+- Marca del sitio: solo el título, en `--t-titulo`. Sin fechas de los datos ni número de
+  versión en la barra lateral (el párrafo `#actualizado` queda oculto y solo aparece si no se
+  encuentran los datos).
 - Ítems de navegación en `--t-base`.
 
 ---
