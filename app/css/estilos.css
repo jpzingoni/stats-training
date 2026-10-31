@@ -523,8 +523,16 @@ body[data-vista="inicio"] main { padding-bottom: var(--hueco); }
 .tarjeta-cab figcaption { margin-right: auto; }   /* los selectores quedan juntos a la derecha */
 #panel-inicio .mini-cal { flex: 1; min-height: 0; }
 .tarjeta-grafico .lienzo { flex: 1; height: auto; min-height: 0; }
-.kpis-cuadro { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); grid-template-rows: repeat(2, minmax(0, 1fr)); gap: var(--hueco); min-height: 0; }
-.kpis-cuadro .kpi { display: flex; flex-direction: column; justify-content: center; min-height: 0; overflow: hidden; }
+/* Objetivos del mes: una barra horizontal por objetivo que se llena con lo hecho */
+.objetivos { list-style: none; margin: 0; padding: 0; flex: 1; min-height: 0; display: flex; flex-direction: column; justify-content: space-around; gap: var(--e3); }
+.objetivo-cab { display: flex; align-items: baseline; justify-content: space-between; gap: var(--e2); margin-bottom: var(--e1); }
+.objetivo-nombre { display: inline-flex; align-items: center; gap: var(--e2); font: var(--t-base); font-weight: 600; }
+.objetivo-nombre i { width: 10px; height: 10px; border-radius: 50%; }
+.objetivo-pct { font: var(--t-titulo); }
+.objetivo.cumplido .objetivo-pct { color: var(--dia-ganado); }
+.objetivo-barra { height: 12px; border-radius: 999px; background: var(--superficie-2); overflow: hidden; }
+.objetivo-barra span { display: block; height: 100%; border-radius: 999px; }
+.objetivo-det { margin-top: var(--e1); font: var(--t-chico); color: var(--texto-sec); }
 
 /* ── Selectores de la vista Carrera ───────────────────────────────────────── */
 .selectores { display: flex; flex-wrap: wrap; gap: var(--e3); margin-bottom: var(--hueco); align-items: flex-end; }
@@ -605,7 +613,6 @@ body[data-vista="inicio"] main { padding-bottom: var(--hueco); }
   .inicio-fila { grid-template-columns: minmax(0, 1fr); }
   #panel-inicio .mini-dia { aspect-ratio: 1; }
   .tarjeta-grafico .lienzo { flex: none; height: 230px; }
-  .kpis-cuadro .kpi { min-height: 110px; }
 }
 
 /* Pantallas chicas: la tabla crece con su contenido */

@@ -171,7 +171,6 @@ ETIQUETA                       (--t-etiqueta, --texto-sec)
 ```
 - Como máximo una línea de contexto. Lo que es igual para todos los KPI va en el encabezado
   de la vista.
-- En "Este mes", el primer KPI puede ir en `--t-hero` como dato protagonista.
 - **En celular** (KPI en 2 × 2), el valor no se parte: si no entra, la unidad baja a la línea
   siguiente. Las duraciones largas se escriben compactas (`7:16` con unidad `h`, no
   `7 h 16 min`).
@@ -204,6 +203,20 @@ ETIQUETA                       (--t-etiqueta, --texto-sec)
 - Textos explicativos: en un ícono ⓘ con tooltip o en un `<details>`, no en un párrafo fijo
   dentro de la tarjeta.
 - Todo texto dibujado en canvas lee tamaño y fuente de los tokens (nada de `11px` fijo en JS).
+
+### Portada "Este mes"
+- Grilla de 2 × 2 que entra en una pantalla: arriba el calendario chico y "Actividades del
+  mes"; abajo "Objetivos del mes" y el gráfico diario (Pasos / Sueño). Sin KPI sueltos.
+  En celular se apila en ese orden.
+
+### Objetivos del mes
+- Una barra horizontal por objetivo (definidos en `OBJETIVOS`, en `js/secciones/inicio.js`:
+  nombre, meta, unidad, color y cómo se mide en el mes).
+- Encabezado: punto y nombre en `--t-base` 600, porcentaje a la derecha en `--t-titulo`.
+  Debajo, "lo hecho de la meta" en `--t-chico` `--texto-sec` ("23,0 de 50 km").
+- Barra de 12px con puntas redondeadas: carril `--superficie-2`, relleno del color del
+  deporte (Pasos: `--serie-diaria`). **Al cumplirse pasa a `--dia-ganado`** y el porcentaje
+  lleva "✓" en ese verde. El porcentaje puede pasar de 100 %; la barra no.
 
 ### Calendario (mini y mensual)
 - Días futuros: solo el número en `--texto-muted`, sin borde.

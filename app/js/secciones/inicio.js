@@ -1,15 +1,25 @@
-// Vista "Este mes": la portada. Resume el mes (pasos, sueño, FC en reposo y actividades)
-// y muestra un calendario chico con los días en que hubo actividad.
+// Vista "Este mes": la portada. Calendario chico con los días en que hubo actividad, las
+// actividades del mes, el avance de los objetivos mensuales y el gráfico de pasos / sueño.
 (() => {
   const Tablero = (window.Tablero ??= { secciones: {} });
 
-  const { kpis, escapar } = Tablero.componentes;
+  const { escapar } = Tablero.componentes;
   const { GRUPOS, VAR_GRUPO, grupoDe, grafico, sinDatos, colores, ejeY, estiloBarra, tipografia, conAlfa } = Tablero.graficos;
   const { numero, duracion, suma, promedio, sumarDias, lunesDe, fechaLarga,
-    MESES_LARGOS, hoyLocal, sumarMes, ultimoDiaMes, nombreMes, variacion } = Tablero.formato;
+    MESES_LARGOS, hoyLocal, sumarMes, ultimoDiaMes, nombreMes } = Tablero.formato;
 
   const estado = { mes: null, ctx: null, enlazado: false, metrica: null };
   const DIAS = ["L", "M", "X", "J", "V", "S", "D"];
+
+  /** Objetivos mensuales: cada uno dice cómo se mide en el mes, su meta y su color. */
+  const kmDe = (m, grupo) => suma(m.actividades.filter((a) => grupoDe(a) === grupo), (a) => a.distancia_m) / 1000;
+  const OBJETIVOS = [
+    { nombre: "Correr", meta: 50, unidad: "km", decimales: 1, color: VAR_GRUPO.Carrera, valor: (m) => kmDe(m, "Carrera") },
+    { nombre: "Ciclismo", meta: 100, unidad: "km", decimales: 1, color: VAR_GRUPO.Ciclismo, valor: (m) => kmDe(m, "Ciclismo") },
+    { nombre: "Pasos", meta: 300000, unidad: "pasos", decimales: 0, color: "var(--serie-diaria)", valor: (m) => m.pasosTotal ?? 0 },
+    { nombre: "Pádel", meta: 2, unidad: "sesiones", decimales: 0, color: VAR_GRUPO["Pádel"],
+      valor: (m) => m.actividades.filter((a) => grupoDe(a) === "Pádel").length },
+  ];
 
   function render(ctx) {
     estado.ctx = ctx;
@@ -75,26 +85,8 @@
     document.getElementById("inicio-anterior").disabled = mes <= limites.min;
     document.getElementById("inicio-siguiente").disabled = mes >= limites.max;
 
-    // Variación contra el mes anterior (flecha en verde o rojo según convenga) y cuántos
-    // días del mes tienen dato, porque hay días sin reloj
-    const mesAntCorto = nombreAnt.slice(0, 3);
-    const contra = (actual, anterior, metrica, formato) => {
-      const v = variacion(actual, anterior, metrica, formato);
-      return v && { ...v, texto: `${v.texto} vs. ${mesAntCorto}` };
-    };
-    const cobertura = (dias) => `${dias}/${m.transcurridos} días`;
-    kpis("inicio-kpis", [
-      { etiqueta: "Pasos del mes", valor: numero(m.pasosTotal), protagonista: true,
-        delta: `${m.pasosDias}/${m.transcurridos} días con dato` },
-      { etiqueta: "Pasos por día", valor: numero(m.pasosProm),
-        variacion: contra(m.pasosProm, p?.pasosProm, "pasos"), delta: cobertura(m.pasosDias) },
-      { etiqueta: "Sueño promedio", valor: m.suenoProm != null ? horasCompacto(m.suenoProm) : "—", unidad: "h",
-        variacion: contra(m.suenoProm, p?.suenoProm, "sueno", (x) => `${numero(x * 60)} min`), delta: cobertura(m.suenoDias) },
-      { etiqueta: "FC en reposo promedio", valor: numero(m.fcProm), unidad: "ppm",
-        variacion: contra(m.fcProm, p?.fcProm, "fc_reposo", (x) => numero(x, 1)), delta: cobertura(m.fcDias) },
-    ]);
-
     renderActividades(m, p, nombreAnt);
+    renderObjetivos(m);
     renderMiniCalendario(ctx, m);
     renderDiario(ctx, m);
   }
@@ -132,6 +124,28 @@
           <span class="act-lista-det">${duracion(x.s)}${x.km >= 0.1 ? ` · ${numero(x.km, 1)} km` : ""}</span>
           <span class="act-lista-n">${x.n}</span>
         </li>`).join("")}</ul>` : '<p class="texto-sec">Todavía no hay actividades este mes.</p>'}`;
+  }
+
+  /** Una barra por objetivo que se llena con lo hecho en el mes; al cumplirlo pasa al verde
+   *  de "día ganado". El porcentaje puede pasar de 100 %, la barra no. */
+  function renderObjetivos(m) {
+    document.getElementById("inicio-objetivos").innerHTML = OBJETIVOS.map((o) => {
+      const hecho = o.valor(m);
+      const pct = Math.round((hecho / o.meta) * 100);
+      const cumplido = hecho >= o.meta;
+      return `
+        <li class="objetivo${cumplido ? " cumplido" : ""}">
+          <div class="objetivo-cab">
+            <span class="objetivo-nombre"><i style="background:${o.color}"></i>${escapar(o.nombre)}</span>
+            <span class="objetivo-pct num">${cumplido ? "✓ " : ""}${pct} %</span>
+          </div>
+          <div class="objetivo-barra" role="progressbar" aria-label="${escapar(o.nombre)}" aria-valuemin="0"
+               aria-valuemax="${o.meta}" aria-valuenow="${Math.round(hecho)}">
+            <span style="width:${Math.min(pct, 100)}%;background:${cumplido ? "var(--dia-ganado)" : o.color}"></span>
+          </div>
+          <div class="objetivo-det num">${numero(hecho, hecho % 1 ? o.decimales : 0)} de ${numero(o.meta)} ${o.unidad}</div>
+        </li>`;
+    }).join("");
   }
 
   function renderMiniCalendario(ctx, m) {
