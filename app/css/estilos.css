@@ -432,6 +432,7 @@ main { padding: var(--hueco) var(--hueco) var(--e5); max-width: 1400px; }
 .cal-cabecera h2 { font: var(--t-pagina); letter-spacing: -0.01em; min-width: 11rem; text-align: center; }
 .cal-cabecera button { min-width: var(--alto-control); }
 .cal-cabecera button:disabled { opacity: 0.4; cursor: default; }
+.cal-cabecera .texto-sec { margin: 0; }   /* centrado con los botones y el título */
 .cal-leyenda-dia { margin-left: auto; display: flex; gap: 0.8rem; color: var(--texto-muted); font: var(--t-chico); flex-wrap: wrap; }
 .cal-leyenda-dia span { display: inline-flex; align-items: center; gap: 0.25rem; }
 

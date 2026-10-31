@@ -193,8 +193,8 @@ ETIQUETA                       (--t-etiqueta, --texto-sec)
 - Unidades: van en el título del eje o en el título del gráfico, no en cada marca
   (marcas "6:40", no "6:40 /km").
 - Líneas de 2px, sin puntos visibles (aparecen al pasar el mouse).
-- Promedios y referencias: línea punteada `--texto-muted` 1px con etiqueta directa
-  ("prom. 11.872").
+- Promedios y referencias: línea punteada `--texto` 1,5px con etiqueta directa en `--texto`
+  ("prom. 11.872"). Negra y no gris: tiene que leerse también donde cruza las barras.
 - **Bloques de plantilla**: bandas de fondo alternadas (`--superficie` / `--superficie-2`)
   en lugar de líneas punteadas, con el nombre arriba en `--t-etiqueta`. El bloque de
   Entrenamiento puede llevar un fondo apenas más marcado.

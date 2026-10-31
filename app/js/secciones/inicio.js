@@ -181,7 +181,7 @@
           { type: "bar", label: met.etiqueta, data: valores, ...estiloBarra(colorBarras), order: 1 },
           // Promedio de los días con dato: referencia punteada con etiqueta directa
           { type: "line", label: "Promedio", data: dias.map((f) => (f <= m.hasta ? met.promedio(m) : null)),
-            borderColor: c.muted, borderWidth: 1, borderDash: [4, 4], pointRadius: 0, pointHitRadius: 0, order: 0 },
+            borderColor: c.texto, borderWidth: 1.5, borderDash: [4, 4], pointRadius: 0, pointHitRadius: 0, order: 0 },
         ],
       },
       plugins: [ETIQUETA_PROMEDIO],
@@ -193,7 +193,7 @@
         },
         plugins: {
           legend: { display: false },
-          etiquetaPromedio: { texto: `prom. ${met.prom(met.promedio(m))}`, color: c.muted },
+          etiquetaPromedio: { texto: `prom. ${met.prom(met.promedio(m))}`, color: c.texto },
           tooltip: {
             filter: (i) => i.parsed.y != null && i.datasetIndex === 0,
             callbacks: {
