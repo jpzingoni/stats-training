@@ -208,6 +208,9 @@ ETIQUETA                       (--t-etiqueta, --texto-sec)
 - Grilla de 2 × 2 que entra en una pantalla: arriba el calendario chico y "Actividades del
   mes"; abajo "Objetivos del mes" y el gráfico de pasos por día. Sin KPI sueltos.
 - Los títulos de las cuatro tarjetas van **centrados**.
+- "Actividades del mes" es una `.tabla` (Deporte · Tiempo · Km · Sesiones, números a la
+  derecha) con la **suma en la última fila** ("Total", en 700 y con una línea de `--texto`
+  arriba). Sin total arriba: el número de actividades es la suma de la columna Sesiones.
   En celular se apila en ese orden.
 
 ### Objetivos del mes

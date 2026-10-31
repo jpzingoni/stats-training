@@ -59,9 +59,6 @@
     const ctx = estado.ctx;
     const { mes, limites } = estado;
     const m = resumenMes(ctx, mes);
-    const mesAnt = sumarMes(mes, -1);
-    const p = mesAnt >= limites.min ? resumenMes(ctx, mesAnt) : null;
-    const nombreAnt = MESES_LARGOS[Number(mesAnt.slice(5, 7)) - 1].toLowerCase();
 
     document.getElementById("inicio-mes").textContent = nombreMes(mes);
     document.getElementById("inicio-cal-titulo").textContent = MESES_LARGOS[Number(mes.slice(5, 7)) - 1];
@@ -71,33 +68,30 @@
     document.getElementById("inicio-anterior").disabled = mes <= limites.min;
     document.getElementById("inicio-siguiente").disabled = mes >= limites.max;
 
-    renderActividades(m, p, nombreAnt);
+    renderActividades(m);
     renderObjetivos(m);
     renderMiniCalendario(ctx, m);
     renderDiario(ctx, m);
   }
 
-  function renderActividades(m, p, nombreAnt) {
+  /** Tabla por deporte (tiempo, km y sesiones) con la suma del mes en la última fila. */
+  function renderActividades(m) {
     const acts = m.actividades;
-    const porGrupo = GRUPOS.map((g) => {
-      const lista = acts.filter((a) => grupoDe(a) === g);
-      return { g, n: lista.length, s: suma(lista, (a) => a.duracion_s), km: suma(lista, (a) => a.distancia_m) / 1000 };
-    }).filter((x) => x.n);
-    const diasActivos = new Set(acts.map((a) => a.fecha)).size;
-    const comparacion = p ? ` · ${p.actividades.length} en ${nombreAnt}` : "";
-
-    document.getElementById("inicio-actividades").innerHTML = `
-      <div class="act-total">
-        <div><span class="act-total-num">${acts.length}</span> ${acts.length === 1 ? "actividad" : "actividades"}</div>
-        <div class="texto-sec">${duracion(suma(acts, (a) => a.duracion_s))} en total · ${diasActivos} ${diasActivos === 1 ? "día activo" : "días activos"}${comparacion}</div>
-      </div>
-      ${porGrupo.length ? `<ul class="act-lista">${porGrupo.map((x) => `
-        <li>
-          <span class="muestra" style="background:${VAR_GRUPO[x.g]}"></span>
-          <span class="act-lista-nombre">${escapar(x.g)}</span>
-          <span class="act-lista-det">${duracion(x.s)}${x.km >= 0.1 ? ` · ${numero(x.km, 1)} km` : ""}</span>
-          <span class="act-lista-n">${x.n}</span>
-        </li>`).join("")}</ul>` : '<p class="texto-sec">Todavía no hay actividades este mes.</p>'}`;
+    const fila = (lista) => ({ n: lista.length, s: suma(lista, (a) => a.duracion_s), km: suma(lista, (a) => a.distancia_m) / 1000 });
+    const porGrupo = GRUPOS.map((g) => ({ g, ...fila(acts.filter((a) => grupoDe(a) === g)) })).filter((x) => x.n);
+    const total = fila(acts);
+    const km = (x) => (x >= 0.1 ? numero(x, 1) : "—");
+    document.getElementById("inicio-actividades").innerHTML = porGrupo.length ? `
+      <table class="tabla act-tabla">
+        <thead><tr><th>Deporte</th><th class="num">Tiempo</th><th class="num">Km</th><th class="num">Sesiones</th></tr></thead>
+        <tbody>${porGrupo.map((x) => `
+          <tr>
+            <td><span class="muestra" style="background:${VAR_GRUPO[x.g]}"></span>${escapar(x.g)}</td>
+            <td class="num">${duracion(x.s)}</td><td class="num">${km(x.km)}</td><td class="num">${x.n}</td>
+          </tr>`).join("")}
+        </tbody>
+        <tfoot><tr><td>Total</td><td class="num">${duracion(total.s)}</td><td class="num">${km(total.km)}</td><td class="num">${total.n}</td></tr></tfoot>
+      </table>` : '<p class="texto-sec">Todavía no hay actividades este mes.</p>';
   }
 
   /** Una barra por objetivo que se llena con lo hecho en el mes; al cumplirlo pasa al verde

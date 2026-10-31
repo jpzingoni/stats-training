@@ -181,7 +181,7 @@ button { font: inherit; color: inherit; }
 /* Foco visible en tinta, igual en todos los controles */
 :focus-visible { outline: 2px solid var(--tinta); outline-offset: 2px; }
 /* Números: fuente condensada con cifras tabulares */
-.num, .tabla td.num, .kpi-valor, .act-total-num, .act-lista-n, .mini-dia b {
+.num, .tabla td.num, .kpi-valor, .mini-dia b {
   font-variant-numeric: tabular-nums;
 }
 .texto-sec { color: var(--texto-sec); margin: 0.4rem 0 0.8rem; }
@@ -471,18 +471,10 @@ main { padding: var(--hueco) var(--hueco) var(--e5); max-width: 1400px; }
 
 /* ── Este mes (portada) ──────────────────────────────────────────────────── */
 .tarjeta > h2 { margin-bottom: 0.6rem; }
-.act-total { margin-bottom: 0.4rem; }
-.act-total-num { font: var(--t-kpi); letter-spacing: -0.01em; }
-.act-total .texto-sec { margin: var(--e1) 0 0; font: var(--t-chico); }
-.act-lista { list-style: none; margin: 0; padding: 0; }
-.act-lista li {
-  display: grid; grid-template-columns: 10px auto minmax(0, 1fr) auto; align-items: baseline; gap: 0.6rem;
-  padding: 0.3rem 0; border-top: 1px solid var(--grilla);
-}
-.act-lista .muestra { width: 10px; height: 10px; border-radius: 50%; }
-.act-lista-nombre { font-weight: 600; }
-.act-lista-n { font-weight: 600; font-variant-numeric: tabular-nums; }
-.act-lista-det { color: var(--texto-sec); font: var(--t-chico); font-variant-numeric: tabular-nums; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+/* Actividades del mes: tabla por deporte con columnas alineadas y la suma abajo */
+.act-tabla td:first-child { font-weight: 600; }
+.act-tabla .muestra { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: var(--e2); }
+.act-tabla tfoot td { font-weight: 700; border-bottom: none; border-top: 2px solid var(--texto); }
 .mini-cal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
 .mini-nombre { text-align: center; font: var(--t-etiqueta); text-transform: uppercase; letter-spacing: 0.06em; color: var(--texto-muted); }
 /* Calendario chico: fondo de color en los días con actividad; puntos con el color del deporte */
