@@ -95,7 +95,7 @@ daltonismo y tienen versión oscura). Lo que cambia es **qué se pinta con qué*
 | Qué | Color | Regla |
 |---|---|---|
 | Deporte | Carrera `--serie-1` · Pádel `--serie-2` · Caminata `--serie-3` · Ciclismo `--serie-4` · Otras `--serie-otras` | Fijo en todo el sitio (ya está en `graficos.js`, no duplicarlo). |
-| Zonas de FC Z1–Z7 | `--rampa-1` … `--rampa-7` | Ordinal: más oscuro = más intenso. |
+| Zonas de FC Z1–Z7 | `--zona-1` … `--zona-7` | Escala propia: gris (Z1) → celeste → verde → naranja → rojo (Z5); Z6 y Z7 oscurecen el rojo. Igual en claro y oscuro. No usar la rampa azul para zonas. |
 | Carga diaria (calendario) | `--rampa-1` … `--rampa-5` según HRSS | Mapa de calor. Sin actividad: `--rampa-vacio`. |
 | **Sesiones comparadas** | ver abajo | |
 | Variación buena / mala | `--bien` / `--mal` | Ver "Variaciones". |

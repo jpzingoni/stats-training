@@ -3,7 +3,7 @@
   const Tablero = (window.Tablero ??= { secciones: {} });
 
   const { grafico, sinDatos, colores, ejeFechas, ejeY, tituloFecha, estiloBarra } = Tablero.graficos;
-  const { kpis, escapar } = Tablero.componentes;
+  const { escapar } = Tablero.componentes;
   const { numero, ritmo, duracion, ts, fechaCorta, fechaLarga, suma, promedio } = Tablero.formato;
 
   const SUBTIPOS = ["Bloques", "Series", "Libre"];
@@ -42,7 +42,7 @@
   // ─── Comparar sesiones de una misma plantilla ──────────────────────────────
 
   const MAX_SESIONES = 8;   // la paleta tiene 8 colores distinguibles; más líneas no se leen
-  const comp = { plantillas: null, elegidas: null, metrica: "ritmo", etapa: "todas", ef: "m", enlazado: false, corridas: [], minutos: {} };
+  const comp = { plantillas: null, elegidas: null, metrica: "ritmo", etapa: "todas", ef: "m", zonas: false, enlazado: false, corridas: [], minutos: {} };
   // Cada métrica: su columna en minutos.js, su valor por bloque (si no hay minutos) y su formato
   const METRICAS_COMP = {
     ritmo: { nombre: "Ritmo", clave: "ritmo", valor: (b) => b.ritmo_s_km, formato: (v) => `${ritmo(v)} /km`, invertir: true },
@@ -54,7 +54,7 @@
 
   function guardarComp() {
     try {
-      localStorage.setItem("carrera-comparar", JSON.stringify({ plantillas: [...comp.plantillas], metrica: comp.metrica, etapa: comp.etapa, ef: comp.ef }));
+      localStorage.setItem("carrera-comparar", JSON.stringify({ plantillas: [...comp.plantillas], metrica: comp.metrica, etapa: comp.etapa, ef: comp.ef, zonas: comp.zonas }));
     } catch { /* solo esta visita */ }
   }
 
@@ -67,6 +67,7 @@
       if (METRICAS_COMP[g?.metrica]) comp.metrica = g.metrica;
       if (g?.ef === "m" || g?.ef === "w") comp.ef = g.ef;
       if (g?.etapa) comp.etapa = g.etapa;
+      comp.zonas = g?.zonas === true;
     } catch { /* valores por defecto */ }
 
     // Al cambiar las plantillas se eligen de nuevo las sesiones (las más recientes)
@@ -109,6 +110,11 @@
       const b = e.target.closest("[data-metrica]");
       if (!b) return;
       comp.metrica = b.dataset.metrica;
+      guardarComp();
+      renderComparacion(comp.corridas);
+    });
+    document.getElementById("carrera-zonas").addEventListener("click", () => {
+      comp.zonas = !comp.zonas;
       guardarComp();
       renderComparacion(comp.corridas);
     });
@@ -184,7 +190,6 @@
     selEtapa.disabled = !fases.length;
     selEtapa.innerHTML = `<option value="todas">${fases.length ? "Toda la sesión" : "Toda la sesión (sin etapas)"}</option>` +
       fases.map((f) => `<option value="${escapar(f)}"${f === comp.etapa ? " selected" : ""}>${escapar(f)}</option>`).join("");
-    renderKpisComparacion(elegidas);
     renderTabla(elegidas, colorDe);
 
     // Con plantilla, el eje X sigue los bloques de la plantilla: todas las sesiones comparten
@@ -193,21 +198,25 @@
     // La alineación por bloques solo es posible con una única plantilla elegida
     const pasos = comp.plantillas.size === 1 ? comp.meta?.plantillas?.[[...comp.plantillas][0]] : null;
     const eje = pasos ? ejePlantilla(pasos, sesiones) : null;
-    const hayDistancia = pasos?.some((p) => p.tipo === "distancia");
-    document.getElementById("carrera-comp-nota").textContent =
-      "Curva minuto a minuto de cada sesión. " +
-      (eje && comp.etapa !== "todas" ? `Se muestran solo los minutos de ${comp.etapa}. ` : "") +
-      (eje
-        ? "El eje sigue los bloques de la plantilla: cada bloque se estira o se comprime a su tramo, así todas las sesiones quedan alineadas." +
-          (hayDistancia ? " Los bloques por distancia toman su duración promedio." : "")
-        : "El eje es el tiempo desde el inicio de la sesión" +
-          (comp.plantillas.size > 1 ? " (con varias plantillas no hay bloques comunes para alinear)." : ".")) +
-      (comp.metrica === "ritmo" ? " Más arriba = más rápido; los minutos con pausas quedan contra el borde." : "") +
-      (sesiones.length > MAX_SESIONES ? ` Se pueden comparar hasta ${MAX_SESIONES} sesiones a la vez.` : "");
     renderDeriva(elegidas, colorDe, pasos);
     renderEficienciaPlantilla(elegidas, colorDe);
     renderDispersion(elegidas, colorDe);
+    // Zonas de FC: con el botón, una franja por sesión bajo el gráfico
+    const limites = comp.meta?.zonas_fc_carrera ?? [];
+    const zonaDe = (fc) => { const z = limites.findIndex((l) => fc <= l); return z === -1 ? limites.length - 1 : z; };
+    const conZonas = comp.zonas && limites.length > 0;
+    document.getElementById("carrera-zonas").setAttribute("aria-pressed", String(conZonas));
+    const leyenda = document.getElementById("carrera-zonas-leyenda");
+    leyenda.hidden = !conZonas || !elegidas.length;
+    leyenda.innerHTML = limites.map((l, z) => `<span><i style="background:var(--zona-${z + 1})"></i>Z${z + 1}
+      <b>${z === 0 ? `≤ ${l}` : z === limites.length - 1 ? `> ${limites[z - 1]}` : `${limites[z - 1] + 1}–${l}`}</b> ppm</span>`).join("");
     if (!elegidas.length) return sinDatos("g-carrera-comparar", "Elegí al menos una sesión");
+    const franjas = conZonas
+      ? elegidas.map((a) => ({ color: colorDe.get(a.id),
+          puntos: puntosSesion(a, METRICAS_COMP.fc, eje).map((p) => ({ x: p.x, z: p.y == null ? null : zonaDe(p.y) })) }))
+      : [];
+    const FRANJA = 7, SEP = 3;   // alto de cada franja y separación, en px
+    const espacioFranjas = franjas.length ? 4 + franjas.length * (FRANJA + SEP) : 0;
 
     const datasets = elegidas.map((a) => ({
       label: fechaLarga(a.fecha), data: puntosSesion(a, met, eje),
@@ -218,10 +227,11 @@
       return sinDatos("g-carrera-comparar", `Sin datos de ${met.nombre.toLowerCase()} para estas sesiones`);
     }
     const rango = rangoRobusto(datasets.flatMap((d) => d.data.map((pt) => pt.y)));
+    const promedios = lineasPromedio(elegidas, datasets, met, eje, colorDe);
     grafico("g-carrera-comparar", {
       type: "line",
       data: { datasets },
-      plugins: [LINEAS_BLOQUES],
+      plugins: [LINEAS_BLOQUES, Tablero.graficos.FRANJAS_ZONAS, Tablero.graficos.BANDAS_ZONAS, LINEAS_PROMEDIO],
       options: {
         interaction: { mode: "nearest", intersect: false, axis: "x" },
         elements: { line: { tension: 0 } },
@@ -229,7 +239,10 @@
         scales: {
           x: { type: "linear", min: 0, max: eje ? eje.total / 60 : undefined, grid: { display: false }, border: { color: c.eje },
                title: { display: true, text: eje ? `minutos según la plantilla ${nombrePlantillas()}` : "minutos desde el inicio" },
-               ticks: { callback: (v) => (Number.isInteger(v) ? `${v}′` : "") } },   // sin el último valor con decimales
+               // Con zonas, el espacio entre el eje y los números aloja las franjas
+               ticks: { padding: 3 + espacioFranjas, callback: (v) => (Number.isInteger(v) ? `${v}′` : "") },   // sin el último valor con decimales
+               // Chart.js suma el padding también debajo de los números: se descuenta
+               afterFit: (escala) => { escala.height -= espacioFranjas; } },
           // Rango del 3 % al 97 % de los valores: un minuto con pausa no aplasta toda la curva
           y: ejeY({ reverse: met.invertir, min: rango?.min, max: rango?.max,
                     ticks: { maxTicksLimit: 8, callback: (v, i, t) => (rango && (i === 0 || i === t.length - 1) ? "" : met.formato(v)) } }),
@@ -237,6 +250,10 @@
         plugins: {
           // Con plantilla, la leyenda va abajo: arriba están los nombres de las fases
           legend: { display: datasets.length > 1, position: eje ? "bottom" : "top" },
+          lineasPromedio: { lineas: promedios, rotulos: elegidas.length === 1, fondo: c.superficie },
+          franjasZonas: franjas.length ? { franjas, colores: c.zonas, alto: FRANJA, sep: SEP, fondo: comp.metrica !== "fc" } : null,
+          // En FC, las zonas siempre van de fondo (como en Pádel)
+          bandasZonas: comp.metrica === "fc" && limites.length ? { limites, colores: c.zonas } : null,
           lineasBloques: eje ? { limites: eje.inicios.slice(1).map((v) => v / 60), tramos: eje.tramos, linea: c.muted, texto: c.textoSec } : null,
           tooltip: {
             filter: (i) => i.parsed.y != null,
@@ -245,7 +262,9 @@
               label: (i) => {
                 const pt = i.raw;
                 const donde = pt.b ? `bloque ${pt.b.nro}${pt.b.fase ? ` · ${pt.b.fase}` : ""}` : "";
-                return ` Min ${pt.minuto + 1}${donde ? ` (${donde})` : ""}: ${met.formato(i.parsed.y)}`;
+                const fc = comp.minutos[elegidas[i.datasetIndex]?.id]?.fc?.[pt.minuto];
+                const zona = (conZonas || comp.metrica === "fc") && fc != null ? ` · Z${zonaDe(fc) + 1}` : "";
+                return ` Min ${pt.minuto + 1}${donde ? ` (${donde})` : ""}: ${met.formato(i.parsed.y)}${zona}`;
               },
             },
           },
@@ -497,38 +516,6 @@
     (b.duracion_s ?? 0) >= 10 && (comp.etapa === "todas" || b.fase === comp.etapa));
 
   /**
-   * Tarjetas: ritmo, FC, potencia y distancia de las sesiones elegidas, en la etapa elegida.
-   * El ritmo sale de distancia y tiempo totales (no del promedio de ritmos) y la FC se
-   * pondera por el tiempo de cada bloque.
-   */
-  function renderKpisComparacion(elegidas) {
-    const bloques = elegidas.flatMap(bloquesDeEtapa);
-    const dur = suma(bloques, (b) => b.duracion_s);
-    const dist = suma(bloques, (b) => b.distancia_m);
-    const conFc = bloques.filter((b) => b.fc_media != null);
-    const fc = conFc.length ? suma(conFc, (b) => b.fc_media * b.duracion_s) / suma(conFc, (b) => b.duracion_s) : null;
-    const etapa = comp.etapa === "todas" ? "toda la sesión" : comp.etapa.toLowerCase();
-    const alcance = `${elegidas.length} ${elegidas.length === 1 ? "sesión" : "sesiones"} · ${etapa}`;
-    // Última sesión elegida, para ver cómo viene respecto del promedio
-    const ultima = elegidas.at(-1);
-    const bu = ultima ? bloquesDeEtapa(ultima) : [];
-    const durU = suma(bu, (b) => b.duracion_s), distU = suma(bu, (b) => b.distancia_m);
-    const fcU = bu.some((b) => b.fc_media != null)
-      ? suma(bu.filter((b) => b.fc_media != null), (b) => b.fc_media * b.duracion_s) / suma(bu.filter((b) => b.fc_media != null), (b) => b.duracion_s)
-      : null;
-    const pot = ponderado(bloques, "potencia_w");
-    const potU = ponderado(bu, "potencia_w");
-    const ultimaTxt = (v) => (elegidas.length > 1 && v ? ` · última: ${v}` : "");
-    kpis("carrera-kpis", [
-      { etiqueta: "Ritmo medio", valor: dist ? ritmo((dur / dist) * 1000) : "—", unidad: "/km",
-        delta: alcance + ultimaTxt(distU ? `${ritmo((durU / distU) * 1000)} /km` : "") },
-      { etiqueta: "FC media", valor: numero(fc), unidad: "ppm", delta: alcance + ultimaTxt(fcU ? `${numero(fcU)} ppm` : "") },
-      { etiqueta: "Potencia media", valor: numero(pot), unidad: "W", delta: alcance + ultimaTxt(potU ? `${numero(potU)} W` : "") },
-      { etiqueta: "Distancia", valor: numero(dist / 1000, 1), unidad: "km", delta: alcance },
-    ]);
-  }
-
-  /**
    * Eje común de una plantilla: dónde empieza y cuánto ocupa cada paso (en segundos).
    * Los pasos por tiempo ocupan su objetivo; los de distancia, la duración promedio que tuvo
    * ese paso en todas las sesiones de la plantilla (si no hay ninguna, se estima a 6 min/km).
@@ -550,6 +537,68 @@
     }));
     return { anchos, inicios, tramos, total: inicios.at(-1) + anchos.at(-1) };
   }
+
+  /**
+   * Promedio de la métrica en cada tramo de la plantilla (o en toda la sesión, sin plantilla),
+   * por sesión. El ritmo sale de tiempo y distancia de los bloques (como en la tabla); el resto,
+   * del promedio de sus minutos.
+   */
+  function lineasPromedio(elegidas, datasets, met, eje, colorDe) {
+    const lineas = [];
+    elegidas.forEach((a, k) => {
+      const puntos = datasets[k].data.filter((p) => p.y != null && p.b);
+      const grupos = eje
+        ? a.bloques.filter((b) => b.fase).map((b, n) => ({ bloques: [b], desde: eje.tramos[n]?.desde, hasta: eje.tramos[n]?.hasta }))
+        : [{ bloques: a.bloques.filter((b) => (b.duracion_s ?? 0) >= 10), desde: null, hasta: null }];
+      for (const g of grupos) {
+        const nros = new Set(g.bloques.map((b) => b.nro));
+        const suyos = puntos.filter((p) => nros.has(p.b.nro));
+        if (!suyos.length || g.desde === undefined) continue;   // tramo fuera de la etapa elegida
+        let valor;
+        if (met.clave === "ritmo") {
+          const dur = suma(g.bloques, (b) => b.duracion_s), dist = suma(g.bloques, (b) => b.distancia_m);
+          valor = dist ? (dur / dist) * 1000 : null;
+        } else {
+          valor = suyos.reduce((x, p) => x + p.y, 0) / suyos.length;
+        }
+        if (valor == null) continue;
+        lineas.push({ desde: g.desde ?? suyos[0].x, hasta: g.hasta ?? suyos.at(-1).x, valor, color: colorDe.get(a.id),
+                      texto: `Prom. ${met.formato(valor)}` });
+      }
+    });
+    return lineas;
+  }
+
+  /** Plugin: líneas punteadas con el promedio de cada tramo (y su valor, si hay una sola sesión). */
+  const LINEAS_PROMEDIO = {
+    id: "lineasPromedio",
+    afterDatasetsDraw(chart) {
+      const op = chart.options.plugins.lineasPromedio;
+      if (!op?.lineas.length) return;
+      const { ctx, chartArea: area, scales: { x, y } } = chart;
+      ctx.save();
+      ctx.lineWidth = 1.25; ctx.setLineDash([5, 4]);
+      ctx.font = Tablero.graficos.tipografia().chico.canvas;
+      ctx.textAlign = "right"; ctx.textBaseline = "bottom";
+      for (const l of op.lineas) {
+        const py = Math.round(y.getPixelForValue(l.valor)) + 0.5;
+        if (py < area.top || py > area.bottom) continue;
+        const x0 = Math.max(x.getPixelForValue(l.desde), area.left) + 3, x1 = Math.min(x.getPixelForValue(l.hasta), area.right) - 3;
+        if (x1 <= x0) continue;
+        ctx.strokeStyle = l.color;
+        ctx.beginPath(); ctx.moveTo(x0, py); ctx.lineTo(x1, py); ctx.stroke();
+        if (op.rotulos && ctx.measureText(l.texto).width + 8 < x1 - x0) {
+          // Con fondo, para que se lea aunque la curva pase por detrás
+          const ancho = ctx.measureText(l.texto).width;
+          ctx.fillStyle = op.fondo;
+          ctx.fillRect(x1 - ancho - 4, py - 16, ancho + 4, 14);
+          ctx.fillStyle = l.color;
+          ctx.fillText(l.texto, x1 - 2, py - 3);
+        }
+      }
+      ctx.restore();
+    },
+  };
 
   /** Plugin de Chart.js: líneas punteadas en cada cambio de bloque y el nombre de la fase arriba. */
   const LINEAS_BLOQUES = {
@@ -674,7 +723,7 @@
           label: `Z${z + 1}`,
           data: pct.map((p) => p[z]),
           segundos: semanas.map((s) => s.por_categoria.Carrera.zonas_s[z]),
-          ...estiloBarra(c.rampa[z], true),
+          ...estiloBarra(c.zonas[z], true),
           borderRadius: 0,
         })),
       },

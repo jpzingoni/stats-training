@@ -108,6 +108,28 @@
     }
   }
 
+  // ─── Resumen / Gráficos en las vistas de actividades (se recuerda por vista) ─
+  const CON_MODO = ["carrera", "padel", "ciclismo", "otras"];
+  function leerModos() {
+    try { return JSON.parse(localStorage.getItem("modos-vista") ?? "{}") ?? {}; } catch { return {}; }
+  }
+  const modos = leerModos();
+  function aplicarModo(nombre) {
+    const panel = document.getElementById(`panel-${nombre}`);
+    if (!panel || !CON_MODO.includes(nombre)) return;
+    const modo = modos[nombre] === "graficos" ? "graficos" : "resumen";
+    panel.dataset.modo = modo;
+    for (const b of panel.querySelectorAll("[data-modo]")) b.setAttribute("aria-pressed", String(b.dataset.modo === modo));
+  }
+  document.addEventListener("click", (e) => {
+    const b = e.target.closest(".modo-vista [data-modo]");
+    if (!b) return;
+    modos[estado.pestana] = b.dataset.modo;
+    try { localStorage.setItem("modos-vista", JSON.stringify(modos)); } catch { /* solo esta visita */ }
+    aplicarModo(estado.pestana);
+    dibujar();   // los gráficos se vuelven a dibujar ya visibles, con su tamaño real
+  });
+
   function mostrarPestana(nombre) {
     if (!SECCIONES[nombre]) nombre = "inicio";
     estado.pestana = nombre;
@@ -117,6 +139,7 @@
       else b.removeAttribute("aria-current");
     }
     for (const s of document.querySelectorAll(".seccion")) s.hidden = s.id !== `panel-${nombre}`;
+    aplicarModo(nombre);
     document.getElementById("titulo-vista").textContent = TITULOS[nombre];
     document.getElementById("filtro").hidden = SIN_PERIODO.includes(nombre);
     document.getElementById("filtros-lateral").hidden = nombre !== "calendario";

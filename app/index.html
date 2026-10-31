@@ -29,9 +29,9 @@
         <button type="button" data-pestana="padel"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><ellipse cx="10" cy="9" rx="6" ry="7"/><path d="M14 14l6 6"/><circle cx="19" cy="5" r="1.5"/></svg><span>Pádel</span></button>
         <button type="button" data-pestana="ciclismo"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="6" cy="17" r="4"/><circle cx="18" cy="17" r="4"/><path d="M6 17l4-8h5l3 8M10 9l2 8M14 5h3"/></svg><span>Ciclismo</span></button>
         <button type="button" data-pestana="otras"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><circle cx="12" cy="4" r="2"/><path d="M10 22l1-7-2-2 1-5 3 1 2 4 2 1M9 13l-3 3"/></svg><span>Otras actividades</span></button>
-        <span class="nav-grupo">Salud y datos</span>
-        <button type="button" data-pestana="recuperacion"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 5.6a5.5 5.5 0 0 0-7.8 0L12 6.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 22l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"/></svg><span>Recuperación</span></button>
-        <button type="button" data-pestana="datos"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M3 15h18M9 4v16"/></svg><span>Datos</span></button>
+        <span class="nav-grupo" hidden>Salud y datos</span>
+        <button type="button" data-pestana="recuperacion" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M20.8 5.6a5.5 5.5 0 0 0-7.8 0L12 6.7l-1-1.1a5.5 5.5 0 0 0-7.8 7.8L12 22l8.8-8.6a5.5 5.5 0 0 0 0-7.8z"/></svg><span>Recuperación</span></button>
+        <button type="button" data-pestana="datos" hidden><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.75" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><rect x="3" y="4" width="18" height="16" rx="2"/><path d="M3 10h18M3 15h18M9 4v16"/></svg><span>Datos</span></button>
       </nav>
       <section class="filtros-lateral" id="filtros-lateral" aria-label="Filtros">
         <div class="filtros-grupo" id="grupo-bienestar">
@@ -73,9 +73,9 @@
       </div>
       <div class="inicio-fila">
         <section class="tarjeta">
-          <h2>Días con actividad</h2>
+          <h2 id="inicio-cal-titulo">Mes</h2>
+          <div class="mini-cal" id="inicio-mini-cal" aria-label="Días con actividad"></div>
           <div class="mini-leyenda" id="inicio-mini-leyenda" aria-label="Deportes del mes"></div>
-          <div class="mini-cal" id="inicio-mini-cal"></div>
         </section>
         <div class="kpis-cuadro" id="inicio-kpis"></div>
       </div>
@@ -165,14 +165,17 @@
           <span>Etapa</span>
           <select id="carrera-etapa"></select>
         </label>
+        <div class="segmentado modo-vista" role="group" aria-label="Ver como">
+          <button type="button" data-modo="resumen">Resumen</button>
+          <button type="button" data-modo="graficos">Gráficos</button>
+        </div>
       </div>
-      <!-- Primera pantalla: la tabla de sesiones y, a la derecha, las cuatro tarjetas -->
+      <!-- Primera pantalla: la tabla de sesiones a todo el ancho -->
       <div class="vista-arriba">
         <figure class="tarjeta tarjeta-tabla">
           <figcaption><h2>Sesiones</h2><p id="carrera-tabla-nota"></p></figcaption>
           <div class="tabla-contenedor"><table class="tabla" id="tabla-carreras"></table></div>
         </figure>
-        <div class="kpis kpis-columna" id="carrera-kpis"></div>
       </div>
       <div class="grilla">
         <figure class="tarjeta ancha">
@@ -185,9 +188,12 @@
               <button type="button" data-metrica="cadencia">Cadencia</button>
               <button type="button" data-metrica="zancada">Zancada</button>
             </div>
+            <div class="segmentado">
+              <button type="button" id="carrera-zonas" aria-pressed="false">Zonas de FC</button>
+            </div>
           </div>
-          <p class="texto-sec" id="carrera-comp-nota"></p>
           <div class="lienzo alto"><canvas id="g-carrera-comparar"></canvas></div>
+          <div class="zonas-leyenda" id="carrera-zonas-leyenda" hidden></div>
         </figure>
         <figure class="tarjeta">
           <figcaption><h2 id="carrera-deriva-titulo">Deriva cardíaca</h2><p id="carrera-deriva-nota"></p></figcaption>
@@ -234,13 +240,18 @@
 
     <!-- ── Pádel ───────────────────────────────────────────────── -->
     <section id="panel-padel" class="seccion" hidden>
-      <!-- Primera pantalla: la tabla y, a la derecha, las cuatro tarjetas -->
+      <div class="selectores">
+        <div class="segmentado modo-vista" role="group" aria-label="Ver como">
+          <button type="button" data-modo="resumen">Resumen</button>
+          <button type="button" data-modo="graficos">Gráficos</button>
+        </div>
+      </div>
+      <!-- Primera pantalla: la tabla de sesiones a todo el ancho -->
       <div class="vista-arriba sin-filtros">
         <figure class="tarjeta tarjeta-tabla">
           <figcaption><h2>Sesiones</h2><p>Tocá una fila para ver el detalle</p></figcaption>
           <div class="tabla-contenedor"><table class="tabla" id="tabla-padel"></table></div>
         </figure>
-        <div class="kpis kpis-columna" id="padel-kpis"></div>
       </div>
       <div class="grilla">
         <figure class="tarjeta ancha">
@@ -268,15 +279,48 @@
 
     <!-- ── Ciclismo ────────────────────────────────────────────── -->
     <section id="panel-ciclismo" class="seccion" hidden>
-      <!-- Primera pantalla: la tabla y, a la derecha, las cuatro tarjetas -->
+      <div class="selectores">
+        <div class="selector solo-graficos">
+          <span id="bici-salidas-etiqueta">Salidas</span>
+          <details class="desplegable" id="bici-salidas">
+            <summary aria-labelledby="bici-salidas-etiqueta"><span id="bici-salidas-resumen"></span></summary>
+            <div class="desplegable-menu">
+              <div class="desplegable-acciones">
+                <button type="button" data-accion="todas">Todas</button>
+                <button type="button" data-accion="ninguna">Ninguna</button>
+              </div>
+              <div id="bici-salidas-lista"></div>
+            </div>
+          </details>
+        </div>
+        <div class="segmentado modo-vista" role="group" aria-label="Ver como">
+          <button type="button" data-modo="resumen">Resumen</button>
+          <button type="button" data-modo="graficos">Gráficos</button>
+        </div>
+      </div>
+      <!-- Primera pantalla: la tabla de sesiones a todo el ancho -->
       <div class="vista-arriba sin-filtros">
         <figure class="tarjeta tarjeta-tabla">
           <figcaption><h2>Salidas</h2><p>Tocá una fila para ver el detalle y sus vueltas</p></figcaption>
           <div class="tabla-contenedor"><table class="tabla" id="tabla-bici"></table></div>
         </figure>
-        <div class="kpis kpis-columna" id="bici-kpis"></div>
       </div>
       <div class="grilla">
+        <figure class="tarjeta ancha">
+          <div class="tarjeta-cab">
+            <figcaption><h2 id="bici-evol-titulo">Velocidad a lo largo de la salida</h2></figcaption>
+            <div class="segmentado" id="bici-metrica" role="group" aria-label="Dato a mostrar">
+              <button type="button" data-metrica="velocidad">Velocidad</button>
+              <button type="button" data-metrica="fc">FC</button>
+              <button type="button" data-metrica="altitud">Altitud</button>
+            </div>
+            <div class="segmentado">
+              <button type="button" id="bici-zonas" aria-pressed="false">Zonas de FC</button>
+            </div>
+          </div>
+          <div class="lienzo alto"><canvas id="g-bici-evolucion"></canvas></div>
+          <div class="zonas-leyenda" id="bici-zonas-leyenda" hidden></div>
+        </figure>
         <figure class="tarjeta">
           <figcaption><h2>Kilómetros por semana</h2></figcaption>
           <div class="lienzo"><canvas id="g-bici-km"></canvas></div>
@@ -298,13 +342,18 @@
 
     <!-- ── Otras actividades ───────────────────────────────────── -->
     <section id="panel-otras" class="seccion" hidden>
-      <!-- Primera pantalla: la tabla y, a la derecha, las cuatro tarjetas -->
+      <div class="selectores">
+        <div class="segmentado modo-vista" role="group" aria-label="Ver como">
+          <button type="button" data-modo="resumen">Resumen</button>
+          <button type="button" data-modo="graficos">Gráficos</button>
+        </div>
+      </div>
+      <!-- Primera pantalla: la tabla de sesiones a todo el ancho -->
       <div class="vista-arriba sin-filtros">
         <figure class="tarjeta tarjeta-tabla">
           <figcaption><h2>Sesiones</h2><p>Tocá una fila para ver el detalle</p></figcaption>
           <div class="tabla-contenedor"><table class="tabla" id="tabla-otras"></table></div>
         </figure>
-        <div class="kpis kpis-columna" id="otras-kpis"></div>
       </div>
       <div class="grilla">
         <figure class="tarjeta">

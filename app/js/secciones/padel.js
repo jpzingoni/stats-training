@@ -3,25 +3,12 @@
   const Tablero = (window.Tablero ??= { secciones: {} });
 
   const { grafico, sinDatos, colores, ejeY, estiloBarra } = Tablero.graficos;
-  const { kpis, delta, escapar } = Tablero.componentes;
-  const { numero, duracion, fechaCorta, fechaLarga, suma, promedio } = Tablero.formato;
+  const { escapar } = Tablero.componentes;
+  const { numero, duracion, fechaCorta, fechaLarga, suma } = Tablero.formato;
 
   function render(ctx) {
     const sesiones = ctx.actividades.filter((a) => a.categoria === "Pádel");
-    const anteriores = ctx.actividadesAnteriores?.filter((a) => a.categoria === "Pádel");
-    const per = ctx.etiquetaPeriodo;
     const c = colores();
-
-    const horas = suma(sesiones, (a) => a.duracion_s) / 3600;
-    const cargaMedia = promedio(sesiones, (a) => a.carga);
-    const fcMedia = promedio(sesiones, (a) => a.fc_media);
-    kpis("padel-kpis", [
-      { etiqueta: "Sesiones", valor: numero(sesiones.length), delta: delta(sesiones.length, anteriores?.length, per) },
-      { etiqueta: "Tiempo total", valor: numero(horas, 1), unidad: "h",
-        delta: delta(horas, anteriores && suma(anteriores, (a) => a.duracion_s) / 3600, per, (x) => `${numero(x, 1)} h`) },
-      { etiqueta: "Carga media", valor: numero(cargaMedia), unidad: "HRSS" },
-      { etiqueta: "FC media", valor: numero(fcMedia), unidad: "ppm" },
-    ]);
 
     renderFcMinutos(ctx, sesiones);
 
@@ -74,7 +61,7 @@
       data: {
         labels: zonas.map((_, z) => `Z${z + 1}`),
         datasets: [{
-          label: "Minutos", data: zonas, backgroundColor: c.rampa,
+          label: "Minutos", data: zonas, backgroundColor: c.zonas,
           borderRadius: { topRight: 4, bottomRight: 4 }, borderSkipped: "left", maxBarThickness: 22,
         }],
       },
@@ -126,7 +113,7 @@
       type: "line",
       data: { datasets: [{ label: "FC", data: puntos, borderColor: c.categoria["Pádel"], backgroundColor: c.categoria["Pádel"],
         borderWidth: 2, pointRadius: 0, pointHoverRadius: 4, pointHitRadius: 8, tension: 0 }] },
-      plugins: [BANDAS_ZONAS],
+      plugins: [Tablero.graficos.BANDAS_ZONAS],
       options: {
         interaction: { mode: "nearest", intersect: false, axis: "x" },
         scales: {
@@ -136,7 +123,7 @@
         },
         plugins: {
           legend: { display: false },
-          bandasZonas: { limites, colores: c.rampa },
+          bandasZonas: { limites, colores: c.zonas },
           tooltip: { callbacks: {
             title: (i) => `Minuto ${Math.floor(i[0].parsed.x) + 1}`,
             label: (i) => ` FC: ${i.parsed.y} ppm · Z${zonaDe(i.parsed.y) + 1}`,
@@ -145,40 +132,6 @@
       },
     });
   }
-
-  /** Plugin: bandas horizontales de fondo con las zonas de FC (Z1 abajo, Z7 arriba). */
-  const BANDAS_ZONAS = {
-    id: "bandasZonas",
-    beforeDatasetsDraw(chart) {
-      const op = chart.options.plugins.bandasZonas;
-      if (!op) return;
-      const { ctx, chartArea: area, scales: { y } } = chart;
-      ctx.save();
-      ctx.globalAlpha = 0.14;
-      let inferior = y.min;
-      op.limites.forEach((sup, z) => {
-        const desde = Math.max(inferior, y.min), hasta = Math.min(z === op.limites.length - 1 ? y.max : sup, y.max);
-        if (hasta > desde) {
-          const top = y.getPixelForValue(hasta), bottom = y.getPixelForValue(desde);
-          ctx.fillStyle = op.colores[z];
-          ctx.fillRect(area.left, top, area.right - area.left, bottom - top);
-        }
-        inferior = sup;
-      });
-      ctx.globalAlpha = 1;
-      ctx.fillStyle = Chart.defaults.color;
-      ctx.font = Tablero.graficos.tipografia().etiqueta.canvas;   // "Z1"…"Z7" en --t-etiqueta
-      ctx.textAlign = "right"; ctx.textBaseline = "middle";
-      inferior = y.min;
-      op.limites.forEach((sup, z) => {
-        const desde = Math.max(inferior, y.min), hasta = Math.min(z === op.limites.length - 1 ? y.max : sup, y.max);
-        const alto = y.getPixelForValue(desde) - y.getPixelForValue(hasta);
-        if (alto > 12) ctx.fillText(`Z${z + 1}`, area.right - 4, y.getPixelForValue((desde + hasta) / 2));
-        inferior = sup;
-      });
-      ctx.restore();
-    },
-  };
 
   Tablero.secciones.padel = { render };
 })();

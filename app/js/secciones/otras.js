@@ -3,8 +3,8 @@
   const Tablero = (window.Tablero ??= { secciones: {} });
 
   const { grafico, sinDatos, colores, ejeY, estiloBarra } = Tablero.graficos;
-  const { kpis, delta, escapar } = Tablero.componentes;
-  const { numero, ritmo, duracion, fechaCorta, fechaLarga, suma } = Tablero.formato;
+  const { escapar } = Tablero.componentes;
+  const { numero, ritmo, duracion, fechaCorta, fechaLarga } = Tablero.formato;
 
   const PROPIAS = ["Carrera", "Pádel", "Ciclismo"];     // tienen su propia pestaña
   const GRUPOS = ["Caminata", "Otras"];                 // mismo agrupamiento que el Resumen
@@ -13,32 +13,9 @@
 
   function render(ctx) {
     const sesiones = ctx.actividades.filter(esOtra);
-    const anteriores = ctx.actividadesAnteriores?.filter(esOtra);
-    renderKpis(ctx, sesiones, anteriores);
     renderSemanal(ctx, "g-otras-horas", (c) => c.duracion_s / 3600, "horas", (v) => duracion(v * 3600), true);
     renderSemanal(ctx, "g-otras-km", (c) => c.distancia_m / 1000, "km", (v) => `${numero(v, 1)} km`, false);
     renderTabla(sesiones);
-  }
-
-  function totales(lista) {
-    return {
-      sesiones: lista.length,
-      horas: suma(lista, (a) => a.duracion_s) / 3600,
-      km: suma(lista, (a) => a.distancia_m) / 1000,
-      carga: suma(lista, (a) => a.carga),
-    };
-  }
-
-  function renderKpis(ctx, sesiones, anteriores) {
-    const t = totales(sesiones);
-    const p = anteriores ? totales(anteriores) : {};
-    const per = ctx.etiquetaPeriodo;
-    kpis("otras-kpis", [
-      { etiqueta: "Sesiones", valor: numero(t.sesiones), delta: delta(t.sesiones, p.sesiones, per) },
-      { etiqueta: "Tiempo total", valor: numero(t.horas, 1), unidad: "h", delta: delta(t.horas, p.horas, per, (x) => `${numero(x, 1)} h`) },
-      { etiqueta: "Distancia", valor: numero(t.km, 1), unidad: "km", delta: delta(t.km, p.km, per, (x) => `${numero(x, 1)} km`) },
-      { etiqueta: "Carga total", valor: numero(t.carga), unidad: "HRSS", delta: delta(t.carga, p.carga, per, (x) => numero(x)) },
-    ]);
   }
 
   /** Barras por semana y por grupo. Las horas se apilan; los km van lado a lado

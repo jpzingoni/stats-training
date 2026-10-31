@@ -19,7 +19,9 @@
       serie: [1, 2, 3, 4, 5, 6, 7, 8].map((i) => v(`--serie-${i}`)),
       rampa: [1, 2, 3, 4, 5, 6, 7].map((i) => v(`--rampa-${i}`)),
       rampaVacio: v("--rampa-vacio"),
+      zonas: [1, 2, 3, 4, 5, 6, 7].map((i) => v(`--zona-${i}`)),   // zonas de FC
       tinta: v("--tinta"), bien: v("--bien"), mal: v("--mal"),
+      diario: v("--serie-diaria"),   // métricas diarias (pasos, sueño)
     };
   }
 
@@ -169,5 +171,88 @@
   };
   const grupoDe = (a) => (GRUPOS.includes(a.categoria) ? a.categoria : "Otras");
 
-  Tablero.graficos = { colores, aplicarEstiloGlobal, grafico, sinDatos, destruirTodos, ejeFechas, tituloFecha, ejeY, estiloBarra, GRUPOS, VAR_GRUPO, grupoDe, tipografia, conAlfa };
+  /** Plugin: bandas horizontales de fondo con las zonas de FC (Z1 abajo, Z7 arriba). */
+  const BANDAS_ZONAS = {
+    id: "bandasZonas",
+    beforeDatasetsDraw(chart) {
+      const op = chart.options.plugins.bandasZonas;
+      if (!op) return;
+      const { ctx, chartArea: area, scales: { y } } = chart;
+      ctx.save();
+      ctx.globalAlpha = 0.25;   // bandas horizontales de FC
+      let inferior = y.min;
+      op.limites.forEach((sup, z) => {
+        const desde = Math.max(inferior, y.min), hasta = Math.min(z === op.limites.length - 1 ? y.max : sup, y.max);
+        if (hasta > desde) {
+          const top = y.getPixelForValue(hasta), bottom = y.getPixelForValue(desde);
+          ctx.fillStyle = op.colores[z];
+          ctx.fillRect(area.left, top, area.right - area.left, bottom - top);
+        }
+        inferior = sup;
+      });
+      ctx.globalAlpha = 1;
+      ctx.fillStyle = Chart.defaults.color;
+      ctx.font = Tablero.graficos.tipografia().etiqueta.canvas;   // "Z1"…"Z7" en --t-etiqueta
+      ctx.textAlign = "right"; ctx.textBaseline = "middle";
+      inferior = y.min;
+      op.limites.forEach((sup, z) => {
+        const desde = Math.max(inferior, y.min), hasta = Math.min(z === op.limites.length - 1 ? y.max : sup, y.max);
+        const alto = y.getPixelForValue(desde) - y.getPixelForValue(hasta);
+        if (alto > 12) ctx.fillText(`Z${z + 1}`, area.right - 4, y.getPixelForValue((desde + hasta) / 2));
+        inferior = sup;
+      });
+      ctx.restore();
+    },
+  };
+
+  /**
+   * Plugin: una franja por sesión justo debajo del área del gráfico, pintada minuto a minuto
+   * con el color de su zona de FC. A la izquierda, un cuadradito con el color de la sesión.
+   */
+  /** Recorre los minutos de una franja con su tramo en píxeles (de la mitad hacia el anterior a la mitad hacia el siguiente). */
+  function tramosZona(pts, x, area, hacer) {
+    pts.forEach((p, i) => {
+      if (p.z == null) return;
+      const ant = pts[i - 1]?.z != null ? pts[i - 1].x : null, sig = pts[i + 1]?.z != null ? pts[i + 1].x : null;
+      const medio = ((sig ?? (ant != null ? 2 * p.x - ant : p.x + 0.5)) - (ant ?? (sig != null ? 2 * p.x - sig : p.x - 0.5))) / 2;
+      const x0 = Math.max(x.getPixelForValue(ant != null ? (ant + p.x) / 2 : p.x - medio / 2), area.left);
+      const x1 = Math.min(x.getPixelForValue(sig != null ? (p.x + sig) / 2 : p.x + medio / 2), area.right);
+      const r0 = Math.round(x0), r1 = Math.round(x1);   // píxeles enteros: sin rayitas entre minutos
+      if (r1 > r0) hacer(r0, r1 - r0, p.z);
+    });
+  }
+
+  const FRANJAS_ZONAS = {
+    id: "franjasZonas",
+    // Con una sola sesión, además, el fondo del gráfico se pinta con la zona de cada minuto
+    beforeDatasetsDraw(chart) {
+      const op = chart.options.plugins.franjasZonas;
+      if (!op?.fondo || op.franjas.length !== 1) return;
+      const { ctx, chartArea: area, scales: { x } } = chart;
+      ctx.save();
+      ctx.globalAlpha = 0.35;   // fondo por minuto
+      tramosZona(op.franjas[0].puntos, x, area, (x0, ancho, z) => {
+        ctx.fillStyle = op.colores[z];
+        ctx.fillRect(x0, area.top, ancho, area.bottom - area.top);
+      });
+      ctx.restore();
+    },
+    afterDraw(chart) {
+      const op = chart.options.plugins.franjasZonas;
+      if (!op) return;
+      const { ctx, chartArea: area, scales: { x } } = chart;
+      ctx.save();
+      op.franjas.forEach((f, k) => {
+        const top = area.bottom + 4 + k * (op.alto + op.sep);
+        tramosZona(f.puntos, x, area, (x0, ancho, z) => {
+          ctx.fillStyle = op.colores[z];
+          ctx.fillRect(x0, top, ancho, op.alto);
+        });
+        if (op.franjas.length > 1) { ctx.fillStyle = f.color; ctx.fillRect(area.left - 10, top, op.alto, op.alto); }
+      });
+      ctx.restore();
+    },
+  };
+
+  Tablero.graficos = { FRANJAS_ZONAS, BANDAS_ZONAS, colores, aplicarEstiloGlobal, grafico, sinDatos, destruirTodos, ejeFechas, tituloFecha, ejeY, estiloBarra, GRUPOS, VAR_GRUPO, grupoDe, tipografia, conAlfa };
 })();

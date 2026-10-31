@@ -68,6 +68,7 @@
     const nombreAnt = MESES_LARGOS[Number(mesAnt.slice(5, 7)) - 1].toLowerCase();
 
     document.getElementById("inicio-mes").textContent = nombreMes(mes);
+    document.getElementById("inicio-cal-titulo").textContent = MESES_LARGOS[Number(mes.slice(5, 7)) - 1];
     document.getElementById("inicio-rango").textContent = m.hasta < m.desde
       ? "Todavía no hay datos de este mes"
       : `Del ${fechaLarga(m.desde)} al ${fechaLarga(m.hasta)} · ${m.transcurridos} ${m.transcurridos === 1 ? "día" : "días"}`;
@@ -209,7 +210,7 @@
     const c = colores();
     // El último día con dato va en color pleno; el resto, al 60 % (DESIGN.md §4 Barras)
     const ultimo = valores.reduce((u, v, i) => (v != null ? i : u), -1);
-    const colorBarras = valores.map((_, i) => (i === ultimo ? c.serie[0] : conAlfa(c.serie[0], 0.6)));
+    const colorBarras = valores.map((_, i) => (i === ultimo ? c.diario : conAlfa(c.diario, 0.6)));
     grafico("g-inicio-pasos", {
       type: "bar",
       data: {
