@@ -29,7 +29,7 @@
    * Tipografía de los gráficos leída de los tokens --t-* del CSS (DESIGN.md §1): nada de
    * tamaños ni fuentes escritos en JS. Cada rol devuelve
    *   { family, size, weight, lineHeight }  → para Chart.js (font: {...})
-   *   canvas                                → "600 10px Montserrat, …" para ctx.font
+   *   canvas                                → "700 10px Nunito, …" para ctx.font
    * Uso: tipografia().eje, tipografia().chico, tipografia().etiqueta…
    */
   const ROLES = ["hero", "kpi", "pagina", "titulo", "base", "control", "chico", "eje", "etiqueta"];

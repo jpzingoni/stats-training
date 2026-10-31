@@ -15,7 +15,7 @@ Hay tres ideas que ordenan todo:
    usan tinta (`--tinta`), no colores de la paleta. Así, cuando algo tiene color, significa algo:
    un deporte, una zona, una sesión o una variación buena o mala.
 2. **Los números mandan.** Cada pantalla tiene un dato protagonista y el resto lo acompaña.
-   Los números usan una fuente condensada con cifras tabulares.
+   Los números usan cifras tabulares (de ancho fijo).
 3. **Pocas decisiones, siempre las mismas.** La escala de tamaños es de 7 valores, los radios
    son 2, hay un solo estilo de control y un solo estilo de tarjeta.
 
@@ -23,16 +23,20 @@ Hay tres ideas que ordenan todo:
 
 ## 1. Tipografía
 
-**Una sola familia para todo: Montserrat** (`--fuente`). Títulos de página, de tarjetas y de
-gráficos, texto, números, ejes y tooltips usan la misma letra. No hay una fuente aparte para
-los números: Montserrat trae cifras de ancho fijo y se activan con `tabular-nums`.
+**Una sola familia para todo: Nunito** (`--fuente`), redondeada y amable (elegida el
+31/10/2026 a partir de la referencia de Nivea, ver `diseno/propuestas/v6-nivea/`). Títulos de
+página, de tarjetas y de gráficos, texto, números, ejes y tooltips usan la misma letra. No hay
+una fuente aparte para los números: Nunito trae cifras de ancho fijo y se activan con
+`tabular-nums` (verificado: "1111" y "0000" miden lo mismo).
 
-- Pesos incluidos: **400** (texto), **500** (controles y ejes), **600** (títulos, etiquetas y
-  valores) y **700** (solo título de página y dato protagonista).
+- Es una fuente **variable** (un archivo por juego de caracteres, pesos 400 a 800). Se usan:
+  **400** (texto), **600** (controles, ejes y énfasis), **700** (títulos, etiquetas y valores)
+  y **800** (solo título de página y dato protagonista).
 - Las fuentes se **incluyen dentro de `app/vendor/fuentes/`** (woff2 + `@font-face`, licencia
   OFL), no se cargan desde Google Fonts. Así funcionan con `file://`, sin conexión y en Cloudflare.
 - Respaldo: `system-ui, sans-serif`.
-- Montserrat es ancha y de letra alta: por eso la escala es más chica que la de otras familias.
+- Nunito es más angosta que Montserrat (la anterior): cada rol lleva un peso más que antes
+  para que los números grandes no se vean flojos. Los tamaños no cambiaron.
 
 ### La variable: un token por rol
 
@@ -41,15 +45,15 @@ con `font: var(--t-…)`. Así no se puede mezclar el tamaño de un rol con el p
 
 | Token | `font` (peso tamaño/interlineado) | Espaciado | Mayúsculas | Se usa en |
 |---|---|---|---|---|
-| `--t-hero` | 700 40px/44px | −0,02em | no | **un** dato protagonista por vista |
-| `--t-kpi` | 600 28px/32px | −0,01em | no | valor de cada tarjeta |
-| `--t-pagina` | 700 22px/28px | −0,01em | no | título de vista y del mes ("Octubre 2026") |
-| `--t-titulo` | 600 16px/22px | 0 | no | título de tarjeta **y de gráfico** |
+| `--t-hero` | 800 40px/44px | −0,02em | no | **un** dato protagonista por vista |
+| `--t-kpi` | 700 28px/32px | −0,01em | no | valor de cada tarjeta |
+| `--t-pagina` | 800 22px/28px | −0,01em | no | título de vista y del mes ("Octubre 2026") |
+| `--t-titulo` | 700 16px/22px | 0 | no | título de tarjeta **y de gráfico** |
 | `--t-base` | 400 14px/20px | 0 | no | texto, filas de tabla, navegación, unidades |
-| `--t-control` | 500 13px/20px | 0 | no | botones, selectores, segmentados |
+| `--t-control` | 600 13px/20px | 0 | no | botones, selectores, segmentados |
 | `--t-chico` | 400 12px/16px | 0 | no | contexto de tarjetas, subtextos, leyendas, tooltips |
-| `--t-eje` | 500 11px/14px | 0 | no | marcas de los ejes de los gráficos |
-| `--t-etiqueta` | 600 10px/14px | +0,06em | **sí** | etiqueta de tarjeta, encabezado de tabla, grupo de navegación, nombre de bloque en gráficos |
+| `--t-eje` | 600 11px/14px | 0 | no | marcas de los ejes de los gráficos |
+| `--t-etiqueta` | 700 10px/14px | +0,06em | **sí** | etiqueta de tarjeta, encabezado de tabla, grupo de navegación, nombre de bloque en gráficos |
 
 ### Reglas (se respetan siempre)
 
@@ -60,7 +64,7 @@ con `font: var(--t-…)`. Así no se puede mezclar el tamaño de un rol con el p
    valores de tarjetas, celdas numéricas, ejes y tooltips.
 3. **Máximo 3 roles por tarjeta** (por ejemplo, título + valor + chico).
 4. **Mayúsculas solo en `--t-etiqueta`.**
-5. **Peso 700 solo en `--t-pagina` y `--t-hero`.** El único énfasis permitido fuera del token
+5. **Peso 800 solo en `--t-pagina` y `--t-hero`.** El único énfasis permitido fuera del token
    es `font-weight: 600` sobre `--t-base` o `--t-chico` (por ejemplo, la columna protagonista
    de una tabla o el nombre de un deporte en una lista).
 6. `/revisar-diseno` marca como error cualquier tamaño, peso o familia fuera de estos tokens.
@@ -238,18 +242,18 @@ ETIQUETA                       (--t-etiqueta, --texto-sec)
 
 ```css
 :root {
-  --fuente: "Montserrat", system-ui, sans-serif;
+  --fuente: "Nunito", system-ui, sans-serif;
 
   /* Tipografía: un token por rol (font: peso tamaño/interlineado familia) */
-  --t-hero:     700 40px/44px var(--fuente);
-  --t-kpi:      600 28px/32px var(--fuente);
-  --t-pagina:   700 22px/28px var(--fuente);
-  --t-titulo:   600 16px/22px var(--fuente);
+  --t-hero:     800 40px/44px var(--fuente);
+  --t-kpi:      700 28px/32px var(--fuente);
+  --t-pagina:   800 22px/28px var(--fuente);
+  --t-titulo:   700 16px/22px var(--fuente);
   --t-base:     400 14px/20px var(--fuente);
-  --t-control:  500 13px/20px var(--fuente);
+  --t-control:  600 13px/20px var(--fuente);
   --t-chico:    400 12px/16px var(--fuente);
-  --t-eje:      500 11px/14px var(--fuente);
-  --t-etiqueta: 600 10px/14px var(--fuente);   /* + uppercase, letter-spacing .06em */
+  --t-eje:      600 11px/14px var(--fuente);
+  --t-etiqueta: 700 10px/14px var(--fuente);   /* + uppercase, letter-spacing .06em */
 
   --e1: 4px; --e2: 8px; --e3: 12px; --e4: 16px; --e5: 24px; --e6: 32px;
   --radio: 10px; --radio-chico: 6px;

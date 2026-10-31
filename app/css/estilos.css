@@ -1,24 +1,24 @@
-/* ── Fuente: Montserrat (incluida en vendor/fuentes: funciona con file:// y sin conexión) ── */
-@font-face { font-family: "Montserrat"; font-weight: 400; font-display: swap; src: url("../vendor/fuentes/montserrat-400.woff2") format("woff2"); }
-@font-face { font-family: "Montserrat"; font-weight: 500; font-display: swap; src: url("../vendor/fuentes/montserrat-500.woff2") format("woff2"); }
-@font-face { font-family: "Montserrat"; font-weight: 600; font-display: swap; src: url("../vendor/fuentes/montserrat-600.woff2") format("woff2"); }
-@font-face { font-family: "Montserrat"; font-weight: 700; font-display: swap; src: url("../vendor/fuentes/montserrat-700.woff2") format("woff2"); }
+/* ── Fuente: Nunito (variable 400–800, incluida en vendor/fuentes: funciona con file:// y sin conexión) ── */
+@font-face { font-family: "Nunito"; font-weight: 400 800; font-display: swap; src: url("../vendor/fuentes/nunito-latin.woff2") format("woff2");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA, U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193, U+2212, U+2215, U+FEFF, U+FFFD; }
+@font-face { font-family: "Nunito"; font-weight: 400 800; font-display: swap; src: url("../vendor/fuentes/nunito-latin-ext.woff2") format("woff2");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF, U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020, U+20A0-20AB, U+20AD-20C4, U+2113, U+2C60-2C7F, U+A720-A7FF; }
 
 /* ── Tokens: modo claro ─────────────────────────────────────────────────── */
 :root {
   color-scheme: light;
   /* Tipografía, espaciado, radios y controles (DESIGN.md) */
-  --fuente: "Montserrat", system-ui, sans-serif;
+  --fuente: "Nunito", system-ui, sans-serif;
   /* Un token por rol: font: peso tamaño/interlineado familia */
-  --t-hero:     700 40px/44px var(--fuente);
-  --t-kpi:      600 28px/32px var(--fuente);
-  --t-pagina:   700 22px/28px var(--fuente);
-  --t-titulo:   600 16px/22px var(--fuente);
+  --t-hero:     800 40px/44px var(--fuente);
+  --t-kpi:      700 28px/32px var(--fuente);
+  --t-pagina:   800 22px/28px var(--fuente);
+  --t-titulo:   700 16px/22px var(--fuente);
   --t-base:     400 14px/20px var(--fuente);
-  --t-control:  500 13px/20px var(--fuente);
+  --t-control:  600 13px/20px var(--fuente);
   --t-chico:    400 12px/16px var(--fuente);
-  --t-eje:      500 11px/14px var(--fuente);
-  --t-etiqueta: 600 10px/14px var(--fuente);   /* + mayúsculas y letter-spacing .06em */
+  --t-eje:      600 11px/14px var(--fuente);
+  --t-etiqueta: 700 10px/14px var(--fuente);   /* + mayúsculas y letter-spacing .06em */
   --e1: 4px; --e2: 8px; --e3: 12px; --e4: 16px; --e5: 24px; --e6: 32px;
   /* Espaciado del tablero (prueba compacta 2): entre tarjetas y dentro de cada tarjeta */
   --hueco: var(--e2);
