@@ -2,6 +2,19 @@
 
 Leer antes de cada propuesta. Lo más nuevo, arriba.
 
+## 2026-10-31 · Ajustes directos al tablero y referencia Nivea
+
+Lo que hizo y dijo (probando él mismo desde el inspector, aplicado en `app/`):
+- **Un solo tema, el claro**, sin botón de tema, mientras se rediseña.
+- **Fondos:** página `#f2f7f5`, tarjetas `#ffffff`, barra lateral `#ECECEC`, días sin actividad
+  `#ECECEC`.
+- **No le gusta que los mismos colores se usen para muchas cosas.** Cada color, una sola cosa.
+- **Calendario de "Este mes":** los días entrenados de **un solo color** (no por carga) y **verde**:
+  "da la sensación de día ganado". Eligió el verde fuerte (`#2f9e5f`) con número blanco.
+- **Referencia nueva:** https://www.nivea.com.ar/productos/gel-de-afeitar-sensitive-40058082291230087.html
+  Le gustan los colores y la letra; del producto, "ese blanco, azul y verde". Se armó la prueba
+  `propuestas/v6-nivea/` (paleta + Nunito en lugar de NIVEA Brand Type, que es de marca).
+
 ## 2026-10-16 · Sobre la v4 "Pulso" (con el ajuste de la barra lateral)
 
 Lo que dijo: todavía no encuentra la estética que le gusta, ni la letra ni la paleta. Pidió
