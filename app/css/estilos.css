@@ -473,6 +473,7 @@ main { padding: var(--hueco) var(--hueco) var(--e5); max-width: 1400px; }
 .tarjeta > h2 { margin-bottom: 0.6rem; }
 /* Actividades del mes: tabla por deporte con columnas alineadas y la suma abajo */
 .act-tabla td:first-child { font-weight: 600; }
+.act-tabla th.num, .act-tabla td.num { text-align: center; }   /* Tiempo, Km y Sesiones centrados */
 .act-tabla .muestra { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: var(--e2); }
 .act-tabla tfoot td { font-weight: 700; border-bottom: none; border-top: 1px solid var(--eje); }
 .mini-cal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }

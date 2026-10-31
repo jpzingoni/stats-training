@@ -187,7 +187,7 @@
         },
         plugins: {
           legend: { display: false },
-          etiquetaPromedio: { texto: `prom. ${met.prom(met.promedio(m))}`, color: c.texto },
+          etiquetaPromedio: { texto: `prom. ${met.prom(met.promedio(m))}`, fondo: c.texto, color: c.superficie },
           tooltip: {
             filter: (i) => i.parsed.y != null && i.datasetIndex === 0,
             callbacks: {
@@ -200,7 +200,8 @@
     });
   }
 
-  /** Plugin: etiqueta directa al final de la línea de promedio ("prom. 11.872"). */
+  /** Plugin: etiqueta directa al final de la línea de promedio ("prom. 11.872"), sobre una
+   *  pastilla del color de la línea para que se lea aunque haya barras detrás. */
   const ETIQUETA_PROMEDIO = {
     id: "etiquetaPromedio",
     afterDatasetsDraw(chart) {
@@ -214,10 +215,18 @@
       const { ctx } = chart;
       ctx.save();
       ctx.font = t.chico.canvas;
-      ctx.fillStyle = op.color;
       ctx.textAlign = "left";
-      ctx.textBaseline = "bottom";
-      ctx.fillText(op.texto, Math.min(fin.x + 6, chart.chartArea.right - ctx.measureText(op.texto).width), fin.y - 3);
+      ctx.textBaseline = "middle";
+      const PX = 6, ALTO = t.chico.size + 6;
+      const ancho = ctx.measureText(op.texto).width + 2 * PX;
+      const x = Math.min(fin.x + 6, chart.chartArea.right - ancho);
+      const y = fin.y - ALTO / 2 - 4;   // apenas arriba de la línea
+      ctx.fillStyle = op.fondo;
+      ctx.beginPath();
+      ctx.roundRect(x, y - ALTO / 2, ancho, ALTO, ALTO / 2);
+      ctx.fill();
+      ctx.fillStyle = op.color;
+      ctx.fillText(op.texto, x + PX, y);
       ctx.restore();
     },
   };
