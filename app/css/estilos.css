@@ -474,7 +474,7 @@ main { padding: var(--hueco) var(--hueco) var(--e5); max-width: 1400px; }
 /* Actividades del mes: tabla por deporte con columnas alineadas y la suma abajo */
 .act-tabla td:first-child { font-weight: 600; }
 .act-tabla .muestra { display: inline-block; width: 10px; height: 10px; border-radius: 50%; margin-right: var(--e2); }
-.act-tabla tfoot td { font-weight: 700; border-bottom: none; border-top: 2px solid var(--texto); }
+.act-tabla tfoot td { font-weight: 700; border-bottom: none; border-top: 1px solid var(--eje); }
 .mini-cal { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
 .mini-nombre { text-align: center; font: var(--t-etiqueta); text-transform: uppercase; letter-spacing: 0.06em; color: var(--texto-muted); }
 /* Calendario chico: fondo de color en los días con actividad; puntos con el color del deporte */
@@ -517,7 +517,7 @@ body[data-vista="inicio"] main { padding-bottom: var(--hueco); }
 .objetivo-cab { display: flex; align-items: baseline; gap: var(--e3); margin-bottom: var(--e1); }
 .objetivo-nombre { display: inline-flex; align-items: center; gap: var(--e2); font: var(--t-base); font-weight: 600; }
 .objetivo-nombre i { width: 10px; height: 10px; border-radius: 50%; }
-.objetivo-pct { font: var(--t-titulo); margin-left: auto; }
+.objetivo-pct { font: var(--t-base); font-weight: 600; color: var(--texto-sec); margin-left: auto; }
 .objetivo.cumplido .objetivo-pct { color: var(--dia-ganado); }
 .objetivo-barra { height: 12px; border-radius: 999px; background: var(--superficie-2); overflow: hidden; }
 .objetivo-barra span { display: block; height: 100%; border-radius: 999px; }
