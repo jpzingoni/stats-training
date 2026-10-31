@@ -500,9 +500,6 @@ main { padding: var(--hueco) var(--hueco) var(--e5); max-width: 1400px; }
 .mini-dia.hoy { outline: 2px solid var(--tinta); outline-offset: 1px; }
 .mini-puntos { display: flex; gap: 3px; }
 .mini-puntos i { width: 6px; height: 6px; border-radius: 50%; outline: 1.5px solid var(--superficie); }
-.mini-leyenda { display: flex; flex-wrap: wrap; gap: var(--e1) var(--e3); margin-top: var(--e2); color: var(--texto-sec); font: var(--t-chico); }
-.mini-leyenda span { display: inline-flex; align-items: center; gap: var(--e1); }
-.mini-leyenda i { width: 8px; height: 8px; border-radius: 50%; }
 
 /* La portada entra entera en la pantalla (en escritorio): sin la barra superior ni el pie,
    y con dos filas que se reparten el alto disponible */
@@ -516,7 +513,8 @@ body[data-vista="inicio"] main { padding-bottom: var(--hueco); }
 #panel-inicio .cal-cabecera { margin: 0; }
 .inicio-fila { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: var(--hueco); min-height: 0; }
 .inicio-fila > .tarjeta { display: flex; flex-direction: column; min-height: 0; }
-.inicio-fila > .tarjeta > h2 { margin-bottom: var(--e2); }
+.inicio-fila > .tarjeta > h2 { margin-bottom: var(--e2); text-align: center; }
+#panel-inicio .tarjeta-cab { justify-content: center; }   /* títulos de las tarjetas centrados */
 .inicio-scroll { flex: 1; min-height: 0; overflow-y: auto; }
 .tarjeta-cab { display: flex; align-items: center; justify-content: space-between; gap: var(--e2); flex-wrap: wrap; margin-bottom: var(--e2); }
 .tarjeta-cab h2 { margin: 0; }

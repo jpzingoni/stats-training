@@ -207,6 +207,7 @@ ETIQUETA                       (--t-etiqueta, --texto-sec)
 ### Portada "Este mes"
 - Grilla de 2 × 2 que entra en una pantalla: arriba el calendario chico y "Actividades del
   mes"; abajo "Objetivos del mes" y el gráfico de pasos por día. Sin KPI sueltos.
+- Los títulos de las cuatro tarjetas van **centrados**.
   En celular se apila en ese orden.
 
 ### Objetivos del mes
@@ -230,8 +231,9 @@ ETIQUETA                       (--t-etiqueta, --texto-sec)
 - El número del día va en `--dia-ganado-texto` (blanco, 600) sobre el verde. Los puntos de deporte llevan un
   anillo de 1,5px `--superficie` para leerse sobre cualquier fondo.
 - La carga por día queda solo en el calendario de carga del Resumen.
-- La explicación de los puntos es una leyenda chica con los deportes del mes (punto + nombre),
-  no un texto.
+- **El calendario chico no lleva leyenda**: los colores de los puntos se leen en
+  "Actividades del mes", que está al lado con el mismo punto por deporte. Así el calendario
+  tiene más aire y los meses de seis semanas no quedan apretados.
 
 ### Navegación lateral
 - Grupos ("ENTRENAMIENTOS") en `--t-etiqueta` `--texto-muted`.

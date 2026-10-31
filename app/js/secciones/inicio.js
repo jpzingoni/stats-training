@@ -144,10 +144,6 @@
       celdas.push(`<span class="${clases}" title="${escapar(titulo)}" aria-label="${escapar(titulo)}">
         <b>${Number(f.slice(8, 10))}</b>${puntos ? `<span class="mini-puntos">${puntos}</span>` : ""}</span>`);
     }
-    // Leyenda: los deportes que aparecen en el mes, con su color
-    const deportes = GRUPOS.filter((g) => m.actividades.some((a) => grupoDe(a) === g));
-    document.getElementById("inicio-mini-leyenda").innerHTML = deportes
-      .map((g) => `<span><i style="background:${VAR_GRUPO[g]}"></i>${escapar(g)}</span>`).join("");
     const cal = document.getElementById("inicio-mini-cal");
     cal.innerHTML = celdas.join("");
     // La fila de nombres + una fila por semana, repartiéndose el alto de la tarjeta
