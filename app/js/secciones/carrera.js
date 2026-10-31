@@ -1,48 +1,21 @@
-// Pestaña Carrera: progreso, volumen, intensidad y técnica.
+// Pestaña Carrera: tabla de sesiones de una plantilla y su curva a lo largo de la sesión.
 (() => {
   const Tablero = (window.Tablero ??= { secciones: {} });
 
-  const { grafico, sinDatos, colores, ejeFechas, ejeY, tituloFecha, estiloBarra } = Tablero.graficos;
+  const { grafico, sinDatos, colores, ejeY } = Tablero.graficos;
   const { escapar } = Tablero.componentes;
-  const { numero, ritmo, duracion, ts, fechaCorta, fechaLarga, suma, promedio } = Tablero.formato;
-
-  const SUBTIPOS = ["Bloques", "Series", "Libre"];
+  const { numero, ritmo, duracion, fechaLarga, suma } = Tablero.formato;
 
   function render(ctx) {
     const corridas = ctx.actividades.filter((a) => a.categoria === "Carrera");
 
     renderComparacion(corridas, ctx.meta, ctx.todo.minutos ?? {});
-    renderEficiencia(ctx, corridas);
-    renderKm(ctx);
-    renderZonas(ctx);
-    renderDinamica(ctx, corridas);
-  }
-
-  function lineaTiempo(id, ctx, puntos, { color, etiqueta, formato, invertir = false, minimo = 2 }) {
-    if (puntos.length < minimo) {
-      return sinDatos(id, puntos.length ? "Hace falta más de una sesión para ver la tendencia" : "Sin datos en este período");
-    }
-    grafico(id, {
-      type: "line",
-      data: { datasets: [{ label: etiqueta, data: puntos, borderColor: color, backgroundColor: color, pointRadius: 4 }] },
-      options: {
-        interaction: { mode: "nearest", intersect: false },
-        scales: {
-          x: ejeFechas(ctx.desde, ctx.hasta),
-          y: ejeY({ reverse: invertir, grace: "10%", ticks: { maxTicksLimit: 5, callback: formato } }),
-        },
-        plugins: {
-          legend: { display: false },
-          tooltip: { callbacks: { title: tituloFecha, label: (i) => ` ${etiqueta}: ${formato(i.parsed.y)}` } },
-        },
-      },
-    });
   }
 
   // ─── Comparar sesiones de una misma plantilla ──────────────────────────────
 
   const MAX_SESIONES = 8;   // la paleta tiene 8 colores distinguibles; más líneas no se leen
-  const comp = { plantillas: null, elegidas: null, metrica: "ritmo", etapa: "todas", ef: "m", zonas: false, enlazado: false, corridas: [], minutos: {} };
+  const comp = { plantillas: null, elegidas: null, metrica: "ritmo", etapa: "todas", zonas: false, enlazado: false, corridas: [], minutos: {} };
   // Cada métrica: su columna en minutos.js, su valor por bloque (si no hay minutos) y su formato
   const METRICAS_COMP = {
     ritmo: { nombre: "Ritmo", clave: "ritmo", valor: (b) => b.ritmo_s_km, formato: (v) => `${ritmo(v)} /km`, invertir: true },
@@ -54,7 +27,7 @@
 
   function guardarComp() {
     try {
-      localStorage.setItem("carrera-comparar", JSON.stringify({ plantillas: [...comp.plantillas], metrica: comp.metrica, etapa: comp.etapa, ef: comp.ef, zonas: comp.zonas }));
+      localStorage.setItem("carrera-comparar", JSON.stringify({ plantillas: [...comp.plantillas], metrica: comp.metrica, etapa: comp.etapa, zonas: comp.zonas }));
     } catch { /* solo esta visita */ }
   }
 
@@ -65,7 +38,6 @@
       if (Array.isArray(g?.plantillas)) comp.plantillas = new Set(g.plantillas);
       else if (g?.plantilla) comp.plantillas = new Set([g.plantilla]);   // formato anterior (una sola)
       if (METRICAS_COMP[g?.metrica]) comp.metrica = g.metrica;
-      if (g?.ef === "m" || g?.ef === "w") comp.ef = g.ef;
       if (g?.etapa) comp.etapa = g.etapa;
       comp.zonas = g?.zonas === true;
     } catch { /* valores por defecto */ }
@@ -92,13 +64,6 @@
       if (!accion) return;
       const ids = sesionesDePlantilla().map((a) => a.id);
       comp.elegidas = new Set(accion === "todas" ? ids.slice(-MAX_SESIONES) : []);
-      renderComparacion(comp.corridas);
-    });
-    document.getElementById("carrera-ef-metrica").addEventListener("click", (e) => {
-      const b = e.target.closest("[data-ef]");
-      if (!b) return;
-      comp.ef = b.dataset.ef;
-      guardarComp();
       renderComparacion(comp.corridas);
     });
     document.getElementById("carrera-etapa").addEventListener("change", (e) => {
@@ -198,9 +163,6 @@
     // La alineación por bloques solo es posible con una única plantilla elegida
     const pasos = comp.plantillas.size === 1 ? comp.meta?.plantillas?.[[...comp.plantillas][0]] : null;
     const eje = pasos ? ejePlantilla(pasos, sesiones) : null;
-    renderDeriva(elegidas, colorDe, pasos);
-    renderEficienciaPlantilla(elegidas, colorDe);
-    renderDispersion(elegidas, colorDe);
     // Zonas de FC: con el botón, una franja por sesión bajo el gráfico
     const limites = comp.meta?.zonas_fc_carrera ?? [];
     const zonaDe = (fc) => { const z = limites.findIndex((l) => fc <= l); return z === -1 ? limites.length - 1 : z; };
@@ -327,165 +289,6 @@
   }
 
   // ─── Deriva cardíaca y eficiencia entre sesiones ───────────────────────────
-
-  /**
-   * Deriva cardíaca de una sesión: cuánto cae la eficiencia (velocidad ÷ FC) de la primera a
-   * la segunda mitad del bloque de entrenamiento continuo. Se saltean sus 2 primeros minutos
-   * (la FC tarda en estabilizarse) y los minutos muy incompletos.
-   */
-  function deriva(a) {
-    const m = comp.minutos[a.id];
-    const entrenamiento = a.bloques.filter((b) => b.fase === "Entrenamiento");
-    if (!m?.vel || !m?.fc || entrenamiento.length !== 1 || entrenamiento[0].duracion_s < 600) return null;
-    const nro = entrenamiento[0].nro;
-    const usados = m.bloque.map((n, i) => i)
-      .filter((i) => m.bloque[i] === nro && (m.seg[i] ?? 0) >= 50 && m.vel[i] != null && m.fc[i] != null)
-      .slice(2);
-    if (usados.length < 6) return null;
-    const mitad = Math.floor(usados.length / 2);
-    const ef = (ix) => promedio(ix, (i) => m.vel[i]) / promedio(ix, (i) => m.fc[i]);
-    const ef1 = ef(usados.slice(0, mitad)), ef2 = ef(usados.slice(-mitad));
-    return {
-      valor: ((ef1 - ef2) / ef1) * 100, minutos: usados.length,
-      fc1: promedio(usados.slice(0, mitad), (i) => m.fc[i]), fc2: promedio(usados.slice(-mitad), (i) => m.fc[i]),
-      v1: promedio(usados.slice(0, mitad), (i) => m.vel[i]), v2: promedio(usados.slice(-mitad), (i) => m.vel[i]),
-    };
-  }
-
-  function renderDeriva(elegidas, colorDe, pasos) {
-    const c = colores();
-    const titulo = document.getElementById("carrera-deriva-titulo");
-    const nota = document.getElementById("carrera-deriva-nota");
-    const bloquesEntrenamiento = pasos ? pasos.filter((p) => p.fase === "Entrenamiento").length : 0;
-    const soloLibre = [...comp.plantillas].every((n) => !comp.meta?.plantillas?.[n]);
-    if (soloLibre) {
-      titulo.textContent = "Deriva cardíaca";
-      nota.textContent = "Se calcula sobre el bloque de entrenamiento de una plantilla; las sesiones libres no lo tienen.";
-      return sinDatos("g-carrera-deriva", "Elegí una plantilla");
-    }
-    if (pasos && bloquesEntrenamiento > 1) {
-      // Plantillas por ciclos (CACO, Aumento de ritmo): FC de cada bloque de entrenamiento
-      titulo.textContent = "FC en cada bloque de entrenamiento";
-      nota.textContent = "En las plantillas por ciclos, la deriva se ve en cómo sube la FC de un ciclo al siguiente.";
-      const datasets = elegidas.map((a) => ({
-        label: fechaLarga(a.fecha),
-        data: a.bloques.filter((b) => b.fase === "Entrenamiento").map((b, k) => ({ x: k + 1, y: b.fc_media })),
-        borderColor: colorDe.get(a.id), backgroundColor: colorDe.get(a.id), pointRadius: 3,
-      }));
-      if (!datasets.length) return sinDatos("g-carrera-deriva", "Elegí al menos una sesión");
-      return grafico("g-carrera-deriva", {
-        type: "line", data: { datasets },
-        options: {
-          scales: { x: { type: "linear", min: 1, max: bloquesEntrenamiento, grid: { display: false },
-                         ticks: { stepSize: 1, callback: (v) => `${v}` }, title: { display: true, text: "bloque de entrenamiento" } },
-                    y: ejeY({ grace: "10%", ticks: { callback: (v) => `${v} ppm` } }) },
-          plugins: { legend: { display: datasets.length > 1, position: "bottom" },
-                     tooltip: { callbacks: { title: (i) => `Bloque ${i[0].parsed.x}`, label: (i) => ` ${i.dataset.label}: ${i.parsed.y} ppm` } } },
-        },
-      });
-    }
-    titulo.textContent = "Deriva cardíaca";
-    nota.textContent = "Cuánto cae la eficiencia (velocidad ÷ FC) de la primera a la segunda mitad del bloque de entrenamiento. " +
-      "Por debajo de 5 %, ritmo y FC se mantuvieron acoplados (referencia que usan Intervals y TrainingPeaks)." +
-      (pasos ? "" : " Con varias plantillas, se muestran las sesiones con un bloque de entrenamiento continuo.");
-    const filas = elegidas.map((a) => ({ a, d: deriva(a) })).filter((x) => x.d);
-    if (!filas.length) return sinDatos("g-carrera-deriva", "Sin minutos suficientes para calcularla");
-    grafico("g-carrera-deriva", {
-      type: "bar",
-      data: {
-        labels: filas.map((x) => fechaCorta(x.a.fecha)),
-        datasets: [{ label: "Deriva", data: filas.map((x) => x.d.valor),
-          backgroundColor: filas.map((x) => colorDe.get(x.a.id)), borderRadius: 4, maxBarThickness: 48 }],
-      },
-      plugins: [LINEA_REFERENCIA],
-      options: {
-        scales: { x: { grid: { display: false } }, y: ejeY({ suggestedMin: 0, suggestedMax: 8, ticks: { callback: (v) => `${v} %` } }) },
-        plugins: {
-          legend: { display: false },
-          lineaReferencia: { valor: 5, texto: "5 %", color: c.muted },
-          tooltip: { callbacks: {
-            title: (i) => fechaLarga(filas[i[0].dataIndex].a.fecha),
-            label: (i) => {
-              const d = filas[i.dataIndex].d;
-              return [` Deriva: ${numero(d.valor, 1)} %`,
-                ` 1.ª mitad: ${ritmo(1000 / d.v1)} /km a ${numero(d.fc1)} ppm`,
-                ` 2.ª mitad: ${ritmo(1000 / d.v2)} /km a ${numero(d.fc2)} ppm`];
-            },
-          } },
-        },
-      },
-    });
-  }
-
-  /** Eficiencia de cada sesión elegida en la etapa elegida: m por latido o W por latido. */
-  function renderEficienciaPlantilla(elegidas, colorDe) {
-    const c = colores();
-    for (const b of document.querySelectorAll("#carrera-ef-metrica button")) {
-      b.setAttribute("aria-pressed", String(b.dataset.ef === comp.ef));
-    }
-    const puntos = elegidas.map((a) => {
-      const bl = bloquesDeEtapa(a);
-      const dur = suma(bl, (b) => b.duracion_s), dist = suma(bl, (b) => b.distancia_m);
-      const fc = ponderado(bl, "fc_media"), pot = ponderado(bl, "potencia_w");
-      const valor = comp.ef === "m" ? (dist && fc ? (dist / dur) * 60 / fc : null) : (pot && fc ? pot / fc : null);
-      return { a, valor };
-    }).filter((x) => x.valor != null);
-    if (!puntos.length) return sinDatos("g-carrera-ef-plantilla", "Sin datos para estas sesiones");
-    const unidad = comp.ef === "m" ? "m/latido" : "W/latido";
-    grafico("g-carrera-ef-plantilla", {
-      type: "line",
-      data: {
-        labels: puntos.map((x) => fechaCorta(x.a.fecha)),
-        datasets: [{ label: unidad, data: puntos.map((x) => x.valor), borderColor: c.muted,
-          pointBackgroundColor: puntos.map((x) => colorDe.get(x.a.id)), pointBorderColor: c.superficie,
-          pointBorderWidth: 2, pointRadius: 6, pointHoverRadius: 8 }],
-      },
-      options: {
-        scales: { x: { grid: { display: false } }, y: ejeY({ grace: "20%", ticks: { callback: (v) => numero(v, 2) } }) },
-        plugins: { legend: { display: false },
-          tooltip: { callbacks: { title: (i) => fechaLarga(puntos[i[0].dataIndex].a.fecha), label: (i) => ` ${numero(i.parsed.y, 3)} ${unidad}` } } },
-      },
-    });
-  }
-
-  /**
-   * Dispersión ritmo–FC: cada punto es un minuto completo de la etapa elegida. Con el tiempo,
-   * si los puntos se corren hacia "más rápido con la misma FC", la forma mejora.
-   * Máximo 3 sesiones (las más recientes de las elegidas): con más colores los puntos no se distinguen.
-   */
-  const MAX_DISPERSION = 3;
-  function renderDispersion(elegidas, colorDe) {
-    const nota = document.getElementById("carrera-disp-nota");
-    const usadas = elegidas.slice(-MAX_DISPERSION);
-    const datasets = usadas.map((a) => {
-      const m = comp.minutos[a.id];
-      const porNro = new Map(a.bloques.map((b) => [b.nro, b]));
-      const data = (m?.ritmo ?? []).map((r, i) => ({ x: m.fc?.[i], y: r, b: porNro.get(m.bloque?.[i]), minuto: i, seg: m.seg?.[i] }))
-        .filter((p) => p.x != null && p.y != null && (p.seg ?? 0) >= 50 && (comp.etapa === "todas" || p.b?.fase === comp.etapa));
-      return { label: fechaLarga(a.fecha), data, backgroundColor: colorDe.get(a.id), borderColor: colores().superficie,
-        borderWidth: 1, pointRadius: 4, pointHoverRadius: 6 };
-    });
-    const etapa = comp.etapa === "todas" ? "toda la sesión" : comp.etapa.toLowerCase();
-    nota.textContent = `Cada punto es un minuto completo (${etapa}). Más arriba = más rápido, más a la izquierda = menos pulsaciones: ` +
-      "arriba a la izquierda es mejor." + (elegidas.length > MAX_DISPERSION ? ` Se muestran las ${MAX_DISPERSION} sesiones elegidas más recientes.` : "");
-    if (!datasets.some((d) => d.data.length)) return sinDatos("g-carrera-dispersion", "Sin minutos para estas sesiones");
-    const rangoY = rangoRobusto(datasets.flatMap((d) => d.data.map((p) => p.y)));
-    grafico("g-carrera-dispersion", {
-      type: "scatter",
-      data: { datasets },
-      options: {
-        scales: {
-          x: { grid: { color: colores().grilla }, border: { display: false }, title: { display: true, text: "FC (ppm)" } },
-          y: ejeY({ reverse: true, min: rangoY?.min, max: rangoY?.max,
-                    ticks: { maxTicksLimit: 7, callback: (v, i, t) => (rangoY && (i === 0 || i === t.length - 1) ? "" : `${ritmo(v)} /km`) } }),
-        },
-        plugins: {
-          legend: { display: datasets.length > 1, position: "top" },
-          tooltip: { callbacks: { label: (i) => ` ${i.dataset.label}, min ${i.raw.minuto + 1}: ${ritmo(i.raw.y)} /km a ${i.raw.x} ppm` } },
-        },
-      },
-    });
-  }
 
   /** Promedio de una columna de los bloques, ponderado por la duración de cada uno. */
   function ponderado(bloques, clave) {
@@ -633,139 +436,6 @@
       ctx.restore();
     },
   };
-
-  function renderEficiencia(ctx, corridas) {
-    const c = colores();
-    const conDato = corridas.filter((a) => a.eficiencia != null);
-    if (!conDato.length) return sinDatos("g-eficiencia");
-    const subtipos = SUBTIPOS.filter((s) => conDato.some((a) => a.subtipo === s));
-    grafico("g-eficiencia", {
-      type: "line",
-      data: {
-        datasets: subtipos.map((s) => ({
-          label: s,
-          data: conDato.filter((a) => a.subtipo === s).map((a) => ({ x: ts(a.fecha), y: a.eficiencia, a })),
-          borderColor: c.subtipo[s], backgroundColor: c.subtipo[s],
-          showLine: false, pointRadius: 5, pointHoverRadius: 7,
-          pointBorderColor: c.superficie, pointBorderWidth: 2,
-        })),
-      },
-      options: {
-        interaction: { mode: "nearest", intersect: false },
-        scales: { x: ejeFechas(ctx.desde, ctx.hasta), y: ejeY({ grace: "5%", title: { display: true, text: "m/latido" } }) },
-        plugins: {
-          tooltip: {
-            callbacks: {
-              title: tituloFecha,
-              label: (i) => {
-                const a = i.raw.a;
-                return [` ${i.dataset.label}: ${numero(i.parsed.y, 2)} m/latido`,
-                  ` ${numero(a.distancia_m / 1000, 2)} km a ${ritmo(a.ritmo_s_km)} /km, ${a.fc_media} ppm`];
-              },
-            },
-          },
-        },
-      },
-    });
-  }
-
-  function renderKm(ctx) {
-    const c = colores();
-    const semanas = ctx.semanas;
-    if (!semanas.length) return sinDatos("g-km");
-    const subtipos = SUBTIPOS.filter((s) => semanas.some((w) => w.por_categoria.Carrera?.distancia_m_por_subtipo?.[s]));
-    grafico("g-km", {
-      type: "bar",
-      data: {
-        labels: semanas.map((s) => fechaCorta(s.inicio)),
-        datasets: subtipos.map((s) => ({
-          label: s,
-          data: semanas.map((w) => (w.por_categoria.Carrera?.distancia_m_por_subtipo?.[s] ?? 0) / 1000),
-          ...estiloBarra(c.subtipo[s], true),
-        })),
-      },
-      options: {
-        interaction: { mode: "index", intersect: false },
-        scales: {
-          x: { stacked: true, grid: { display: false }, ticks: { maxRotation: 0 } },
-          y: ejeY({ stacked: true, title: { display: true, text: "km" } }),
-        },
-        plugins: {
-          tooltip: {
-            filter: (i) => i.parsed.y > 0,
-            callbacks: {
-              title: (i) => `Semana del ${i[0].label}`,
-              label: (i) => ` ${i.dataset.label}: ${numero(i.parsed.y, 1)} km`,
-              footer: (items) => `Total: ${numero(items.reduce((t, i) => t + i.parsed.y, 0), 1)} km`,
-            },
-          },
-        },
-      },
-    });
-  }
-
-  function renderZonas(ctx) {
-    const c = colores();
-    const semanas = ctx.semanas.filter((s) => s.por_categoria.Carrera);
-    if (!semanas.length) return sinDatos("g-zonas");
-    const limites = ctx.meta.zonas_fc_carrera;
-    const nombreZona = (z) => `Z${z + 1} (${z === 0 ? "<" : `${limites[z - 1] + 1}–`}${limites[z]})`;
-    const pct = semanas.map((s) => {
-      const zonas = s.por_categoria.Carrera.zonas_s;
-      const total = zonas.reduce((a, b) => a + b, 0) || 1;
-      return zonas.map((z) => (z / total) * 100);
-    });
-    grafico("g-zonas", {
-      type: "bar",
-      data: {
-        labels: semanas.map((s) => fechaCorta(s.inicio)),
-        datasets: limites.map((_, z) => ({
-          label: `Z${z + 1}`,
-          data: pct.map((p) => p[z]),
-          segundos: semanas.map((s) => s.por_categoria.Carrera.zonas_s[z]),
-          ...estiloBarra(c.zonas[z], true),
-          borderRadius: 0,
-        })),
-      },
-      options: {
-        interaction: { mode: "index", intersect: false },
-        scales: {
-          x: { stacked: true, grid: { display: false }, ticks: { maxRotation: 0 } },
-          y: ejeY({ stacked: true, max: 100, ticks: { callback: (v) => `${v}%`, stepSize: 25 } }),
-        },
-        plugins: {
-          tooltip: {
-            itemSort: (a, b) => b.datasetIndex - a.datasetIndex,
-            callbacks: {
-              title: (i) => `Semana del ${i[0].label}`,
-              label: (i) => ` ${nombreZona(i.datasetIndex)}: ${numero(i.parsed.y)}% · ${duracion(i.dataset.segundos[i.dataIndex])}`,
-            },
-          },
-        },
-      },
-    });
-  }
-
-  function renderDinamica(ctx, corridas) {
-    const c = colores();
-    const metricas = [
-      ["g-cadencia", "cadencia", "Cadencia", (v) => `${numero(v)} ppm`],
-      ["g-zancada", "zancada", "Zancada", (v) => `${numero(v, 2)} m`],
-      ["g-contacto", "contacto", "Contacto", (v) => `${numero(v)} ms`],
-      ["g-oscilacion", "oscilacion", "Oscilación", (v) => `${numero(v, 1)} cm`],
-    ];
-    for (const [id, clave, etiqueta, formato] of metricas) {
-      const puntos = corridas.filter((a) => a.dinamica[clave] != null).map((a) => ({ x: ts(a.fecha), y: a.dinamica[clave] }));
-      lineaTiempo(id, ctx, puntos, { color: c.categoria.Carrera, etiqueta, formato });
-      const g = Chart.getChart(id);
-      if (g) {
-        g.options.elements.point.radius = 2;
-        g.options.scales.x.ticks.maxTicksLimit = 4;
-        g.options.scales.y.ticks.maxTicksLimit = 4;
-        g.update("none");
-      }
-    }
-  }
 
   /**
    * Tabla de las sesiones elegidas (plantilla + sesiones). Con una etapa elegida, el ritmo y la
