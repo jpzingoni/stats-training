@@ -78,6 +78,8 @@
   --lateral-texto: #080808;
   /* Prueba: color de las métricas diarias (barras de Pasos / Sueño en Este mes) */
   --serie-diaria: #f9652f;
+  --dia-ganado: #2f9e5f;          /* días con entrenamiento en el calendario de "Este mes" */
+  --dia-ganado-texto: #ffffff;
 }
 
 /* ── Tokens: modo oscuro (sistema, salvo que el usuario elija claro) ─────── */
@@ -492,8 +494,8 @@ main { padding: var(--hueco) var(--hueco) var(--e5); max-width: 1400px; }
 }
 .mini-dia.fuera { background: none; }
 .mini-dia.futuro { background: none; color: var(--texto-muted); }
-/* Días con actividad: un solo tono del naranja de las métricas diarias (no indica la carga) */
-.mini-dia.activo { background: color-mix(in srgb, var(--serie-diaria) 45%, var(--superficie)); color: var(--texto); }
+/* Días con actividad: "día ganado", un solo verde (no indica la carga) */
+.mini-dia.activo { background: var(--dia-ganado); color: var(--dia-ganado-texto); }
 .mini-dia.activo b { font-weight: 600; }
 .mini-dia.hoy { outline: 2px solid var(--tinta); outline-offset: 1px; }
 .mini-puntos { display: flex; gap: 3px; }

@@ -204,12 +204,11 @@ ETIQUETA                       (--t-etiqueta, --texto-sec)
 ### Calendario (mini y mensual)
 - Días futuros: solo el número en `--texto-muted`, sin borde.
 - Días pasados sin actividad: celda `--rampa-vacio`, sin borde.
-- Días con actividad (calendario chico): **un solo color**, el naranja de las métricas
-  diarias al 45 % sobre `--superficie`, sin importar la carga del día; puntos por deporte
-  (colores de deporte).
+- Días con actividad (calendario chico): **un solo color, el verde de "día ganado"**
+  (`--dia-ganado`), sin importar la carga del día; puntos por deporte (colores de deporte).
 - Hoy: anillo de 2px `--tinta`.
 - No se usa más el borde azul de "activo".
-- El número del día va en `--texto` (600) sobre el color. Los puntos de deporte llevan un
+- El número del día va en `--dia-ganado-texto` (blanco, 600) sobre el verde. Los puntos de deporte llevan un
   anillo de 1,5px `--superficie` para leerse sobre cualquier fondo.
 - La carga por día queda solo en el calendario de carga del Resumen.
 - La explicación de los puntos es una leyenda chica con los deportes del mes (punto + nombre),
