@@ -74,10 +74,10 @@
   /* Prueba de paleta (13/10): fondo de página #837D67 (mezclado con blanco según el %,
      opaco para que las barras fijas no transparenten) y barra lateral clara */
   --fondo-pagina: #f2f7f5;
-  --lateral-fondo: #ececec;
+  --lateral-fondo: #ffffff;
   --lateral-texto: #080808;
   /* Prueba: color de las métricas diarias (barras de Pasos / Sueño en Este mes) */
-  --serie-diaria: #f9652f;
+  --serie-diaria: #0032a0;
   --dia-ganado: #2f9e5f;          /* días con entrenamiento en el calendario de "Este mes" */
   --dia-ganado-texto: #ffffff;
 }
