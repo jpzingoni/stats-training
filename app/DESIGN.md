@@ -212,8 +212,10 @@ ETIQUETA                       (--t-etiqueta, --texto-sec)
 ### Objetivos del mes
 - Una barra horizontal por objetivo (definidos en `OBJETIVOS`, en `js/secciones/inicio.js`:
   nombre, meta, unidad, color y cómo se mide en el mes).
-- Encabezado: punto y nombre en `--t-base` 600, porcentaje a la derecha en `--t-titulo`.
-  Debajo, "lo hecho de la meta" en `--t-chico` `--texto-sec` ("23,0 de 50 km").
+- Una sola línea arriba de la barra: punto y nombre en `--t-base` 600; al lado, "lo hecho de
+  la meta" en `--t-chico` `--texto-sec` ("23,0 de 50 km"); el porcentaje a la derecha en
+  `--t-titulo`. Así la tarjeta entra en pantallas bajas (~590px); si igual no entra, la lista
+  scrollea dentro de la tarjeta.
 - Barra de 12px con puntas redondeadas: carril `--superficie-2`, relleno del color del
   deporte (Pasos: `--serie-diaria`). **Al cumplirse pasa a `--dia-ganado`** y el porcentaje
   lleva "✓" en ese verde. El porcentaje puede pasar de 100 %; la barra no.

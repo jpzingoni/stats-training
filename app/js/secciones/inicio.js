@@ -137,13 +137,13 @@
         <li class="objetivo${cumplido ? " cumplido" : ""}">
           <div class="objetivo-cab">
             <span class="objetivo-nombre"><i style="background:${o.color}"></i>${escapar(o.nombre)}</span>
+            <span class="objetivo-det num">${numero(hecho, hecho % 1 ? o.decimales : 0)} de ${numero(o.meta)} ${o.unidad}</span>
             <span class="objetivo-pct num">${cumplido ? "✓ " : ""}${pct} %</span>
           </div>
           <div class="objetivo-barra" role="progressbar" aria-label="${escapar(o.nombre)}" aria-valuemin="0"
                aria-valuemax="${o.meta}" aria-valuenow="${Math.round(hecho)}">
             <span style="width:${Math.min(pct, 100)}%;background:${cumplido ? "var(--dia-ganado)" : o.color}"></span>
           </div>
-          <div class="objetivo-det num">${numero(hecho, hecho % 1 ? o.decimales : 0)} de ${numero(o.meta)} ${o.unidad}</div>
         </li>`;
     }).join("");
   }
