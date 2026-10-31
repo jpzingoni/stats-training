@@ -31,7 +31,7 @@
   --sombra-flotante: 0 6px 20px rgba(0, 0, 0, 0.15);
   --velo: rgba(0, 0, 0, 0.45);
   --fondo: #f9f9f7;
-  --superficie: #fcfcfb;
+  --superficie: #ffffff;
   --superficie-2: #f0efec;
   --borde: rgba(11, 11, 11, 0.10);
   --texto: #0b0b0b;
@@ -61,7 +61,7 @@
   --rampa-5: #1c5cab;
   --rampa-6: #184f95;
   --rampa-7: #0d366b;
-  --rampa-vacio: #f0efec;
+  --rampa-vacio: #ececec;
   /* Zonas de FC (iguales en claro y oscuro). Z6 y Z7 siguen oscureciendo el rojo de Z5 */
   --zona-1: #d1d3d4;
   --zona-2: #96d7de;
@@ -73,8 +73,8 @@
 
   /* Prueba de paleta (13/10): fondo de página #837D67 (mezclado con blanco según el %,
      opaco para que las barras fijas no transparenten) y barra lateral clara */
-  --fondo-pagina: color-mix(in srgb, #837d67 20%, #ffffff);   /* % de #837D67 sobre blanco: se ajusta acá */
-  --lateral-fondo: #f8f8f8;
+  --fondo-pagina: #f2f7f5;
+  --lateral-fondo: #ececec;
   --lateral-texto: #080808;
   /* Prueba: color de las métricas diarias (barras de Pasos / Sueño en Este mes) */
   --serie-diaria: #f9652f;
