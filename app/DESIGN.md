@@ -206,7 +206,7 @@ ETIQUETA                       (--t-etiqueta, --texto-sec)
 
 ### Portada "Este mes"
 - Grilla de 2 × 2 que entra en una pantalla: arriba el calendario chico y "Actividades del
-  mes"; abajo "Objetivos del mes" y el gráfico diario (Pasos / Sueño). Sin KPI sueltos.
+  mes"; abajo "Objetivos del mes" y el gráfico de pasos por día. Sin KPI sueltos.
   En celular se apila en ese orden.
 
 ### Objetivos del mes

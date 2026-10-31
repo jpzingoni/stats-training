@@ -1,5 +1,5 @@
 // Vista "Este mes": la portada. Calendario chico con los días en que hubo actividad, las
-// actividades del mes, el avance de los objetivos mensuales y el gráfico de pasos / sueño.
+// actividades del mes, el avance de los objetivos mensuales y el gráfico de pasos por día.
 (() => {
   const Tablero = (window.Tablero ??= { secciones: {} });
 
@@ -8,7 +8,7 @@
   const { numero, duracion, suma, promedio, sumarDias, lunesDe, fechaLarga,
     MESES_LARGOS, hoyLocal, sumarMes, ultimoDiaMes, nombreMes } = Tablero.formato;
 
-  const estado = { mes: null, ctx: null, enlazado: false, metrica: null };
+  const estado = { mes: null, ctx: null, enlazado: false };
   const DIAS = ["L", "M", "X", "J", "V", "S", "D"];
 
   /** Objetivos mensuales: cada uno dice cómo se mide en el mes, su meta y su color. */
@@ -27,14 +27,6 @@
     if (!estado.mes) estado.mes = estado.limites.max;           // abre en el mes actual
     if (!estado.enlazado) {
       estado.enlazado = true;
-      estado.metrica = leerMetrica();
-      document.getElementById("inicio-metrica").addEventListener("click", (e) => {
-        const b = e.target.closest("[data-metrica]");
-        if (!b) return;
-        estado.metrica = b.dataset.metrica;
-        try { localStorage.setItem("inicio-metrica", estado.metrica); } catch { /* solo esta visita */ }
-        renderDiario(estado.ctx, resumenMes(estado.ctx, estado.mes));
-      });
       document.getElementById("inicio-anterior").onclick = () => { estado.mes = sumarMes(estado.mes, -1); dibujar(); };
       document.getElementById("inicio-siguiente").onclick = () => { estado.mes = sumarMes(estado.mes, 1); dibujar(); };
     }
@@ -49,22 +41,16 @@
     return { desde, hasta: fin < ultimoDato ? fin : ultimoDato, fin };
   }
 
-  /** Números del mes: totales y promedios de bienestar (solo sobre los días con dato). */
+  /** Números del mes: pasos (total y promedio, solo sobre los días con dato) y actividades. */
   function resumenMes(ctx, mes) {
     const r = rangoMes(mes, ctx.meta.hasta);
     const enMes = (f) => f >= r.desde && f <= r.hasta;
     const dias = ctx.todo.bienestar.filter((d) => enMes(d.fecha));
-    const conDato = (clave) => dias.filter((d) => d[clave] != null);
     const transcurridos = Math.round((Date.parse(r.hasta) - Date.parse(r.desde)) / 86400000) + 1;
     return {
       ...r, transcurridos,
       pasosTotal: suma(dias, (d) => d.pasos),
-      pasosDias: conDato("pasos").length,
       pasosProm: promedio(dias, (d) => d.pasos),
-      suenoProm: promedio(dias, (d) => d.sueno_horas),
-      suenoDias: conDato("sueno_horas").length,
-      fcProm: promedio(dias, (d) => d.fc_reposo),
-      fcDias: conDato("fc_reposo").length,
       actividades: ctx.todo.actividades.filter((a) => enMes(a.fecha) && ctx.visible(a)),
     };
   }
@@ -89,18 +75,6 @@
     renderObjetivos(m);
     renderMiniCalendario(ctx, m);
     renderDiario(ctx, m);
-  }
-
-  /** 7.27 → "7:16" (horas y minutos, compacto para la tarjeta) */
-  function horasCompacto(h) {
-    const min = Math.round(h * 60);
-    return `${Math.floor(min / 60)}:${String(min % 60).padStart(2, "0")}`;
-  }
-
-  /** 7.47 → "7 h 28 min" */
-  function horasMin(h) {
-    const min = Math.round(h * 60);
-    return `${Math.floor(min / 60)} h ${String(min % 60).padStart(2, "0")} min`;
   }
 
   function renderActividades(m, p, nombreAnt) {
@@ -181,34 +155,17 @@
     cal.style.gridTemplateRows = `auto repeat(${semanas}, minmax(0, 1fr))`;
   }
 
-  /** Qué se puede ver en el gráfico diario (el selector Pasos / Sueño). */
-  const METRICAS = {
-    pasos: {
-      titulo: "Pasos por día", etiqueta: "Pasos", clave: "pasos", promedio: (m) => m.pasosProm,
-      eje: (v) => (v >= 1000 ? `${numero(v / 1000)} mil` : v),
-      valor: (v) => `${numero(v)} pasos`,
-      prom: (v) => numero(v),
-    },
-    sueno: {
-      titulo: "Horas de sueño por día", etiqueta: "Sueño", clave: "sueno_horas", promedio: (m) => m.suenoProm,
-      eje: (v) => v,                      // la unidad ya está en el título ("Horas de sueño…")
-      valor: (v) => horasMin(v),
-      prom: (v) => horasCompacto(v),
-    },
+  /** Cómo se muestran los pasos en el gráfico diario. */
+  const PASOS = {
+    etiqueta: "Pasos", clave: "pasos", promedio: (m) => m.pasosProm,
+    eje: (v) => (v >= 1000 ? `${numero(v / 1000)} mil` : v),
+    valor: (v) => `${numero(v)} pasos`,
+    prom: (v) => numero(v),
   };
-
-  function leerMetrica() {
-    try { return METRICAS[localStorage.getItem("inicio-metrica")] ? localStorage.getItem("inicio-metrica") : "pasos"; }
-    catch { return "pasos"; }
-  }
 
   /** Barras verticales: un día por barra. Los días sin dato quedan vacíos. */
   function renderDiario(ctx, m) {
-    const met = METRICAS[estado.metrica];
-    document.getElementById("inicio-grafico-titulo").textContent = met.titulo;
-    for (const b of document.querySelectorAll("#inicio-metrica button")) {
-      b.setAttribute("aria-pressed", String(b.dataset.metrica === estado.metrica));
-    }
+    const met = PASOS;
     const porDia = new Map(ctx.todo.bienestar.map((d) => [d.fecha, d[met.clave]]));
     const dias = [];
     for (let f = m.desde; f <= m.fin; f = sumarDias(f, 1)) dias.push(f);
