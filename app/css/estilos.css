@@ -261,7 +261,7 @@ button { font: inherit; color: inherit; }
 .filtro[hidden] { display: none; }
 .filtro-etiqueta { color: var(--texto-muted); margin-right: var(--e2); }
 /* Controles: alto 32px, radio chico, borde fino; activo en tinta */
-.boton-tema, .cal-cabecera button, .filtro button, .segmentado button {
+.cal-cabecera button, .filtro button, .segmentado button {
   height: var(--alto-control); padding: 0 var(--e3); display: inline-flex; align-items: center; justify-content: center;
   background: var(--superficie); border: 1px solid var(--borde); border-radius: var(--radio-chico);
   cursor: pointer; font: var(--t-control); white-space: nowrap; color: var(--texto);

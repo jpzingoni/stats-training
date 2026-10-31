@@ -4,7 +4,6 @@
   const Tablero = (window.Tablero ??= { secciones: {} });
 
   const { aplicarEstiloGlobal, destruirTodos, GRUPOS } = Tablero.graficos;
-  const { iniciarTema } = Tablero.tema;
   const { escapar } = Tablero.componentes;
   const { sumarDias, fechaLarga, ts } = Tablero.formato;
   const S = Tablero.secciones;
@@ -217,7 +216,6 @@
     document.getElementById("fondo-lateral").addEventListener("click", cerrarMenu);
     addEventListener("keydown", (e) => { if (e.key === "Escape") cerrarMenu(); });
 
-    iniciarTema(dibujar);
     marcarPeriodo();
     mostrarPestana(location.hash.slice(1));
   }

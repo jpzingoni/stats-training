@@ -22,7 +22,9 @@ recuperación), pensado para ver mi progreso y para mostrar en mi portfolio.
   datos van en un `.js` cargado con `<script>` (nada de `fetch`) y el JavaScript usa scripts
   clásicos con el espacio de nombres `window.Tablero` (nada de módulos ES `import`/`export`).
   Los scripts se cargan en orden desde `index.html`.
-- Tiene que funcionar bien en celular y en modo claro y oscuro.
+- Tiene que funcionar bien en celular. **Por ahora hay un solo tema, el claro** (`data-theme="light"`
+  fijo en `index.html`, sin botón): es el que se está rediseñando. Los tokens del modo oscuro
+  siguen en `estilos.css` para reactivarlo más adelante.
 - Desarrollo local: desde la raíz del repo, `python scripts/generar_datos_app.py` y después
   abrir `app/index.html` en el navegador (doble clic).
 

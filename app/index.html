@@ -1,17 +1,13 @@
 <!doctype html>
-<html lang="es-AR">
+<html lang="es-AR" data-theme="light">
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Tablero de entrenamiento</title>
   <meta name="description" content="Carrera, pádel y recuperación: datos de un reloj Amazfit vía Intervals.icu.">
-  <meta name="color-scheme" content="light dark">
+  <meta name="color-scheme" content="light">
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'><rect x='1' y='8' width='3' height='7' rx='1' fill='%232a78d6'/><rect x='6.5' y='4' width='3' height='11' rx='1' fill='%232a78d6'/><rect x='12' y='1' width='3' height='14' rx='1' fill='%232a78d6'/></svg>">
   <link rel="stylesheet" href="css/estilos.css">
-  <script>
-    // Aplica el tema guardado antes de pintar, para que no parpadee
-    try { const t = localStorage.getItem("tema"); if (t === "claro" || t === "oscuro") document.documentElement.dataset.theme = t === "claro" ? "light" : "dark"; } catch (e) {}
-  </script>
 </head>
 <body>
   <div class="app">
@@ -40,7 +36,6 @@
         </div>
       </section>
       <div class="lateral-pie">
-        <button class="boton-tema" id="boton-tema" type="button" aria-label="Cambiar tema">Tema: auto</button>
         <span class="version" title="Versión del tablero">v1.3</span>
       </div>
     </aside>
@@ -444,7 +439,6 @@
   <script src="js/formato.js"></script>
   <script src="js/graficos.js"></script>
   <script src="js/componentes.js"></script>
-  <script src="js/tema.js"></script>
   <script src="js/sesiones.js"></script>
   <script src="js/secciones/inicio.js"></script>
   <script src="js/secciones/calendario.js"></script>

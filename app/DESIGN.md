@@ -146,8 +146,8 @@ codifica nada y repite los colores de los deportes. Se reemplaza por **orden tem
 ## 4. Componentes
 
 ### Controles: un solo estilo
-Selects, desplegables (`.desplegable`), segmentados (`.segmentado`, `.filtro`), botones de
-calendario y botón de tema comparten:
+Selects, desplegables (`.desplegable`), segmentados (`.segmentado`, `.filtro`) y botones del
+calendario comparten:
 
 - Alto 32px, `--radio-chico`, `1px solid var(--borde)`, fondo `--superficie`, `--t-control`.
 - Activo (`aria-pressed="true"`): fondo `--tinta`, texto `--fondo`.
