@@ -285,6 +285,35 @@ window.DATOS_TABLERO = {
      "tipo": "distancia",
      "valor": 500.0
     }
+   ],
+   "5KM": [
+    {
+     "fase": "Calentamiento",
+     "tipo": "tiempo",
+     "valor": 300
+    },
+    {
+     "fase": "Entrenamiento",
+     "tipo": "distancia",
+     "valor": 5000.0
+    }
+   ],
+   "3.5 KM": [
+    {
+     "fase": "Calentamiento",
+     "tipo": "distancia",
+     "valor": 500.0
+    },
+    {
+     "fase": "Entrenamiento",
+     "tipo": "distancia",
+     "valor": 3500.0
+    },
+    {
+     "fase": "Restaurar",
+     "tipo": "tiempo",
+     "valor": 600
+    }
    ]
   }
  },
@@ -6376,7 +6405,8 @@ window.DATOS_TABLERO = {
      "fc_max": 131,
      "cadencia": 116,
      "desnivel_m": 4,
-     "potencia_w": 109
+     "potencia_w": 109,
+     "fase": "Calentamiento"
     },
     {
      "nro": 2,
@@ -6389,13 +6419,22 @@ window.DATOS_TABLERO = {
      "fc_max": 175,
      "cadencia": 149,
      "desnivel_m": 40,
-     "potencia_w": 234
+     "potencia_w": 234,
+     "fase": "Entrenamiento"
     }
    ],
    "bloque_principal": null,
-   "plantilla": "Libre",
-   "ajuste_plantilla": null,
-   "entrenamiento": null
+   "plantilla": "5KM",
+   "ajuste_plantilla": "exacta",
+   "entrenamiento": {
+    "bloques": 1,
+    "duracion_s": 2230,
+    "distancia_m": 4999,
+    "ritmo_s_km": 446,
+    "fc_media": 157,
+    "potencia_w": 234,
+    "eficiencia": 0.857
+   }
   }
  ],
  "semanas": [
