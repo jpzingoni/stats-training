@@ -2,14 +2,14 @@
 window.DATOS_TABLERO = {
  "meta": {
   "version_esquema": 1,
-  "generado": "2026-10-31 13:24:43",
+  "generado": "2026-11-01 14:18:58",
   "desde": "2026-07-18",
-  "hasta": "2026-10-30",
+  "hasta": "2026-10-31",
   "actividades_por_categoria": {
    "Caminata": 15,
    "Carrera": 25,
    "Ciclismo": 2,
-   "Pádel": 7
+   "Pádel": 8
   },
   "zonas_fc_carrera": [
    139,
@@ -6555,6 +6555,62 @@ window.DATOS_TABLERO = {
     "potencia_w": 263,
     "eficiencia": 1.009
    }
+  },
+  {
+   "id": "i204132346",
+   "fecha": "2026-10-31",
+   "hora": "17:07",
+   "categoria": "Pádel",
+   "subtipo": null,
+   "nombre": "Afternoon Padel",
+   "duracion_s": 5323,
+   "distancia_m": null,
+   "ritmo_s_km": null,
+   "fc_media": 148,
+   "fc_max": 175,
+   "potencia_w": null,
+   "carga": 101,
+   "desnivel_m": null,
+   "tiempo_total_s": 5323,
+   "calorias": 1004,
+   "trimp": 169.6,
+   "intensidad_pct": 82.7,
+   "recuperacion_fc": 32,
+   "zonas_s": [
+    1111,
+    1177,
+    1524,
+    1104,
+    219,
+    179,
+    10
+   ],
+   "dinamica": {
+    "cadencia": null,
+    "zancada": null,
+    "contacto": null,
+    "oscilacion": null
+   },
+   "eficiencia": null,
+   "bloques": [
+    {
+     "nro": 1,
+     "tipo": "WORK",
+     "inicio_s": 0,
+     "duracion_s": 5324,
+     "distancia_m": null,
+     "ritmo_s_km": null,
+     "fc_media": 147,
+     "fc_max": 175,
+     "cadencia": null,
+     "desnivel_m": null,
+     "potencia_w": null
+    }
+   ],
+   "bloque_principal": null,
+   "plantilla": null,
+   "ajuste_plantilla": null,
+   "entrenamiento": null
   }
  ],
  "semanas": [
@@ -7218,9 +7274,9 @@ window.DATOS_TABLERO = {
    "semana": "2026-W44",
    "inicio": "2026-10-26",
    "total": {
-    "sesiones": 2,
-    "duracion_s": 4842,
-    "carga": 92
+    "sesiones": 3,
+    "duracion_s": 10165,
+    "carga": 193
    },
    "por_categoria": {
     "Carrera": {
@@ -7241,6 +7297,21 @@ window.DATOS_TABLERO = {
       "Libre": 5456,
       "Bloques": 4808
      }
+    },
+    "Pádel": {
+     "sesiones": 1,
+     "duracion_s": 5323,
+     "distancia_m": 0,
+     "carga": 101,
+     "zonas_s": [
+      1111,
+      1177,
+      1524,
+      1104,
+      219,
+      179,
+      10
+     ]
     }
    }
   }
@@ -8609,7 +8680,20 @@ window.DATOS_TABLERO = {
    "sueno_horas": 6.6,
    "sueno_horas_m7": 7.2,
    "sueno_puntaje": 70,
-   "pasos": 9986
+   "pasos": 11775
+  },
+  {
+   "fecha": "2026-10-31",
+   "ctl": 19,
+   "atl": 31.7,
+   "forma": -12.8,
+   "carga_dia": 101,
+   "fc_reposo": 55,
+   "fc_reposo_m7": 55.4,
+   "sueno_horas": 7.27,
+   "sueno_horas_m7": 7.5,
+   "sueno_puntaje": 78,
+   "pasos": 4006
   }
  ],
  "crudos": {
@@ -10900,6 +10984,47 @@ window.DATOS_TABLERO = {
      "ZEPP Amazfit Active 2 (Round)",
      "run.10092807.huami.com 1793398271",
      "2026-10-31 13:24:42"
+    ],
+    [
+     "i204132346",
+     "2026-10-31",
+     "17:07",
+     "Padel",
+     "Pádel",
+     "",
+     "Afternoon Padel",
+     "5323",
+     "5323",
+     "",
+     "",
+     "",
+     "148",
+     "175",
+     "101",
+     "169.6",
+     "82.7",
+     "1004",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "1111",
+     "1177",
+     "1524",
+     "1104",
+     "219",
+     "179",
+     "10",
+     "32",
+     "1",
+     "1x 1h28m 147bpm",
+     "19.0",
+     "31.7",
+     "ZEPP Amazfit Active 2 (Round)",
+     "run.10092807.huami.com 1793477251",
+     "2026-11-01 14:18:56"
     ]
    ]
   },
@@ -15471,6 +15596,21 @@ window.DATOS_TABLERO = {
      "110",
      "0",
      "76"
+    ],
+    [
+     "i204132346",
+     "2026-10-31",
+     "1",
+     "WORK",
+     "0",
+     "5324",
+     "",
+     "",
+     "147",
+     "175",
+     "",
+     "",
+     ""
     ]
    ]
   },
@@ -17442,11 +17582,29 @@ window.DATOS_TABLERO = {
      "6.6",
      "70.0",
      "3",
-     "9986",
+     "11775",
      "",
      "",
      "",
-     "2026-10-31 13:24:43"
+     "2026-11-01 14:18:58"
+    ],
+    [
+     "2026-10-31",
+     "19.0",
+     "31.7",
+     "-12.8",
+     "4.0",
+     "101.0",
+     "55",
+     "26160",
+     "7.27",
+     "78.0",
+     "3",
+     "4006",
+     "",
+     "",
+     "",
+     "2026-11-01 14:18:58"
     ]
    ]
   }
