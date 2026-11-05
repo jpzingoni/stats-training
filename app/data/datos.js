@@ -2,9 +2,9 @@
 window.DATOS_TABLERO = {
  "meta": {
   "version_esquema": 1,
-  "generado": "2026-11-04 15:56:57",
+  "generado": "2026-11-05 16:08:40",
   "desde": "2026-07-18",
-  "hasta": "2026-11-03",
+  "hasta": "2026-11-04",
   "actividades_por_categoria": {
    "Caminata": 15,
    "Carrera": 25,
@@ -8703,7 +8703,7 @@ window.DATOS_TABLERO = {
    "sueno_horas": 7.27,
    "sueno_horas_m7": 7.5,
    "sueno_puntaje": 78,
-   "pasos": 4006
+   "pasos": 6059
   },
   {
    "fecha": "2026-11-01",
@@ -8711,12 +8711,12 @@ window.DATOS_TABLERO = {
    "atl": 27.5,
    "forma": -9,
    "carga_dia": 0,
-   "fc_reposo": null,
-   "fc_reposo_m7": 55.0,
-   "sueno_horas": null,
+   "fc_reposo": 53,
+   "fc_reposo_m7": 54.7,
+   "sueno_horas": 7.98,
    "sueno_horas_m7": 7.5,
-   "sueno_puntaje": null,
-   "pasos": null
+   "sueno_puntaje": 90,
+   "pasos": 5677
   },
   {
    "fecha": "2026-11-02",
@@ -8724,12 +8724,12 @@ window.DATOS_TABLERO = {
    "atl": 23.8,
    "forma": -5.7,
    "carga_dia": 0,
-   "fc_reposo": null,
-   "fc_reposo_m7": 54.6,
-   "sueno_horas": null,
-   "sueno_horas_m7": 7.4,
-   "sueno_puntaje": null,
-   "pasos": null
+   "fc_reposo": 52,
+   "fc_reposo_m7": 54.0,
+   "sueno_horas": 7.37,
+   "sueno_horas_m7": 7.5,
+   "sueno_puntaje": 84,
+   "pasos": 2261
   },
   {
    "fecha": "2026-11-03",
@@ -8737,12 +8737,25 @@ window.DATOS_TABLERO = {
    "atl": 20.7,
    "forma": -3,
    "carga_dia": 0,
-   "fc_reposo": null,
-   "fc_reposo_m7": 54.0,
-   "sueno_horas": null,
-   "sueno_horas_m7": 7.2,
-   "sueno_puntaje": null,
-   "pasos": null
+   "fc_reposo": 50,
+   "fc_reposo_m7": 53.0,
+   "sueno_horas": 6.58,
+   "sueno_horas_m7": 7.3,
+   "sueno_puntaje": 74,
+   "pasos": 1051
+  },
+  {
+   "fecha": "2026-11-04",
+   "ctl": 17.3,
+   "atl": 17.9,
+   "forma": -0.7,
+   "carga_dia": 0,
+   "fc_reposo": 50,
+   "fc_reposo_m7": 52.6,
+   "sueno_horas": 8.18,
+   "sueno_horas_m7": 7.3,
+   "sueno_puntaje": 86,
+   "pasos": 4101
   }
  ],
  "crudos": {
@@ -17649,11 +17662,11 @@ window.DATOS_TABLERO = {
      "7.27",
      "78.0",
      "3",
-     "4006",
+     "6059",
      "",
      "",
      "",
-     "2026-11-01 14:18:58"
+     "2026-11-05 16:08:40"
     ],
     [
      "2026-11-01",
@@ -17662,16 +17675,16 @@ window.DATOS_TABLERO = {
      "-9.0",
      "1.8",
      "0",
+     "53",
+     "28740",
+     "7.98",
+     "90.0",
+     "1",
+     "5677",
      "",
      "",
      "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "2026-11-02 17:56:20"
+     "2026-11-05 16:08:40"
     ],
     [
      "2026-11-02",
@@ -17680,16 +17693,16 @@ window.DATOS_TABLERO = {
      "-5.7",
      "1.7",
      "0",
+     "52",
+     "26520",
+     "7.37",
+     "84.0",
+     "2",
+     "2261",
      "",
      "",
      "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "",
-     "2026-11-03 15:43:47"
+     "2026-11-05 16:08:40"
     ],
     [
      "2026-11-03",
@@ -17698,16 +17711,34 @@ window.DATOS_TABLERO = {
      "-3.0",
      "1.7",
      "0",
+     "50",
+     "23700",
+     "6.58",
+     "74.0",
+     "3",
+     "1051",
      "",
      "",
      "",
+     "2026-11-05 16:08:40"
+    ],
+    [
+     "2026-11-04",
+     "17.3",
+     "17.9",
+     "-0.7",
+     "0.4",
+     "0",
+     "50",
+     "29460",
+     "8.18",
+     "86.0",
+     "2",
+     "4101",
      "",
      "",
      "",
-     "",
-     "",
-     "",
-     "2026-11-04 15:56:57"
+     "2026-11-05 16:08:40"
     ]
    ]
   }
