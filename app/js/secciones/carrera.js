@@ -189,6 +189,8 @@
       return sinDatos("g-carrera-comparar", `Sin datos de ${met.nombre.toLowerCase()} para estas sesiones`);
     }
     const rango = rangoRobusto(datasets.flatMap((d) => d.data.map((pt) => pt.y)));
+    // Con una sola sesión, debajo de cada minuto van los km que llevaba en ese momento
+    const kmEn = elegidas.length === 1 ? kmEnEje(elegidas[0], eje) : null;
     const promedios = lineasPromedio(elegidas, datasets, met, eje, colorDe);
     grafico("g-carrera-comparar", {
       type: "line",
@@ -200,9 +202,12 @@
         layout: { padding: { top: eje ? 16 : 0 } },
         scales: {
           x: { type: "linear", min: 0, max: eje ? eje.total / 60 : undefined, grid: { display: false }, border: { color: c.eje },
-               title: { display: true, text: eje ? `minutos según la plantilla ${nombrePlantillas()}` : "minutos desde el inicio" },
+               title: { display: true, text: `${kmEn ? "minutos y km" : "minutos"} ${eje ? `según la plantilla ${nombrePlantillas()}` : "desde el inicio"}` },
                // Con zonas, el espacio entre el eje y los números aloja las franjas
-               ticks: { padding: 3 + espacioFranjas, callback: (v) => (Number.isInteger(v) ? `${v}′` : "") },   // sin el último valor con decimales
+               ticks: { padding: 3 + espacioFranjas, callback: (v) => {
+                 if (!Number.isInteger(v)) return "";                // sin el último valor con decimales
+                 return kmEn ? [`${v}′`, `${numero(kmEn(v), 1)} km`] : `${v}′`;
+               } },
                // Chart.js suma el padding también debajo de los números: se descuenta
                afterFit: (escala) => { escala.height -= espacioFranjas; } },
           // Rango del 3 % al 97 % de los valores: un minuto con pausa no aplasta toda la curva
@@ -245,8 +250,6 @@
     const m = comp.minutos[a.id];
     const serie = m?.[met.clave];
     const conFase = a.bloques.filter((b) => b.fase);
-    const indiceFase = new Map(conFase.map((b, k) => [b.nro, k]));
-    const porNro = new Map(a.bloques.map((b) => [b.nro, b]));
     if (!serie) {
       // Sin minutos: un escalón por bloque (como antes)
       const bloques = eje ? conFase : a.bloques.filter((b) => (b.duracion_s ?? 0) >= 10);
@@ -257,25 +260,65 @@
           { x: (x0 + ancho) / 60, y: null }];
       });
     }
+    const ubicar = ubicador(a, eje);
     const puntos = [];
     let anterior = null;
     serie.forEach((valor, i) => {
       if ((m.seg?.[i] ?? 60) < 20) return;                  // último minuto casi vacío
-      const b = porNro.get(m.bloque?.[i]);
-      if (comp.etapa !== "todas" && b?.fase !== comp.etapa) return;
-      const medio = i * 60 + (m.seg?.[i] ?? 60) / 2;
-      let x = medio / 60;
-      if (eje) {
-        const k = indiceFase.get(b?.nro);
-        if (k === undefined) return;                         // corte de 1 s sin fase
-        const frac = Math.min(Math.max((medio - b.inicio_s) / b.duracion_s, 0), 1);
-        x = (eje.inicios[k] + frac * eje.anchos[k]) / 60;
-      }
-      if (anterior !== null && i !== anterior + 1) puntos.push({ x, y: null });
-      puntos.push({ x, y: valor, b, minuto: i });
+      const u = ubicar(i);
+      if (!u || (comp.etapa !== "todas" && u.b?.fase !== comp.etapa)) return;
+      if (anterior !== null && i !== anterior + 1) puntos.push({ x: u.x, y: null });
+      puntos.push({ x: u.x, y: valor, b: u.b, minuto: i });
       anterior = i;
     });
     return puntos;
+  }
+
+  /**
+   * Dónde cae cada minuto de una sesión en el eje X (en minutos), según su punto medio. Con
+   * plantilla, el minuto se ubica en el tramo de su bloque según la parte del bloque
+   * transcurrida. Devuelve null para los minutos sin fase (cortes de 1 s).
+   */
+  function ubicador(a, eje) {
+    const m = comp.minutos[a.id];
+    const indiceFase = new Map(a.bloques.filter((b) => b.fase).map((b, k) => [b.nro, k]));
+    const porNro = new Map(a.bloques.map((b) => [b.nro, b]));
+    return (i) => {
+      const b = porNro.get(m?.bloque?.[i]);
+      const medio = i * 60 + (m?.seg?.[i] ?? 60) / 2;
+      if (!eje) return { x: medio / 60, b };
+      const k = indiceFase.get(b?.nro);
+      if (k === undefined) return null;
+      const frac = Math.min(Math.max((medio - b.inicio_s) / b.duracion_s, 0), 1);
+      return { x: (eje.inicios[k] + frac * eje.anchos[k]) / 60, b };
+    };
+  }
+
+  /**
+   * Km recorridos de una sesión en cualquier punto del eje X. `dist` de minutos.js es la
+   * distancia acumulada al final de cada minuto: en el punto medio se toma el promedio con el
+   * minuto anterior, y entre minutos se interpola. Null si la sesión no tiene minutos.
+   */
+  function kmEnEje(a, eje) {
+    const dist = comp.minutos[a.id]?.dist;
+    if (!dist) return null;
+    const ubicar = ubicador(a, eje);
+    const pares = [{ x: 0, km: 0 }];
+    let previo = 0;   // acumulado al final del minuto anterior (los minutos sin dato lo mantienen)
+    dist.forEach((d, i) => {
+      const fin = d ?? previo;
+      const u = ubicar(i);
+      if (u && u.x >= pares.at(-1).x) pares.push({ x: u.x, km: (previo + fin) / 2000 });
+      previo = fin;
+    });
+    const total = previo / 1000;
+    return (x) => {
+      const j = pares.findIndex((p) => p.x >= x);
+      if (j === -1) return total;
+      if (j === 0) return 0;
+      const p0 = pares[j - 1], p1 = pares[j];
+      return p0.km + (p1.km - p0.km) * ((x - p0.x) / (p1.x - p0.x || 1));
+    };
   }
 
   /** Mínimo y máximo del eje: percentiles 3 y 97 con un margen (si hay suficientes valores). */
@@ -288,31 +331,13 @@
     return { min: bajo - margen, max: alto + margen };
   }
 
-  // ─── Deriva cardíaca y eficiencia entre sesiones ───────────────────────────
+  // ─── Promedios por bloque ──────────────────────────────────────────────────
 
   /** Promedio de una columna de los bloques, ponderado por la duración de cada uno. */
   function ponderado(bloques, clave) {
     const con = bloques.filter((b) => b[clave] != null);
     return con.length ? suma(con, (b) => b[clave] * b.duracion_s) / suma(con, (b) => b.duracion_s) : null;
   }
-
-  /** Plugin: línea horizontal de referencia (p. ej., 5 % de deriva). */
-  const LINEA_REFERENCIA = {
-    id: "lineaReferencia",
-    afterDatasetsDraw(chart) {
-      const op = chart.options.plugins.lineaReferencia;
-      if (!op) return;
-      const { ctx, chartArea: area, scales: { y } } = chart;
-      const py = Math.round(y.getPixelForValue(op.valor)) + 0.5;
-      if (py < area.top || py > area.bottom) return;
-      ctx.save();
-      ctx.strokeStyle = op.color; ctx.setLineDash([5, 4]); ctx.lineWidth = 1;
-      ctx.beginPath(); ctx.moveTo(area.left, py); ctx.lineTo(area.right, py); ctx.stroke();
-      ctx.setLineDash([]); ctx.fillStyle = op.color; ctx.font = Tablero.graficos.tipografia().chico.canvas;
-      ctx.textAlign = "right"; ctx.textBaseline = "bottom"; ctx.fillText(op.texto, area.right - 2, py - 2);
-      ctx.restore();
-    },
-  };
 
   /** Bloques de la etapa elegida (o todos) de una sesión. */
   const bloquesDeEtapa = (a) => a.bloques.filter((b) =>
