@@ -31,7 +31,7 @@ Pasos en orden. Cada fase termina con algo funcionando antes de pasar a la sigui
    - `INTERVALS_API_KEY` → tu API key
 2. Pestaña **Actions** → "Actualización diaria de datos" → **Run workflow** para probarlo a mano.
 3. Si termina en verde, vas a ver un commit nuevo `datos: actualización AAAA-MM-DD`.
-   Desde ahí corre solo todos los días a las 09:00.
+   Desde ahí corre solo todos los días a las 03:17 (hora de Argentina).
 4. En tu compu, antes de trabajar: `git pull` para tener los datos al día.
 
 Nota: GitHub pausa los workflows programados de repos públicos tras 60 días sin actividad.

@@ -2,7 +2,7 @@ name: Actualización diaria de datos
 
 on:
   schedule:
-    - cron: "0 12 * * *"        # 12:00 UTC = 09:00 Argentina
+    - cron: "17 6 * * *"        # 06:17 UTC = 03:17 Argentina (misma fecha en UTC y en Argentina; fuera de la hora en punto, que GitHub demora más)
   workflow_dispatch:            # permite correrlo a mano desde la pestaña Actions
     inputs:
       dias:
