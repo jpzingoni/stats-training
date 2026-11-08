@@ -2,14 +2,14 @@
 window.DATOS_TABLERO = {
  "meta": {
   "version_esquema": 1,
-  "generado": "2026-11-07 09:57:36",
+  "generado": "2026-11-08 10:21:34",
   "desde": "2026-07-18",
-  "hasta": "2026-11-06",
+  "hasta": "2026-11-07",
   "actividades_por_categoria": {
    "Caminata": 15,
    "Carrera": 26,
    "Ciclismo": 2,
-   "Pádel": 8
+   "Pádel": 9
   },
   "zonas_fc_carrera": [
    139,
@@ -6690,6 +6690,62 @@ window.DATOS_TABLERO = {
     "potencia_w": 242,
     "eficiencia": 0.918
    }
+  },
+  {
+   "id": "i207386378",
+   "fecha": "2026-11-07",
+   "hora": "17:01",
+   "categoria": "Pádel",
+   "subtipo": null,
+   "nombre": "Afternoon Padel",
+   "duracion_s": 6111,
+   "distancia_m": null,
+   "ritmo_s_km": null,
+   "fc_media": 142,
+   "fc_max": 182,
+   "potencia_w": null,
+   "carga": 107,
+   "desnivel_m": null,
+   "tiempo_total_s": 6111,
+   "calorias": 1091,
+   "trimp": 170.5,
+   "intensidad_pct": 79.4,
+   "recuperacion_fc": 38,
+   "zonas_s": [
+    2168,
+    883,
+    1336,
+    1163,
+    248,
+    202,
+    112
+   ],
+   "dinamica": {
+    "cadencia": null,
+    "zancada": null,
+    "contacto": null,
+    "oscilacion": null
+   },
+   "eficiencia": null,
+   "bloques": [
+    {
+     "nro": 1,
+     "tipo": "WORK",
+     "inicio_s": 0,
+     "duracion_s": 6112,
+     "distancia_m": null,
+     "ritmo_s_km": null,
+     "fc_media": 142,
+     "fc_max": 182,
+     "cadencia": null,
+     "desnivel_m": null,
+     "potencia_w": null
+    }
+   ],
+   "bloque_principal": null,
+   "plantilla": null,
+   "ajuste_plantilla": null,
+   "entrenamiento": null
   }
  ],
  "semanas": [
@@ -7398,9 +7454,9 @@ window.DATOS_TABLERO = {
    "semana": "2026-W45",
    "inicio": "2026-11-02",
    "total": {
-    "sesiones": 1,
-    "duracion_s": 2416,
-    "carga": 48
+    "sesiones": 2,
+    "duracion_s": 8527,
+    "carga": 155
    },
    "por_categoria": {
     "Carrera": {
@@ -7420,6 +7476,21 @@ window.DATOS_TABLERO = {
      "distancia_m_por_subtipo": {
       "Libre": 5444
      }
+    },
+    "Pádel": {
+     "sesiones": 1,
+     "duracion_s": 6111,
+     "distancia_m": 0,
+     "carga": 107,
+     "zonas_s": [
+      2168,
+      883,
+      1336,
+      1163,
+      248,
+      202,
+      112
+     ]
     }
    }
   }
@@ -8880,6 +8951,19 @@ window.DATOS_TABLERO = {
    "sueno_horas_m7": 7.5,
    "sueno_puntaje": 78,
    "pasos": 252
+  },
+  {
+   "fecha": "2026-11-07",
+   "ctl": 19.7,
+   "atl": 30.7,
+   "forma": -11.1,
+   "carga_dia": 107,
+   "fc_reposo": null,
+   "fc_reposo_m7": 51.3,
+   "sueno_horas": null,
+   "sueno_horas_m7": 7.5,
+   "sueno_puntaje": null,
+   "pasos": null
   }
  ],
  "crudos": {
@@ -11252,6 +11336,47 @@ window.DATOS_TABLERO = {
      "ZEPP Amazfit Active 2 (Round)",
      "run.10092807.huami.com 1793914997",
      "2026-11-07 09:57:35"
+    ],
+    [
+     "i207386378",
+     "2026-11-07",
+     "17:01",
+     "Padel",
+     "Pádel",
+     "",
+     "Afternoon Padel",
+     "6111",
+     "6111",
+     "",
+     "",
+     "",
+     "142",
+     "182",
+     "107",
+     "170.5",
+     "79.4",
+     "1091",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "2168",
+     "883",
+     "1336",
+     "1163",
+     "248",
+     "202",
+     "112",
+     "38",
+     "1",
+     "1x 1h41m 142bpm",
+     "19.7",
+     "30.7",
+     "ZEPP Amazfit Active 2 (Round)",
+     "run.10092807.huami.com 1794081663",
+     "2026-11-08 10:21:34"
     ]
    ]
   },
@@ -15868,6 +15993,21 @@ window.DATOS_TABLERO = {
      "154",
      "32",
      "242"
+    ],
+    [
+     "i207386378",
+     "2026-11-07",
+     "1",
+     "WORK",
+     "0",
+     "6112",
+     "",
+     "",
+     "142",
+     "182",
+     "",
+     "",
+     ""
     ]
    ]
   },
@@ -17970,6 +18110,24 @@ window.DATOS_TABLERO = {
      "",
      "",
      "2026-11-07 09:57:36"
+    ],
+    [
+     "2026-11-07",
+     "19.7",
+     "30.7",
+     "-11.1",
+     "0.7",
+     "107.0",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "",
+     "2026-11-08 10:21:34"
     ]
    ]
   }
