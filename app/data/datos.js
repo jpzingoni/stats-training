@@ -2,12 +2,12 @@
 window.DATOS_TABLERO = {
  "meta": {
   "version_esquema": 1,
-  "generado": "2026-11-10 11:50:35",
+  "generado": "2026-11-11 11:18:54",
   "desde": "2026-07-18",
-  "hasta": "2026-11-09",
+  "hasta": "2026-11-10",
   "actividades_por_categoria": {
    "Caminata": 15,
-   "Carrera": 26,
+   "Carrera": 27,
    "Ciclismo": 4,
    "Pádel": 9
   },
@@ -6988,6 +6988,112 @@ window.DATOS_TABLERO = {
    "plantilla": null,
    "ajuste_plantilla": null,
    "entrenamiento": null
+  },
+  {
+   "id": "i208504320",
+   "fecha": "2026-11-10",
+   "hora": "20:32",
+   "categoria": "Carrera",
+   "subtipo": "Bloques",
+   "nombre": "Night Correr",
+   "duracion_s": 1635,
+   "distancia_m": 3224,
+   "ritmo_s_km": 508,
+   "fc_media": 138,
+   "fc_max": 173,
+   "potencia_w": 179,
+   "carga": 28,
+   "desnivel_m": 16,
+   "tiempo_total_s": 1637,
+   "calorias": 275,
+   "trimp": 40.7,
+   "intensidad_pct": 78.5,
+   "recuperacion_fc": 22,
+   "zonas_s": [
+    820,
+    56,
+    39,
+    163,
+    462,
+    95,
+    0
+   ],
+   "dinamica": {
+    "cadencia": 132,
+    "zancada": 0.9,
+    "contacto": 348,
+    "oscilacion": 6.1
+   },
+   "eficiencia": 0.857,
+   "bloques": [
+    {
+     "nro": 1,
+     "tipo": "WORK",
+     "inicio_s": 0,
+     "duracion_s": 302,
+     "distancia_m": 428,
+     "ritmo_s_km": 705,
+     "fc_media": 93,
+     "fc_max": 109,
+     "cadencia": 113,
+     "desnivel_m": 4,
+     "potencia_w": 99,
+     "fase": "Calentamiento"
+    },
+    {
+     "nro": 2,
+     "tipo": "WORK",
+     "inicio_s": 302,
+     "duracion_s": 737,
+     "distancia_m": 1998,
+     "ritmo_s_km": 369,
+     "fc_media": 162,
+     "fc_max": 173,
+     "cadencia": 157,
+     "desnivel_m": 4,
+     "potencia_w": 271,
+     "fase": "Entrenamiento"
+    },
+    {
+     "nro": 3,
+     "tipo": "WORK",
+     "inicio_s": 1039,
+     "duracion_s": 599,
+     "distancia_m": 797,
+     "ritmo_s_km": 752,
+     "fc_media": 129,
+     "fc_max": 173,
+     "cadencia": 110,
+     "desnivel_m": 13,
+     "potencia_w": 107,
+     "fase": "Restaurar"
+    }
+   ],
+   "bloque_principal": {
+    "nro": 2,
+    "tipo": "WORK",
+    "inicio_s": 302,
+    "duracion_s": 737,
+    "distancia_m": 1998,
+    "ritmo_s_km": 369,
+    "fc_media": 162,
+    "fc_max": 173,
+    "cadencia": 157,
+    "desnivel_m": 4,
+    "potencia_w": 271,
+    "fase": "Entrenamiento"
+   },
+   "plantilla": "2KM - 6'",
+   "ajuste_plantilla": "exacta",
+   "entrenamiento": {
+    "bloques": 1,
+    "duracion_s": 737,
+    "distancia_m": 1998,
+    "ritmo_s_km": 369,
+    "fc_media": 162,
+    "potencia_w": 271,
+    "eficiencia": 1.004
+   }
   }
  ],
  "semanas": [
@@ -7755,11 +7861,30 @@ window.DATOS_TABLERO = {
    "semana": "2026-W46",
    "inicio": "2026-11-09",
    "total": {
-    "sesiones": 0,
-    "duracion_s": 0,
-    "carga": 0
+    "sesiones": 1,
+    "duracion_s": 1635,
+    "carga": 28
    },
-   "por_categoria": {}
+   "por_categoria": {
+    "Carrera": {
+     "sesiones": 1,
+     "duracion_s": 1635,
+     "distancia_m": 3224,
+     "carga": 28,
+     "zonas_s": [
+      820,
+      56,
+      39,
+      163,
+      462,
+      95,
+      0
+     ],
+     "distancia_m_por_subtipo": {
+      "Bloques": 3224
+     }
+    }
+   }
   }
  ],
  "bienestar": [
@@ -9243,7 +9368,7 @@ window.DATOS_TABLERO = {
    "sueno_horas": 8.72,
    "sueno_horas_m7": 7.4,
    "sueno_puntaje": 85,
-   "pasos": 392
+   "pasos": 5942
   },
   {
    "fecha": "2026-11-09",
@@ -9251,12 +9376,25 @@ window.DATOS_TABLERO = {
    "atl": 26.2,
    "forma": -6.8,
    "carga_dia": 0,
-   "fc_reposo": null,
+   "fc_reposo": 53,
    "fc_reposo_m7": 53.0,
-   "sueno_horas": null,
+   "sueno_horas": 7.37,
    "sueno_horas_m7": 7.4,
-   "sueno_puntaje": null,
-   "pasos": null
+   "sueno_puntaje": 72,
+   "pasos": 1987
+  },
+  {
+   "fecha": "2026-11-10",
+   "ctl": 19.6,
+   "atl": 26.4,
+   "forma": -6.9,
+   "carga_dia": 28,
+   "fc_reposo": 53,
+   "fc_reposo_m7": 53.4,
+   "sueno_horas": 7.32,
+   "sueno_horas_m7": 7.5,
+   "sueno_puntaje": 75,
+   "pasos": 7932
   }
  ],
  "crudos": {
@@ -11752,6 +11890,47 @@ window.DATOS_TABLERO = {
      "ZEPP Amazfit Active 2 (Round)",
      "run.10092807.huami.com 1794146060",
      "2026-11-09 13:13:48"
+    ],
+    [
+     "i208504320",
+     "2026-11-10",
+     "20:32",
+     "Run",
+     "Carrera",
+     "Bloques",
+     "Night Correr",
+     "1635",
+     "1637",
+     "3224",
+     "8:28",
+     "1.97",
+     "138",
+     "173",
+     "28",
+     "40.7",
+     "78.5",
+     "275",
+     "16",
+     "132",
+     "0.9",
+     "348",
+     "6.1",
+     "179",
+     "820",
+     "56",
+     "39",
+     "163",
+     "462",
+     "95",
+     "0",
+     "22",
+     "3",
+     "1x 5m2s 93bpm | 1x 12m17s 162bpm | 1x 9m59s 129bpm",
+     "19.6",
+     "26.4",
+     "ZEPP Amazfit Active 2 (Round)",
+     "run.10092807.huami.com 1794353562",
+     "2026-11-11 11:18:51"
     ]
    ]
   },
@@ -16563,6 +16742,51 @@ window.DATOS_TABLERO = {
      "",
      "1",
      ""
+    ],
+    [
+     "i208504320",
+     "2026-11-10",
+     "1",
+     "WORK",
+     "0",
+     "302",
+     "428",
+     "11:45",
+     "93",
+     "109",
+     "113",
+     "4",
+     "99"
+    ],
+    [
+     "i208504320",
+     "2026-11-10",
+     "2",
+     "WORK",
+     "302",
+     "737",
+     "1998",
+     "6:09",
+     "162",
+     "173",
+     "157",
+     "4",
+     "271"
+    ],
+    [
+     "i208504320",
+     "2026-11-10",
+     "3",
+     "WORK",
+     "1039",
+     "599",
+     "797",
+     "12:32",
+     "129",
+     "173",
+     "110",
+     "13",
+     "107"
     ]
    ]
   },
@@ -18696,11 +18920,11 @@ window.DATOS_TABLERO = {
      "8.72",
      "85.0",
      "2",
-     "392",
+     "5942",
      "",
      "",
      "",
-     "2026-11-09 13:13:50"
+     "2026-11-11 11:18:54"
     ],
     [
      "2026-11-09",
@@ -18709,16 +18933,34 @@ window.DATOS_TABLERO = {
      "-6.8",
      "1.3",
      "0",
+     "53",
+     "26520",
+     "7.37",
+     "72.0",
+     "3",
+     "1987",
      "",
      "",
      "",
+     "2026-11-11 11:18:54"
+    ],
+    [
+     "2026-11-10",
+     "19.6",
+     "26.4",
+     "-6.9",
+     "1.9",
+     "28.0",
+     "53",
+     "26340",
+     "7.32",
+     "75.0",
+     "3",
+     "7932",
      "",
      "",
      "",
-     "",
-     "",
-     "",
-     "2026-11-10 11:50:35"
+     "2026-11-11 11:18:54"
     ]
    ]
   }
