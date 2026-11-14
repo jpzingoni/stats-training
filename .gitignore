@@ -13,13 +13,6 @@ __pycache__/
 datos/consola.log
 .DS_Store
 Thumbs.db
-node_modules/
-
-# Prototipo local de gráficos: nunca al repositorio
-test-grafico/
-
-# Capturas locales de revisión de diseño
 .capturas/
-
-#diseño
-diseno/referencias/*/
+.claude/launch.json
+.claude/settings.local.json

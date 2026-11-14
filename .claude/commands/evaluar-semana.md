@@ -7,8 +7,8 @@ Evaluá mi semana de entrenamiento. Fecha de cierre: $ARGUMENTS (si está vacío
 
 ## Pasos
 
-1. Si los datos pueden estar desactualizados, corré `python ../scripts/diario.py`.
-2. Con Python, leé `../datos/actividades.csv`, `../datos/bloques.csv` y `../datos/bienestar.csv`
+1. Si los datos pueden estar desactualizados, hacé `git pull` (el workflow los actualiza todos los días).
+2. Con Python, leé `datos/actividades.csv`, `datos/bloques.csv` y `datos/bienestar.csv`
    (encoding `utf-8-sig`) y calculá para **la semana evaluada (7 días hasta la fecha de cierre)**
    comparada con **el promedio de las 3 semanas anteriores**:
    - Sesiones por categoría, tiempo total, km corridos, carga HRSS total y por deporte.
@@ -20,9 +20,9 @@ Evaluá mi semana de entrenamiento. Fecha de cierre: $ARGUMENTS (si está vacío
    - Pádel: duración, FC media, carga, carga por hora.
    - Recuperación: sueño medio, noches < 6,5 h, FC en reposo media vs. media de 14 días,
      forma (CTL − ATL) al cierre.
-3. Revisá las señales de alerta definidas en CLAUDE.md.
-4. Escribí el informe en `informes/<fecha-cierre>-semana.md`, empezando con el frontmatter
-   definido en CLAUDE.md (tipo: semana), y con esta estructura:
+3. Revisá las señales de alerta definidas en `coach/ficha.md`.
+4. Escribí el informe en `coach/informes/<fecha-cierre>-semana.md`, empezando con el frontmatter
+   definido en `coach/ficha.md` (tipo: semana), y con esta estructura:
    - **Resumen en 3 líneas** (qué pasó, cómo estás, qué hacer).
    - **Números de la semana** (tabla comparada con las 3 anteriores).
    - **Carrera:** progreso del bloque principal y distribución de intensidad.
@@ -31,7 +31,7 @@ Evaluá mi semana de entrenamiento. Fecha de cierre: $ARGUMENTS (si está vacío
    - **Alertas** (o "Sin alertas").
    - **Recomendación para la próxima semana:** sesiones concretas (día sugerido, tipo,
      duración, zona de FC objetivo), respetando la progresión prudente y los días de pádel.
-     Si hay un plan activo en `planes/`, alineá la recomendación con ese plan.
+     Si hay un plan activo en `coach/planes/`, alineá la recomendación con ese plan.
 5. Mostrame el resumen y las alertas en el chat y decime dónde quedó el informe.
 
 Si hay pocos datos (por ejemplo, menos de 3 semanas anteriores), hacé la comparación con lo

@@ -7,12 +7,12 @@ Armame un plan para llegar a correr 10 km. Datos del objetivo: $ARGUMENTS
 
 ## Antes de planificar
 
-1. Revisá la ficha en CLAUDE.md. Si faltan datos clave (días disponibles para correr, fecha
+1. Revisá la ficha en `coach/ficha.md`. Si faltan datos clave (días disponibles para correr, fecha
    objetivo, lesiones, si el objetivo es completar los 10 km o hacer un tiempo), **preguntámelos
    y esperá la respuesta** antes de armar el plan.
 2. Con Python, calculá mi línea de base de las **últimas 4 semanas** a partir de los CSV:
    - Km por semana (media y máximo), salida más larga, corridas por semana.
-   - Ritmo y FC del **bloque principal** en las corridas de Bloques (../datos/bloques.csv).
+   - Ritmo y FC del **bloque principal** en las corridas de Bloques (datos/bloques.csv).
    - Ritmo "suave" real: ritmo de tramos con FC en Z1–Z2.
    - Carga semanal total incluyendo pádel, y días habituales de pádel.
    - Estado de recuperación actual (FC en reposo, sueño, forma).
@@ -33,9 +33,9 @@ Armame un plan para llegar a correr 10 km. Datos del objetivo: $ARGUMENTS
 
 ## Qué entregar
 
-1. `planes/plan-10k.md`: explicación breve de la línea de base y la lógica del plan, tabla semana
+1. `coach/planes/plan-10k.md`: explicación breve de la línea de base y la lógica del plan, tabla semana
    por semana y detalle de cada sesión.
-2. `planes/plan-10k.csv` con columnas:
+2. `coach/planes/plan-10k.csv` con columnas:
    `fecha,semana,dia,tipo,descripcion,duracion_min,distancia_km,zona_fc,ritmo_objetivo,notas`
    (fechas concretas a partir del próximo lunes). Este CSV se va a usar para comparar lo
    planificado con lo realizado y, más adelante, para cargarlo en el calendario de Intervals.icu.

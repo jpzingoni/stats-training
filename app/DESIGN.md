@@ -16,15 +16,27 @@ Hay tres ideas que ordenan todo:
    un deporte, una zona, una sesión o una variación buena o mala.
 2. **Los números mandan.** Cada pantalla tiene un dato protagonista y el resto lo acompaña.
    Los números usan cifras tabulares (de ancho fijo).
-3. **Pocas decisiones, siempre las mismas.** La escala de tamaños es de 7 valores, los radios
+3. **Pocas decisiones, siempre las mismas.** La escala de tamaños es de 9 roles, los radios
    son 2, hay un solo estilo de control y un solo estilo de tarjeta.
+
+### Preferencias de Juan (decididas en el estudio de diseño, oct. 2026)
+
+- **Homogeneidad** ante todo: mismas fuentes, colores, tamaños y componentes en todas las vistas.
+- **Cada color significa una sola cosa.** No reutilizar un color para cosas distintas.
+- **Un solo tema, el claro**, sin botón. Fondos: página `#f2f7f5`, tarjetas blancas, barra
+  lateral clara con texto negro. Nada de barras laterales oscuras.
+- **Nada de bandas, héroes ni bloques de color grandes** arriba de las vistas: "Este mes" abre
+  directo con calendario, actividades, objetivos y gráfico.
+- Los días entrenados del calendario chico van en **verde "día ganado"** (`#2f9e5f`).
+- Descartadas: Barlow, Montserrat, Archivo, Instrument Sans; paletas racing, monocromo + naranja.
+- Las decisiones de datos menores (qué KPI, qué métrica) se pueden tomar sin preguntar.
 
 ---
 
 ## 1. Tipografía
 
 **Una sola familia para todo: Nunito** (`--fuente`), redondeada y amable (elegida el
-31/10/2026 a partir de la referencia de Nivea, ver `diseno/propuestas/v6-nivea/`). Títulos de
+31/10/2026 a partir de la referencia de Nivea: blanco, azul y verde). Títulos de
 página, de tarjetas y de gráficos, texto, números, ejes y tooltips usan la misma letra. No hay
 una fuente aparte para los números: Nunito trae cifras de ancho fijo y se activan con
 `tabular-nums` (verificado: "1111" y "0000" miden lo mismo).
@@ -35,8 +47,6 @@ una fuente aparte para los números: Nunito trae cifras de ancho fijo y se activ
 - Las fuentes se **incluyen dentro de `app/vendor/fuentes/`** (woff2 + `@font-face`, licencia
   OFL), no se cargan desde Google Fonts. Así funcionan con `file://`, sin conexión y en Cloudflare.
 - Respaldo: `system-ui, sans-serif`.
-- Nunito es más angosta que Montserrat (la anterior): cada rol lleva un peso más que antes
-  para que los números grandes no se vean flojos. Los tamaños no cambiaron.
 
 ### La variable: un token por rol
 
@@ -295,5 +305,6 @@ ETIQUETA                       (--t-etiqueta, --texto-sec)
   --velo: rgba(0, 0, 0, 0.6);
 ```
 
-`--acento` se mantiene temporalmente como alias de `--tinta` hasta terminar la migración,
-y después se borra.
+Los tokens del modo oscuro siguen en `estilos.css` por si se reactiva, pero hoy no se usan
+(`data-theme="light"` fijo en `index.html`). `--acento` queda como alias de `--tinta` hasta
+que se reemplacen sus últimos usos.

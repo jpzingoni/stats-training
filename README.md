@@ -1,10 +1,8 @@
 # Entrenamiento: de mi reloj a un tablero con coach virtual
 
-Proyecto personal para registrar, visualizar y planificar mi entrenamiento (carrera y pádel)
-a partir de los datos de mi reloj, con actualización automática diaria y un coach virtual
-basado en IA.
-
-> 🚧 En construcción. Ver [la bitácora](docs/bitacora.md) para el recorrido del proyecto.
+Proyecto personal para registrar, visualizar y planificar mi entrenamiento (carrera, pádel y
+bici) a partir de los datos de mi reloj, con actualización automática diaria y un coach
+virtual basado en IA. El recorrido del proyecto está en [la bitácora](docs/bitacora.md).
 
 ## Arquitectura
 
@@ -16,34 +14,31 @@ flowchart LR
     D --> E[(CSV en el repo<br/>actividades · bloques · minutos · bienestar)]
     E --> F[Tablero web<br/>Cloudflare Pages]
     E --> G[Coach virtual<br/>Claude Code]
-    G -- informes y planes --> F
 ```
 
 ## Estructura
 
 | Carpeta | Contenido |
 |---|---|
-| `scripts/` | Descarga de datos desde la API de Intervals.icu (Python) |
-| `datos/` | Datos históricos en CSV, actualizados automáticamente |
+| `scripts/` | Descarga desde la API de Intervals.icu y generador de datos del tablero (Python) |
+| `datos/` | Histórico en CSV, actualizado automáticamente |
 | `.github/workflows/` | Workflow de actualización diaria |
-| `app/` | Tablero web |
-| `coach/` | Coach virtual: ficha del atleta, comandos, informes y planes |
-| `docs/` | Bitácora y decisiones del proyecto |
-
-## Herramientas
-
-- **Intervals.icu API**: fuente de datos (actividades, vueltas y bienestar).
-- **Python**: extracción y transformación a CSV.
-- **GitHub Actions**: automatización diaria.
-- **Cloudflare Pages**: publicación del tablero.
-- **Claude Code**: desarrollo asistido del tablero y coach virtual.
+| `app/` | Tablero web estático (HTML, CSS, JS y Chart.js) |
+| `coach/` | Ficha del atleta, informes y planes del coach virtual |
+| `docs/` | Bitácora del proyecto |
 
 ## Uso local
 
 ```bash
+git pull                                 # datos al día (los actualiza el workflow)
+```
+
+Para ver el tablero, abrir `app/index.html` con doble clic. Para correr los scripts a mano:
+
+```bash
 pip install -r requirements.txt
-python scripts/historico.py 2026-07-10   # carga inicial (una sola vez)
 python scripts/diario.py                 # últimos 7 días hasta ayer
+python scripts/generar_datos_app.py      # regenera app/data/
 ```
 
 La primera ejecución local pide el Athlete ID y la API key de Intervals.icu y los guarda en

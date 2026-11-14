@@ -5,6 +5,34 @@ Una entrada por etapa, de la más reciente a la más antigua.
 
 ---
 
+## Limpieza y simplificación del proyecto (14/11/2026)
+
+### Qué hice
+- Moví el proyecto a `portal/apps/entrenamiento`.
+- Borré lo que ya no se usaba: el estudio de diseño (`diseno/`, con las propuestas v2–v6 y
+  ~44 MB de capturas de referencia), la copia congelada `versiones/v1.1` (sigue en la etiqueta
+  `v1.1`), `PASOS.md` (guía de implementación ya cumplida), las fuentes Montserrat (el
+  tablero usa Nunito) y las carpetas vacías.
+- **Una sola sesión de Claude Code, desde la raíz.** Un único `CLAUDE.md` corto reemplaza a
+  los de `app/`, `coach/` y `diseno/`. Los comandos (`/evaluar-semana`, `/plan-10k`,
+  `/revisar-plan`, `/revisar-diseno`) pasaron a `.claude/commands/` con las rutas
+  actualizadas. La ficha del atleta quedó en `coach/ficha.md`.
+- Lo que valía del estudio de diseño (las preferencias aprobadas y rechazadas) pasó a una
+  sección de `app/DESIGN.md`.
+- El workflow ya no pregunta si existe el generador del tablero: lo corre siempre.
+
+### Decisiones
+- **Simplicidad antes que separación por roles**: las sesiones por carpeta duplicaban
+  contexto (el diccionario de datos estaba en tres lugares) y la mayoría no se usaba.
+- Lo borrado queda en el historial de git, así que se puede recuperar.
+
+### Problemas
+- **Git dentro de OneDrive**: OneDrive no deja agregar al final de los archivos del historial
+  de git (`.git/logs`), y el `git pull` quedó a medias. Se resolvió con
+  `git config windows.appendAtomically false`.
+
+---
+
 ## Tablero v1.3: Montserrat y sistema tipográfico único (13/10/2026)
 
 ### Qué hice

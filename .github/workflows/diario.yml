@@ -43,21 +43,14 @@ jobs:
       - name: Bajar datos de Intervals.icu
         run: python scripts/diario.py "${{ github.event.inputs.dias || '7' }}"
 
-      # Fase 2: cuando exista el generador de datos del tablero, se ejecuta automáticamente
-      - name: Generar datos del tablero (si existe el script)
-        run: |
-          if [ -f scripts/generar_datos_app.py ]; then
-            python scripts/generar_datos_app.py
-          else
-            echo "Todavía no hay generador del tablero; se omite."
-          fi
+      - name: Generar datos del tablero
+        run: python scripts/generar_datos_app.py
 
       - name: Guardar cambios en el repositorio
         run: |
           git config user.name "github-actions[bot]"
           git config user.email "41898282+github-actions[bot]@users.noreply.github.com"
-          git add datos/
-          [ -d app/data ] && git add app/data/
+          git add datos/ app/data/
           if git diff --cached --quiet; then
             echo "Sin cambios en los datos."
           else
